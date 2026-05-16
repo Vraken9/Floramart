@@ -46,4 +46,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Tambahkan di bawah fungsi casts()
+    public function shop()
+    {
+        return $this->hasOne(Shop::class);
+    }
 }
