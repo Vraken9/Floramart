@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Database\Seeders\LocationSeeder;
 
 class DatabaseSeeder extends Seeder
 {
