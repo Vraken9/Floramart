@@ -37,5 +37,9 @@ class DatabaseSeeder extends Seeder
                 'slug' => Str::slug($cat)
             ]);
         }
+        
+        $this->call([
+            LocationSeeder::class,
+        ]);
     }
 }
