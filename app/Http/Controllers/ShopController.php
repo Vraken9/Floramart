@@ -14,7 +14,7 @@ class ShopController extends Controller
     {
 
         $existingShop = Shop::where('user_id', Auth::id())->first();
-        
+
         if ($existingShop) {
             return redirect()->route('dashboard')->with('status', 'Anda sudah mendaftarkan toko. Silakan tunggu persetujuan Admin.');
         }
@@ -27,20 +27,23 @@ class ShopController extends Controller
 
     public function store(Request $request)
     {
-
+        // 1. Tambahkan 'reason' ke dalam validasi
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'reason' => 'required|string|max:500', // Tambahan validasi alasan
             'district_id' => 'required|exists:districts,id',
             'address_detail' => 'required|string|max:255',
             'whatsapp_number' => 'required|string|max:20',
         ]);
 
+        // 2. Tambahkan 'reason' ke proses penyimpanan database
         Shop::create([
             'user_id' => Auth::id(),
             'district_id' => $request->district_id,
             'name' => $request->name,
             'description' => $request->description,
+            'reason' => $request->reason, // Tambahan simpan alasan
             'address_detail' => $request->address_detail,
             'whatsapp_number' => $request->whatsapp_number,
             'status' => 'pending',

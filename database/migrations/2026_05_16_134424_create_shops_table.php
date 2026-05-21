@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('district_id')->constrained('districts');  
+            $table->foreignId('district_id')->constrained('districts');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('address_detail'); 
-            $table->string('whatsapp_number'); 
+            $table->text('reason');
+            $table->string('address_detail');
+            $table->string('whatsapp_number');
             $table->enum('status', ['pending', 'approved', 'suspended'])->default('pending');
             $table->timestamps();
         });
