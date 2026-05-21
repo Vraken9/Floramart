@@ -23,4 +23,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductLead::class);
     }
+    /**
+     * Relasi untuk melihat siapa saja user yang memfavoritkan produk ini.
+     */
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists')->withTimestamps();
+    }
 }

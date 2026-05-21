@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\Province;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
@@ -50,5 +51,21 @@ class ShopController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Pendaftaran toko berhasil dikirim! Menunggu persetujuan Admin.');
+    }
+    public function show($id)
+    {
+        // 1. Cari toko yang sudah di-approve. Jika tidak ada/belum approve, munculkan 404.
+        $shop = Shop::with('district.regency', 'user')
+            ->where('status', 'approved')
+            ->findOrFail($id);
+
+        // 2. Ambil semua bunga yang aktif milik toko ini
+        $products = Product::where('shop_id', $shop->id)
+            ->where('is_active', true)
+            ->latest()
+            ->get();
+
+        // 3. Arahkan ke file view di folder resources/views/shop/show.blade.php
+        return view('shop.show', compact('shop', 'products'));
     }
 }

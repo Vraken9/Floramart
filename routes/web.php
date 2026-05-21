@@ -6,11 +6,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WishlistController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/bunga/{slug}', [HomeController::class, 'show'])->name('product.show');
+Route::get('/toko/{id}', [ShopController::class, 'show'])->name('shop.show');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/buka-toko', [ShopController::class, 'create'])->name('shop.create');
     Route::post('/buka-toko', [ShopController::class, 'store'])->name('shop.store');
+    Route::post('/wishlist/{productId}/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 });
 // Rute Khusus Admin

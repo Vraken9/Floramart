@@ -52,4 +52,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Shop::class);
     }
+    public function favoriteProducts()
+    {
+        // Parameter kedua adalah nama tabel pivot kita yaitu 'wishlists'
+        return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
+    }
+
 }
