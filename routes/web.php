@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,5 +28,13 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('/admin/shops/{id}/approve', [AdminController::class, 'approveShop'])->name('admin.shops.approve');
 });
-
+Route::middleware(['auth', 'role:owner'])->group(function () {
+    Route::get('/owner/products', [ProductController::class, 'index'])->name('owner.products.index');
+    Route::get('/owner/products/create', [ProductController::class, 'create'])->name('owner.products.create');
+    Route::post('/owner/products', [ProductController::class, 'store'])->name('owner.products.store');
+    Route::get('/owner/products/{id}/edit', [ProductController::class, 'edit'])->name('owner.products.edit');
+    Route::put('/owner/products/{id}', [ProductController::class, 'update'])->name('owner.products.update');
+    Route::delete('/owner/products/{id}', [ProductController::class, 'destroy'])->name('owner.products.destroy');
+    Route::patch('/owner/products/{id}/toggle', [ProductController::class, 'toggleStatus'])->name('owner.products.toggle');
+});
 require __DIR__.'/auth.php';
