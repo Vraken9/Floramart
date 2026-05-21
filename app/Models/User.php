@@ -48,6 +48,11 @@ class User extends Authenticatable
     }
 
     // Tambahkan di bawah fungsi casts()
+    public function favoriteProducts()
+    {
+        return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
+    }
+
     public function shop()
     {
         return $this->hasOne(Shop::class);

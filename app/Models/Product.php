@@ -23,4 +23,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductLead::class);
     }
+
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists')->withTimestamps();
+    }
 }

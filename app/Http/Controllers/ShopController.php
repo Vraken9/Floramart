@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 class ShopController extends Controller
 {
 
+    public function show($id)
+    {
+        $shop = Shop::with(['district.regency', 'products', 'user'])->findOrFail($id);
+        $categories = \App\Models\Category::all();
+        return view('shop.show', compact('shop', 'categories'));
+    }
+
     public function create()
     {
 

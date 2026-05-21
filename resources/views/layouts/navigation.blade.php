@@ -5,21 +5,29 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
+                    <a href="{{ route('home') }}" class="text-xl font-extrabold text-[#7c4959] tracking-tight">Flora<span class="text-[#926a7a]">Mart</span></a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('home') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
+                        Beranda
+                    </a>
+                    <a href="{{ route('katalog.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('katalog.index') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
+                        Katalog Bunga
+                    </a>
+                    <a href="{{ route('shops.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('shops.index') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
+                        Toko Florist
+                    </a>
+                    <a href="{{ route('dashboard') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('dashboard') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
+                        Favorit Saya
+                    </a>
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                @auth
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -50,6 +58,12 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                @else
+                <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
+                @endif
+                @endauth
             </div>
 
             <!-- Hamburger -->
@@ -65,15 +79,25 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden shadow-lg border-b border-[#d4ccc0]/50 absolute w-full bg-white z-50">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            <a href="{{ route('home') }}" class="block w-full ps-3 pe-4 py-2 border-l-4 {{ request()->routeIs('home') ? 'border-[#7c4959] text-[#7c4959] bg-[#d4ccc0]/10 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:bg-gray-50 hover:border-[#d4ccc0]' }} text-start text-base transition duration-150 ease-in-out">
+                Beranda
+            </a>
+            <a href="{{ route('katalog.index') }}" class="block w-full ps-3 pe-4 py-2 border-l-4 {{ request()->routeIs('katalog.index') ? 'border-[#7c4959] text-[#7c4959] bg-[#d4ccc0]/10 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:bg-gray-50 hover:border-[#d4ccc0]' }} text-start text-base transition duration-150 ease-in-out">
+                Katalog Bunga
+            </a>
+            <a href="{{ route('shops.index') }}" class="block w-full ps-3 pe-4 py-2 border-l-4 {{ request()->routeIs('shops.index') ? 'border-[#7c4959] text-[#7c4959] bg-[#d4ccc0]/10 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:bg-gray-50 hover:border-[#d4ccc0]' }} text-start text-base transition duration-150 ease-in-out">
+                Toko Florist
+            </a>
+            <a href="{{ route('dashboard') }}" class="block w-full ps-3 pe-4 py-2 border-l-4 {{ request()->routeIs('dashboard') ? 'border-[#7c4959] text-[#7c4959] bg-[#d4ccc0]/10 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:bg-gray-50 hover:border-[#d4ccc0]' }} text-start text-base transition duration-150 ease-in-out">
+                Favorit Saya
+            </a>
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
+            @auth
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
@@ -95,6 +119,14 @@
                     </x-responsive-nav-link>
                 </form>
             </div>
+            @else
+            <div class="px-4 pb-2">
+                <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900">Log in</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="ml-4 text-sm font-medium text-gray-700 hover:text-gray-900">Register</a>
+                @endif
+            </div>
+            @endauth
         </div>
     </div>
 </nav>
