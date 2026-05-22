@@ -8,7 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/katalog', [App\Http\Controllers\HomeController::class, 'index'])->name('katalog.index');
+Route::get('/katalog', [App\Http\Controllers\HomeController::class, 'katalog'])->name('katalog.index');
 Route::get('/toko-florist', [App\Http\Controllers\HomeController::class, 'allShops'])->name('shops.index');
 
 Route::get('/dashboard', [App\Http\Controllers\WishlistController::class, 'index'])
