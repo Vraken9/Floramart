@@ -1,12 +1,24 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-bold text-xl text-[#7c4959] leading-tight">
-            <i class="fa-solid fa-store mr-2"></i> {{ __('Dasbor Manajemen Toko') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dasbor Manajemen Toko - FloraMart</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="antialiased bg-gray-50 text-gray-900 font-sans flex flex-col min-h-screen">
+    <x-navigation />
 
-    <div class="py-12">
+    <main class="flex-grow py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h2 class="font-bold text-2xl text-[#7c4959] leading-tight flex items-center">
+                    <i class="fa-solid fa-store mr-3"></i> {{ __('Dasbor Manajemen Toko') }}
+                </h2>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-[#7c4959]">
@@ -111,4 +123,6 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+    </main>
+</body>
+</html>

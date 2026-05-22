@@ -13,8 +13,8 @@ class DashboardController extends Controller
         $role = Auth::user()->role;
 
         if ($role === 'admin') {
-            // Ambil semua toko yang statusnya masih 'pending' beserta data pembuatnya (user)
-            $pendingShops = Shop::with('user')->where('status', 'pending')->get();
+            // Ambil semua toko yang statusnya masih 'pending' beserta data pembuatnya dan lokasi
+            $pendingShops = Shop::with(['user', 'district.regency'])->where('status', 'pending')->get();
 
             // Kirim data tersebut ke halaman view admin
             return view('admin.dashboard', compact('pendingShops'));

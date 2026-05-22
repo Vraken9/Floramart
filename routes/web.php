@@ -11,9 +11,13 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Route::get('/katalog', [App\Http\Controllers\HomeController::class, 'katalog'])->name('katalog.index');
 Route::get('/toko-florist', [App\Http\Controllers\HomeController::class, 'allShops'])->name('shops.index');
 
-Route::get('/dashboard', [App\Http\Controllers\WishlistController::class, 'index'])
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::get('/wishlist', [App\Http\Controllers\WishlistController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('wishlist.index');
 
 Route::post('/wishlist/{product}', [App\Http\Controllers\WishlistController::class, 'toggle'])->middleware('auth')->name('wishlist.toggle');
 Route::get('/product/{slug}', [App\Http\Controllers\HomeController::class, 'show'])->name('product.show');
