@@ -10,45 +10,7 @@
 </head>
 <body class="antialiased bg-gray-50 text-gray-900 font-sans flex flex-col min-h-screen">
 
-    <nav class="bg-white border-b border-[#d4ccc0]/50 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="text-xl font-extrabold text-[#7c4959] tracking-tight">Flora<span class="text-[#926a7a]">Mart</span></a>
-                </div>
-
-                <!-- Desktop Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex lg:flex-1">
-                    <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('home') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
-                        Beranda
-                    </a>
-                    <a href="{{ route('katalog.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('katalog.index') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
-                        Katalog Bunga
-                    </a>
-                    <a href="{{ route('shops.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('shops.index') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
-                        Toko Florist
-                    </a>
-                    <a href="{{ route('dashboard') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('dashboard') ? 'border-[#7c4959] text-gray-900 font-bold' : 'border-transparent text-gray-500 hover:text-[#7c4959] hover:border-[#d4ccc0]' }} text-sm transition-colors duration-150 ease-in-out">
-                        Favorit Saya
-                    </a>
-                </div>
-
-                <div class="flex items-center space-x-4">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-gray-700 hover:text-[#7c4959] transition-colors">Dasbor Anda</a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-[#7c4959] transition-colors">Masuk</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-[#7c4959] text-white rounded-md text-xs font-semibold uppercase tracking-widest hover:bg-[#5d3642] shadow-sm transition-all">Daftar</a>
-                            @endif
-                        @endauth
-                    @endif
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-navigation />
 
     <main class="flex-grow pb-16 pt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,27 +19,38 @@
                 <p class="text-gray-600 max-w-2xl mx-auto">Jelajahi perajin lokal terbaik di seluruh Banjarnegara. Pilih lokasi Anda dan temukan karya seni merajut bunga langsung dari sumbernya.</p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-[#d4ccc0]/50 p-6 mb-12">
-                <form action="{{ route('shops.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                    <div class="w-full sm:w-96">
-                        <label for="district" class="sr-only">Pilih Kecamatan</label>
-                        <select name="district" id="district" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#7c4959] focus:ring focus:ring-[#7c4959] focus:ring-opacity-50 text-sm py-2.5">
-                            <option value="">Semua Kecamatan</option>
-                            @foreach($districts as $district)
-                                <option value="{{ $district->id }}" {{ request('district') == $district->id ? 'selected' : '' }}>
-                                    {{ $district->name }} - {{ $district->regency->name }}
-                                </option>
-                            @endforeach
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8" x-data="{ 
+                regencies: {{ $regencies->toJson() }},
+                selectedRegency: '{{ request('regency') }}',
+                selectedDistrict: '{{ request('district') }}',
+                get districts() {
+                    if (!this.selectedRegency) return [];
+                    const regency = this.regencies.find(r => r.id == this.selectedRegency);
+                    return regency ? regency.districts : [];
+                }
+            }">
+                <form method="GET" action="{{ route('shops.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kabupaten</label>
+                        <select name="regency" x-model="selectedRegency" @change="selectedDistrict = ''" class="block w-full border-gray-300 rounded-md text-sm py-2.5">
+                            <option value="">Semua Kabupaten</option>
+                            <template x-for="reg in regencies" :key="reg.id">
+                                <option :value="reg.id" x-text="reg.name"></option>
+                            </template>
                         </select>
                     </div>
-                    <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-2.5 bg-[#7c4959] border border-transparent rounded-md font-bold text-white uppercase tracking-wider hover:bg-[#5d3642] shadow-sm transition-all text-sm">
-                        Filter Lokasi
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kecamatan</label>
+                        <select name="district" x-model="selectedDistrict" :disabled="!selectedRegency" class="block w-full border-gray-300 rounded-md text-sm py-2.5 disabled:bg-gray-100">
+                            <option value="">Semua Kecamatan</option>
+                            <template x-for="dist in districts" :key="dist.id">
+                                <option :value="dist.id" x-text="dist.name"></option>
+                            </template>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-[#7c4959] text-white py-2.5 rounded-md font-bold text-sm hover:bg-[#5d3642]">
+                        Filter Toko
                     </button>
-                    @if(request('district'))
-                        <a href="{{ route('shops.index') }}" class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-2.5 bg-gray-100 border border-gray-200 rounded-md font-bold text-gray-600 uppercase tracking-wider hover:bg-gray-200 transition-all text-sm">
-                            Reset
-                        </a>
-                    @endif
                 </form>
             </div>
 

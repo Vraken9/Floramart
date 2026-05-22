@@ -10,11 +10,19 @@ use Illuminate\Support\Facades\Auth;
 class ShopController extends Controller
 {
 
-    public function show($id)
+   public function show($id) 
     {
-        $shop = Shop::with(['district.regency', 'products', 'user'])->findOrFail($id);
-        $categories = \App\Models\Category::all();
-        return view('shop.show', compact('shop', 'categories'));
+        // Fetch shop with necessary relations
+        $shop = \App\Models\Shop::with(['district.regency', 'products.category'])->findOrFail($id);
+        
+        // Group products by category name for the 'shop.show' view
+        $groupedProducts = $shop->products
+            ->where('is_active', true)
+            ->groupBy(function($product) {
+                return $product->category ? $product->category->name : 'Uncategorized';
+            });
+        
+        return view('shop.show', compact('shop', 'groupedProducts'));
     }
 
     public function create()

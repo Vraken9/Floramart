@@ -28,28 +28,7 @@ if (!function_exists('formatRupiah')) {
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
-    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="text-2xl font-extrabold text-plum flex items-center gap-2">
-                        Flora<span class="text-[#926a7a]">Mart</span>
-                    </a>
-                </div>
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-500 hover:text-plum font-semibold">Beranda</a>
-                    <a href="{{ route('katalog.index') }}" class="text-gray-900 border-b-2 border-plum font-semibold">Katalog Bunga</a>
-                    <a href="{{ route('shops.index') }}" class="text-gray-500 hover:text-plum font-semibold">Toko Florist</a>
-                    @if (Auth::check())
-                        <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-plum font-semibold border-l pl-4 border-gray-300">Dasbor</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-600 hover:text-plum font-semibold border-l pl-4 border-gray-300">Masuk</a>
-                        <a href="{{ route('register') }}" class="bg-plum hover-bg-plum-dark text-white px-4 py-2 rounded-md text-xs font-semibold uppercase shadow-sm">Daftar</a>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-navigation />
 
         <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
         
@@ -114,7 +93,7 @@ if (!function_exists('formatRupiah')) {
             
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @forelse($products as $product)
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col group relative">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col group relative">
                         @if(Auth::check())
                             <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
                                 @csrf
@@ -125,24 +104,26 @@ if (!function_exists('formatRupiah')) {
                             </form>
                         @endif
 
-                        <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-[#d4ccc0]/20">
-                            @if($product->image_path)
-                                <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-gray-400"><i class="fa-solid fa-image text-4xl"></i></div>
-                            @endif
+                        <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-gray-100">
+                            <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         </a>
-
                         <div class="p-4 flex flex-col flex-grow">
-                            <div class="text-xs font-semibold text-[#7c4959] mb-1 tracking-wide uppercase">{{ $product->category->name ?? 'Kategori' }}</div>
-                            <a href="{{ route('product.show', $product->slug) }}" class="font-bold text-gray-800 leading-tight mb-2 hover:text-[#7c4959] line-clamp-2">{{ $product->name }}</a>
+                            <div class="text-[10px] font-bold text-[#7c4959] uppercase tracking-wider mb-1">{{ $product->category->name }}</div>
+                            <a href="{{ route('product.show', $product->slug) }}" class="font-bold text-gray-900 leading-snug hover:text-[#7c4959] mb-2">{{ $product->name }}</a>
+                            
+                            <div class="flex items-center text-xs text-gray-500 gap-1.5 mb-4 border-t pt-3">
+                                 <i class="fa-solid fa-store text-[#926a7a]"></i> 
+                                 <a href="{{ route('shop.show', $product->shop->id) }}" class="hover:text-[#7c4959]">{{ $product->shop->name }}</a>
+                                 <span class="text-gray-300">•</span>
+                                 <span>{{ $product->shop->district->name }}</span>
+                            </div>
+
                             <div class="mt-auto">
-                                <div class="text-lg font-bold text-gray-900 mb-3">{{ formatRupiah($product->price) }}</div>
-                                <hr class="border-gray-100 mb-3">
-                                <div class="flex items-center text-xs text-gray-500 gap-1.5 line-clamp-1">
-                                    <img src="{{ str_starts_with($product->shop->logo_path ?? '', 'http') ? $product->shop->logo_path : asset('storage/' . ($product->shop->logo_path ?? 'default-avatar.png')) }}" class="w-4 h-4 rounded-full object-cover">
-                                    <i class="fa-solid fa-store text-gray-400"></i> <a href="{{ route('shop.show', $product->shop->id) }}" class="hover:text-[#7c4959]">{{ $product->shop->name ?? 'Toko' }}</a>
-                                </div>
+                                <div class="text-lg font-extrabold text-gray-900 mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
+                                <a href="https://wa.me/6289530123608?text=Halo%20{{ $product->shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" 
+                                   target="_blank" class="block w-full py-2.5 bg-green-600 hover:bg-green-700 text-white text-center font-bold text-sm rounded-lg transition-colors">
+                                   <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -169,7 +150,7 @@ if (!function_exists('formatRupiah')) {
 
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 @foreach($category->products as $product)
-                                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col group relative">
+                                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col group relative">
                                         @if(Auth::check())
                                             <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
                                                 @csrf
@@ -180,24 +161,26 @@ if (!function_exists('formatRupiah')) {
                                             </form>
                                         @endif
 
-                                        <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-[#d4ccc0]/20">
-                                            @if($product->image_path)
-                                                <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                            @else
-                                                <div class="w-full h-full flex items-center justify-center text-gray-400"><i class="fa-solid fa-image text-4xl"></i></div>
-                                            @endif
+                                        <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-gray-100">
+                                            <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                         </a>
-
                                         <div class="p-4 flex flex-col flex-grow">
-                                            <div class="text-xs font-semibold text-[#7c4959] mb-1 tracking-wide uppercase">{{ $product->category->name ?? 'Kategori' }}</div>
-                                            <a href="{{ route('product.show', $product->slug) }}" class="font-bold text-gray-800 leading-tight mb-2 hover:text-[#7c4959] line-clamp-2">{{ $product->name }}</a>
+                                            <div class="text-[10px] font-bold text-[#7c4959] uppercase tracking-wider mb-1">{{ $product->category->name }}</div>
+                                            <a href="{{ route('product.show', $product->slug) }}" class="font-bold text-gray-900 leading-snug hover:text-[#7c4959] mb-2">{{ $product->name }}</a>
+                                            
+                                            <div class="flex items-center text-xs text-gray-500 gap-1.5 mb-4 border-t pt-3">
+                                                 <i class="fa-solid fa-store text-[#926a7a]"></i> 
+                                                 <a href="{{ route('shop.show', $product->shop->id) }}" class="hover:text-[#7c4959]">{{ $product->shop->name }}</a>
+                                                 <span class="text-gray-300">•</span>
+                                                 <span>{{ $product->shop->district->name }}</span>
+                                            </div>
+
                                             <div class="mt-auto">
-                                                <div class="text-lg font-bold text-gray-900 mb-3">{{ formatRupiah($product->price) }}</div>
-                                                <hr class="border-gray-100 mb-3">
-                                                <div class="flex items-center text-xs text-gray-500 gap-1.5 line-clamp-1">
-                                                    <img src="{{ str_starts_with($product->shop->logo_path ?? '', 'http') ? $product->shop->logo_path : asset('storage/' . ($product->shop->logo_path ?? 'default-avatar.png')) }}" class="w-4 h-4 rounded-full object-cover">
-                                                    <i class="fa-solid fa-store text-gray-400"></i> <a href="{{ route('shop.show', $product->shop->id) }}" class="hover:text-[#7c4959]">{{ $product->shop->name ?? 'Toko' }}</a>
-                                                </div>
+                                                <div class="text-lg font-extrabold text-gray-900 mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
+                                                <a href="https://wa.me/6289530123608?text=Halo%20{{ $product->shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" 
+                                                   target="_blank" class="block w-full py-2.5 bg-green-600 hover:bg-green-700 text-white text-center font-bold text-sm rounded-lg transition-colors">
+                                                   <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

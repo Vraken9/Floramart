@@ -89,18 +89,25 @@ class HomeController extends Controller
         return view('product.show', compact('product', 'categories'));
     }
 
-    public function allShops(Request $request)
+    public function allShops(\Illuminate\Http\Request $request)
     {
+        $categories = \App\Models\Category::all();
         $regencies = \App\Models\Regency::with('districts')->where('province_id', 33)->get();
+        
         $query = \App\Models\Shop::with('district.regency')->where('status', 'approved');
 
+        // Apply filters
+        if ($request->filled('regency')) {
+            $query->whereHas('district', function($q) use ($request) {
+                $q->where('regency_id', $request->regency);
+            });
+        }
         if ($request->filled('district')) {
             $query->where('district_id', $request->district);
         }
 
         $shops = $query->latest()->get();
-        $categories = \App\Models\Category::all();
 
-        return view('shop.index', compact('shops', 'districts', 'categories'));
+        return view('shop.index', compact('shops', 'regencies', 'categories'));
     }
 }
