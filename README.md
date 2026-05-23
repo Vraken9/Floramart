@@ -165,7 +165,7 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, pastikan sistem Anda tela
 
 ---
 
-## 🐳 Panduan Deployment dengan Docker (Produksi)
+## Panduan Deployment dengan Docker (Produksi)
 
 Aplikasi ini sudah dilengkapi dengan `Dockerfile` dan `docker-compose.yml` untuk memudahkan proses *deployment* di server VPS atau Cloud.
 
@@ -179,7 +179,7 @@ Aplikasi ini sudah dilengkapi dengan `Dockerfile` dan `docker-compose.yml` untuk
 
 ---
 
-## 📧 Strategi Verifikasi Email di Tahap Produksi
+## Strategi Verifikasi Email di Tahap Produksi
 
 Secara bawaan (*local development*), sistem menggunakan konfigurasi `MAIL_MAILER=log`, di mana tautan verifikasi hanya masuk ke file `storage/logs/laravel.log`.
 
