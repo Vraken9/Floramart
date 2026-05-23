@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: floramart-app
+    container_name: floramart_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      # Mount file env
+      - ./.env:/var/www/html/.env
+      # Mount storage agar file upload tidak hilang saat container mati
+      - ./storage/app/public:/var/www/html/storage/app/public
+    depends_on:
+      - db
+    networks:
+      - floramart_network
+
+  db:
+    image: mysql:8.0
+    container_name: floramart_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: floramart_db
+      MYSQL_ROOT_PASSWORD: secret_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - floramart_network
+
+networks:
+  floramart_network:
+    driver: bridge
+
+volumes:
+  dbdata:

@@ -165,6 +165,42 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, pastikan sistem Anda tela
 
 ---
 
+## 🐳 Panduan Deployment dengan Docker (Produksi)
+
+Aplikasi ini sudah dilengkapi dengan `Dockerfile` dan `docker-compose.yml` untuk memudahkan proses *deployment* di server VPS atau Cloud.
+
+1. Salin repositori ke server Anda.
+2. Pastikan file `.env` sudah dikonfigurasi (terutama kredensial *database*).
+3. Jalankan perintah berikut di dalam direktori proyek:
+   ```bash
+   docker-compose up -d --build
+   ```
+4. Aplikasi akan berjalan otomatis di *port* `8000`. Anda bisa menghubungkannya dengan *Reverse Proxy* seperti Nginx atau Traefik untuk mengarahkannya ke *domain* utama Anda.
+
+---
+
+## 📧 Strategi Verifikasi Email di Tahap Produksi
+
+Secara bawaan (*local development*), sistem menggunakan konfigurasi `MAIL_MAILER=log`, di mana tautan verifikasi hanya masuk ke file `storage/logs/laravel.log`.
+
+Untuk tahap produksi *(live)*, ikuti langkah berikut agar email benar-benar terkirim ke *inbox* pengguna secara gratis dan profesional:
+1. Daftar di layanan penyedia SMTP gratis seperti **Resend**, **Mailtrap**, atau **Brevo (Sendinblue)**.
+2. Dapatkan *API Key* / kredensial SMTP Anda.
+3. Ubah pengaturan di file `.env` server Anda menjadi:
+   ```env
+   MAIL_MAILER=smtp
+   MAIL_HOST=smtp.resend.com
+   MAIL_PORT=465
+   MAIL_USERNAME=resend
+   MAIL_PASSWORD=re_kode_rahasia_anda_di_sini
+   MAIL_ENCRYPTION=tls
+   MAIL_FROM_ADDRESS="noreply@domainanda.com"
+   MAIL_FROM_NAME="FloraMart"
+   ```
+Dengan konfigurasi ini, verifikasi email dapat berjalan otomatis tanpa mengelola *mail server* sendiri.
+
+---
+
 ##  Developer & Kontak
 
 Proyek ini dibangun sebagai dedikasi terhadap pengembangan aplikasi web fungsional yang estetis dan interaktif.
