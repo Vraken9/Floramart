@@ -12,7 +12,7 @@
 
 ##  Deskripsi Proyek
 
-**FloraMart** adalah sebuah aplikasi web *marketplace* yang dirancang secara spesifik untuk mewadahi ekosistem jual-beli bunga dan tanaman hias. Dibangun menggunakan arsitektur monolitik modern dengan **Laravel 11**, aplikasi ini memungkinkan pengguna untuk tidak hanya membeli produk, tetapi juga membuka toko bunga *(Florist)* mereka sendiri.
+**FloraMart** adalah sebuah aplikasi web *marketplace* yang dirancang secara spesifik untuk mewadahi ekosistem jual-beli bunga dan tanaman hias. Dibangun menggunakan arsitektur monolitik modern dengan **Laravel 12**, aplikasi ini memungkinkan pengguna untuk tidak hanya membeli produk, tetapi juga membuka toko bunga *(Florist)* mereka sendiri.
 
 Aplikasi ini mendemonstrasikan kapabilitas implementasi *Role-Based Access Control* (RBAC), antarmuka dinamis (Tailwind CSS + Alpine.js), keamanan transaksi pesanan via WhatsApp, serta sistem *database* relasional yang kompleks dan terstruktur.
 
