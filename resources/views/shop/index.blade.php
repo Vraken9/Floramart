@@ -6,6 +6,7 @@
     <title>Toko Florist - FloraMart</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="antialiased bg-gray-50 text-gray-900 font-sans flex flex-col min-h-screen">
@@ -65,13 +66,20 @@
                         <a href="{{ route('shop.show', $shop->id) }}" class="text-xl font-bold text-gray-900 hover:text-[#7c4959] transition-colors mb-2">
                             {{ $shop->name }}
                         </a>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#d4ccc0]/20 text-[#7c4959] mb-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#d4ccc0]/20 text-[#7c4959] mb-2">
                             <svg class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
                             {{ $shop->district->name }}, {{ $shop->district->regency->name }}
                         </span>
+                        @if($shop->is_branch && $shop->parentShop)
+                            <span class="inline-flex items-center px-2 py-1 rounded text-[10px] font-bold bg-purple-100 text-purple-700 mb-4 border border-purple-200">
+                                <i class="fa-solid fa-code-branch mr-1"></i> Cabang: {{ $shop->parentShop->name }}
+                            </span>
+                        @else
+                            <div class="mb-4"></div>
+                        @endif
                         <p class="text-sm text-gray-500 leading-relaxed mb-6 line-clamp-3">
                             {{ $shop->description ?? 'Toko bunga terpercaya yang menyediakan berbagai macam buket dan karangan bunga segar dari Banjarnegara.' }}
                         </p>

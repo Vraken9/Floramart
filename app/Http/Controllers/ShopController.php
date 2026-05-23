@@ -66,4 +66,49 @@ class ShopController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Pendaftaran toko berhasil dikirim! Menunggu persetujuan Admin.');
     }
+
+    public function edit()
+    {
+        $shop = auth()->user()->shop;
+        if (!$shop) {
+            return redirect()->route('home')->with('error', 'Toko tidak ditemukan.');
+        }
+        
+        $parentShops = Shop::where('id', '!=', $shop->id)
+                           ->where('is_branch', false)
+                           ->where('status', 'approved')
+                           ->get();
+
+        return view('owner.shop.edit', compact('shop', 'parentShops'));
+    }
+
+    public function update(\Illuminate\Http\Request $request)
+    {
+        $shop = auth()->user()->shop;
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'whatsapp_number' => 'required|string|max:20',
+            'address_detail' => 'required|string',
+            'description' => 'nullable|string',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'parent_shop_id' => 'nullable|exists:shops,id'
+        ]);
+
+        $data = $request->only(['name', 'whatsapp_number', 'address_detail', 'description']);
+        
+        $data['is_branch'] = $request->has('is_branch');
+        $data['parent_shop_id'] = $request->has('is_branch') ? $request->parent_shop_id : null;
+
+        if ($request->hasFile('logo')) {
+            if ($shop->logo_path && !str_starts_with($shop->logo_path, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($shop->logo_path);
+            }
+            $data['logo_path'] = $request->file('logo')->store('shop_logos', 'public');
+        }
+
+        $shop->update($data);
+
+        return redirect()->route('owner.shop.edit')->with('success', 'Profil toko berhasil diperbarui!');
+    }
 }

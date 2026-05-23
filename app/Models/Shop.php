@@ -27,4 +27,21 @@ class Shop extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function getAverageRatingAttribute()
+    {
+        $products = $this->products()->withAvg('reviews', 'rating')->get();
+        $avg = $products->avg('reviews_avg_rating');
+        return round($avg, 1) ?: 0;
+    }
+
+    public function parentShop()
+    {
+        return $this->belongsTo(Shop::class, 'parent_shop_id');
+    }
+
+    public function branches()
+    {
+        return $this->hasMany(Shop::class, 'parent_shop_id');
+    }
 }

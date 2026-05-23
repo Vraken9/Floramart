@@ -94,14 +94,19 @@ if (!function_exists('formatRupiah')) {
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @forelse($products as $product)
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col group relative">
-                        @if(Auth::check())
-                            <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
-                                @csrf
-                                @php $isFavorited = Auth::user()->favoriteProducts()->where('product_id', $product->id)->exists(); @endphp
-                                <button type="submit" class="h-8 w-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform">
-                                    <i class="fa-{{ $isFavorited ? 'solid' : 'regular' }} fa-heart {{ $isFavorited ? 'text-red-500' : 'text-gray-400' }}"></i>
-                                </button>
-                            </form>
+                        @if(!Auth::check() || Auth::user()->role !== 'admin')
+                            @if(Auth::check())
+                                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
+                                    @csrf
+                                    <button type="submit" class="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-transform hover:scale-110 {{ Auth::user()->favoriteProducts->contains($product->id) ? 'text-red-500' : 'text-gray-400 hover:text-red-400' }}">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 shadow-sm transition-transform hover:scale-110" title="Login untuk menyimpan favorit">
+                                    <i class="fa-solid fa-heart"></i>
+                                </a>
+                            @endif
                         @endif
 
                         <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-gray-100">
@@ -151,14 +156,19 @@ if (!function_exists('formatRupiah')) {
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 @foreach($category->products as $product)
                                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col group relative">
-                                        @if(Auth::check())
-                                            <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
-                                                @csrf
-                                                @php $isFavorited = Auth::user()->favoriteProducts()->where('product_id', $product->id)->exists(); @endphp
-                                                <button type="submit" class="h-8 w-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform">
-                                                    <i class="fa-{{ $isFavorited ? 'solid' : 'regular' }} fa-heart {{ $isFavorited ? 'text-red-500' : 'text-gray-400' }}"></i>
-                                                </button>
-                                            </form>
+                                        @if(!Auth::check() || Auth::user()->role !== 'admin')
+                                            @if(Auth::check())
+                                                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
+                                                    @csrf
+                                                    <button type="submit" class="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-transform hover:scale-110 {{ Auth::user()->favoriteProducts->contains($product->id) ? 'text-red-500' : 'text-gray-400 hover:text-red-400' }}">
+                                                        <i class="fa-solid fa-heart"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('login') }}" class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 shadow-sm transition-transform hover:scale-110" title="Login untuk menyimpan favorit">
+                                                    <i class="fa-solid fa-heart"></i>
+                                                </a>
+                                            @endif
                                         @endif
 
                                         <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-gray-100">

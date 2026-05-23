@@ -10,18 +10,19 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $role = Auth::user()->role;
+        $user = auth()->user();
 
-        if ($role === 'admin') {
-            // Ambil semua toko yang statusnya masih 'pending' beserta data pembuatnya dan lokasi
-            $pendingShops = Shop::with(['user', 'district.regency'])->where('status', 'pending')->get();
-
-            // Kirim data tersebut ke halaman view admin
+        if ($user->role === 'admin') {
+            $pendingShops = \App\Models\Shop::with(['user', 'district.regency'])->where('status', 'pending')->get();
             return view('admin.dashboard', compact('pendingShops'));
-        } elseif ($role === 'owner') {
-            return view('owner.dashboard');
-        }
-
-        return view('dashboard');
+        } 
+        
+        if ($user->role === 'owner') {
+            return redirect()->route('owner.products.index');
+        } 
+        
+        // Default User Role
+        $favoriteProducts = $user->favoriteProducts()->with(['shop.district.regency', 'category'])->get();
+        return view('dashboard', compact('favoriteProducts'));
     }
 }

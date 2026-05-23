@@ -6,6 +6,7 @@
     <title>{{ $product->name }} - FloraMart</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50">
@@ -126,23 +127,28 @@
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-4 mt-auto">
-                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" class="flex-1 inline-flex justify-center items-center px-8 py-4 bg-[#7c4959] border border-transparent rounded-xl font-bold text-white uppercase tracking-wider hover:bg-[#5d3642] shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7c4959]">
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.115.548 4.181 1.587 6.002L.15 24l6.113-1.603c1.761.954 3.743 1.458 5.768 1.458 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm3.844 17.15c-.198.558-1.155 1.077-1.594 1.139-.439.062-1.01.124-3.327-.837-2.784-1.155-4.577-4.04-4.717-4.226-.14-.186-1.125-1.498-1.125-2.852 0-1.354.714-2.02 1.01-2.33.295-.31.642-.387.854-.387.213 0 .426 0 .608.008.196.009.458-.073.716.55.27.643.916 2.234.996 2.39.08.156.133.342.023.559-.11.218-.166.353-.332.551-.166.198-.352.428-.5.568-.166.17-.34.356-.148.687.193.33 .862 1.422 1.854 2.308 1.285 1.148 2.373 1.503 2.713 1.658.34.156.541.133.745-.101.205-.233.876-1.023 1.114-1.373.238-.35.476-.291.785-.175.31.117 1.955.922 2.291 1.092.335.171.559.253.642.395.082.143.082.833-.116 1.39z"/>
-                                </svg>
-                                Pesan via WhatsApp
+                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" class="flex-1 inline-flex justify-center items-center px-4 py-4 bg-green-600 border border-transparent rounded-xl font-bold text-white tracking-wider hover:bg-green-700 shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 text-lg">
+                                <i class="fa-brands fa-whatsapp mr-2 text-xl"></i> Pesan Sekarang
                             </a>
 
-                            <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="sm:w-auto">
-                                @csrf
-                                <button type="submit" class="w-full h-full sm:w-16 inline-flex justify-center items-center px-4 py-4 bg-white border-2 border-[#d4ccc0] text-[#7c4959] rounded-xl hover:bg-[#d4ccc0]/10 hover:border-[#7c4959] transition-all focus:outline-none">
-                                    @if($isFavorited)
-                                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                                    @else
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                    @endif
-                                </button>
-                            </form>
+                            @if(!Auth::check() || Auth::user()->role !== 'admin')
+                                @if(Auth::check())
+                                    <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="sm:w-auto">
+                                        @csrf
+                                        <button type="submit" class="w-full h-full sm:w-16 inline-flex justify-center items-center px-4 py-4 bg-white border-2 border-[#d4ccc0] text-[#7c4959] rounded-xl hover:bg-[#d4ccc0]/10 hover:border-[#7c4959] transition-all focus:outline-none" title="Favorit">
+                                            @if($isFavorited)
+                                                <i class="fa-solid fa-heart text-2xl text-red-500"></i>
+                                            @else
+                                                <i class="fa-regular fa-heart text-2xl"></i>
+                                            @endif
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="sm:w-auto w-full h-full sm:w-16 inline-flex justify-center items-center px-4 py-4 bg-white border-2 border-[#d4ccc0] text-[#7c4959] rounded-xl hover:bg-[#d4ccc0]/10 hover:border-[#7c4959] transition-all focus:outline-none" title="Login untuk menyimpan favorit">
+                                        <i class="fa-regular fa-heart text-2xl"></i>
+                                    </a>
+                                @endif
+                            @endif
                         </div>
 
                         <div class="mt-8 grid grid-cols-3 gap-4 border-t border-gray-100 pt-8">
@@ -161,6 +167,95 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+
+            <!-- Review Section -->
+            <div class="mt-16 bg-white rounded-2xl shadow-sm border border-[#d4ccc0]/50 overflow-hidden">
+                <div class="px-8 py-6 border-b border-gray-100 bg-[#fdfbf7] flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                        <i class="fa-solid fa-star text-yellow-400"></i> Ulasan Pembeli
+                        <span class="text-lg font-medium text-gray-500">({{ $product->average_rating }} / 5)</span>
+                    </h2>
+                    <span class="text-sm font-semibold text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200 shadow-sm">{{ $product->reviews->count() }} Ulasan</span>
+                </div>
+
+                <div class="p-8">
+                    @auth
+                        @php
+                            $hasReviewed = $product->reviews->where('user_id', Auth::id())->first();
+                        @endphp
+                        
+                        @if(!$hasReviewed)
+                            <!-- Review Form -->
+                            <div class="mb-10 bg-gray-50 rounded-xl p-6 border border-gray-100">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4">Tulis Ulasan Anda</h3>
+                                <form action="{{ route('review.store', $product->id) }}" method="POST">
+                                    @csrf
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Penilaian</label>
+                                        <div class="flex items-center gap-4" x-data="{ rating: 5, hoverRating: 0 }">
+                                            <div class="flex">
+                                                <template x-for="i in 5">
+                                                    <i class="fa-star text-2xl cursor-pointer transition-colors"
+                                                       :class="i <= (hoverRating || rating) ? 'fa-solid text-yellow-400' : 'fa-regular text-gray-300'"
+                                                       @mouseover="hoverRating = i"
+                                                       @mouseleave="hoverRating = 0"
+                                                       @click="rating = i"></i>
+                                                </template>
+                                            </div>
+                                            <input type="hidden" name="rating" x-model="rating" required>
+                                            <span class="text-sm font-medium text-gray-500" x-text="rating + ' Bintang'"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="comment" class="block text-sm font-semibold text-gray-700 mb-2">Komentar (Opsional)</label>
+                                        <textarea name="comment" id="comment" rows="3" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#7c4959] focus:ring focus:ring-[#7c4959]/20" placeholder="Bagaimana pengalaman Anda dengan bunga ini?"></textarea>
+                                    </div>
+                                    <button type="submit" class="px-6 py-2 bg-[#7c4959] hover:bg-[#5d3642] text-white font-bold rounded-lg shadow-sm transition-colors">
+                                        Kirim Ulasan
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    @else
+                        <div class="mb-10 bg-blue-50 text-blue-800 rounded-xl p-4 flex items-center justify-between border border-blue-100">
+                            <span class="text-sm font-medium">Ingin memberikan ulasan? Silakan masuk terlebih dahulu.</span>
+                            <a href="{{ route('login') }}" class="text-sm font-bold bg-white px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition-colors">Masuk</a>
+                        </div>
+                    @endauth
+
+                    <!-- Review List -->
+                    @if($product->reviews->isEmpty())
+                        <div class="text-center py-8">
+                            <i class="fa-regular fa-comments text-4xl text-gray-300 mb-3"></i>
+                            <p class="text-gray-500 font-medium">Belum ada ulasan untuk produk ini. Jadilah yang pertama!</p>
+                        </div>
+                    @else
+                        <div class="space-y-6">
+                            @foreach($product->reviews()->latest()->get() as $review)
+                                <div class="flex gap-4 pb-6 {{ !$loop->last ? 'border-b border-gray-100' : '' }}">
+                                    <div class="w-10 h-10 rounded-full bg-[#d4ccc0]/30 flex items-center justify-center text-[#7c4959] font-bold shrink-0">
+                                        {{ substr($review->user->name, 0, 1) }}
+                                    </div>
+                                    <div class="flex-grow">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-bold text-gray-900">{{ $review->user->name }}</h4>
+                                            <span class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <div class="flex mb-2">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <i class="fa-star {{ $i <= $review->rating ? 'fa-solid text-yellow-400' : 'fa-regular text-gray-300' }} text-sm"></i>
+                                            @endfor
+                                        </div>
+                                        @if($review->comment)
+                                            <p class="text-gray-600 text-sm leading-relaxed">{{ $review->comment }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
 

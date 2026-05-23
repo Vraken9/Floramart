@@ -34,6 +34,7 @@
 | `address_detail` | string | |
 | `whatsapp_number` | string | |
 | `status` | enum | `['pending', 'approved', 'suspended']`, Default: `'pending'` |
+| `logo_path` | string | Nullable |
 | `created_at`, `updated_at` | timestamps | |
 
 ### Table: `products`
@@ -62,7 +63,7 @@
 ### Other Core Tables
 - `password_reset_tokens` (email PK, token, created_at)
 - `sessions` (id PK, user_id, ip_address, user_agent, payload, last_activity)
-- `provinces`, `regencies`, `districts`, `shop_schedules` (Standard relational schemas, not fully extracted beyond necessary foreign keys)
+- `provinces`, `regencies`, `districts`, `shop_schedules` (Standard relational schemas forming a 3-tier geographic hierarchy: Province -> Regency -> District)
 
 ---
 
@@ -99,8 +100,8 @@
 - **Assignment**: `$guarded = ['id']`
 - **Relationships**:
   - `shop()`: belongsTo `Shop`
-  - `category()`: belongsTo `Category` (Error in model: `category()` points to Category, but actual relationship is loosely inferred, no FK in migration. *Wait*: Migration has no `category_id`, but Model has `belongsTo(Category::class)`).
-  - `leads()`: hasMany `ProductLead` (Recursive referencing itself)
+  - `category()`: belongsTo `Category`
+  - `leads()`: hasMany `ProductLead`
 
 ### Regions Hierarchy
 - **Province**: `regencies()` hasMany `Regency`
@@ -116,7 +117,8 @@
 | GET | `/` | `HomeController@index` | - | `home` |
 | GET | `/katalog` | `HomeController@katalog` | - | `katalog.index` |
 | GET | `/toko-florist` | `HomeController@allShops` | - | `shops.index` |
-| GET | `/dashboard` | `WishlistController@index` | `auth, verified` | `dashboard` |
+| GET | `/dashboard` | `DashboardController@index` | `auth, verified` | `dashboard` |
+| GET | `/wishlist` | `WishlistController@index` | `auth, verified` | `wishlist.index` |
 | POST | `/wishlist/{product}`| `WishlistController@toggle`| `auth` | `wishlist.toggle` |
 | GET | `/product/{slug}` | `HomeController@show` | - | `product.show` |
 | GET | `/shop/{id}` | `ShopController@show` | - | `shop.show` |
@@ -142,38 +144,38 @@
 ## 4. Controller Logic
 
 ### `HomeController`
-- `index()`: Returns `$groupedProducts` (4 products per category w/ relationships), `$categories`, `$districts` to `welcome`.
-- `katalog()`: Serves search logic on products. Returns `$products`, `$categories`, `$districts` to `katalog.index`.
-- `show()`: Returns single `$product` (by slug) and `$categories` to `product.show` view.
-- `allShops()`: Returns `$shops`, `$districts`, `$categories` to `shop.index`.
+- `index()`: Returns `$groupedProducts` (4 active products per category with an approved shop, along with shop district & regency data), `$categories`, and `$districts` (with regency and province relationships) to `welcome` view.
+- `katalog()`: Handles search/filter logic. Employs a 2-tier location filtering logic (`regency` and `district`). If searching/filtering, returns flat `$products`; otherwise, returns default grouped `$groupedProducts` (4 per category).
+- `show()`: Returns single `$product` (by slug, if active) along with `shop.district.regency` data, and `$categories` to `product.show` view.
+- `allShops()`: Lists shops with 'approved' status. Also employs the 2-tier location filter (`regency` and `district`). Returns `$shops`, `$regencies`, and `$categories` to `shop.index`.
+
+### `DashboardController` & `AdminController`
+- `index()`: Diverts user based on their role (`admin`, `owner`, or default user). If `admin`, it queries all `pending` shops along with their `user` and `district.regency` relationships, providing `$pendingShops` to the `admin.dashboard` view. If `owner`, returns `owner.dashboard`.
+- `approveShop()`: Updates shop status to 'approved' and promotes the associated user role to 'owner'.
 
 ### `ProductController` (Owner)
 - `index()`: Returns owner's `$products` and `$shop` to `owner.products.index`.
 - `create()`: Returns `$categories` and `$shop` to `owner.products.create`.
-- `store()`: Validates image (URL or local) and creates `Product`.
+- `store()`: Validates input and image (URL or local upload) and creates `Product`.
 - `edit()`: Returns `$product`, `$categories`, `$shop` to `owner.products.edit`.
-- `update()`: Modifies product, handles old image cleanup.
+- `update()`: Modifies product, handles old image cleanup if replaced.
 - `destroy()`: Deletes product and cleans local image.
-- `toggleStatus()`: Switches `is_active` boolean.
-
-### `DashboardController` & `AdminController`
-- `index()`: Diverts user based on role ('admin', 'owner', 'user'). Provides `$pendingShops` to `admin.dashboard` if admin.
-- `approveShop()`: Updates shop status to 'approved' and promotes user role to 'owner'.
+- `toggleStatus()`: Switches `is_active` boolean for a specific product.
 
 ### `ShopController`
-- `show()`: Returns `$shop` (with products & relation) and `$categories` to `shop.show`.
-- `create()` / `store()`: Validates and saves new shop registration data with `status = pending`.
+- `show()`: Returns `$shop` (with its products & relationships) and `$categories` to `shop.show`.
+- `create()` / `store()`: Validates and saves new shop registration data with `status = pending`. Supports newly added `logo_path` functionality for shop logos.
 
 ### `LeadController`
-- `redirectWhatsApp()`: Inserts click tracker log `ProductLead` and redirects user to heavily formatted `https://wa.me/` dynamically.
+- `redirectWhatsApp()`: Inserts a click tracker log (`ProductLead`) and redirects the user to the `https://wa.me/` endpoint with a heavily formatted message linking back to the product.
 
 ### `WishlistController`
-- `index()`: Serves 'user dashboard' with `$favoriteProducts` and `$categories`.
-- `toggle()`: Syncs/Toggles product id to user's `wishlists` pivot.
+- `index()`: Serves the 'user wishlist dashboard' with `$favoriteProducts` and `$categories` at the `/wishlist` route.
+- `toggle()`: Syncs/Toggles a given product ID to the authenticated user's `wishlists` pivot table.
 
 ---
 
-## 5. View Structure
+## 5. View Structure & Design System
 **Root (`resources/views/`)**
 - `welcome.blade.php`
 - `dashboard.blade.php`
@@ -183,10 +185,10 @@
 - `components/` (Breeze components: `application-logo.blade.php`, `modal.blade.php`, button components, inputs, etc.)
 
 **Entity Domains**
-- `admin/dashboard.blade.php`
+- `admin/dashboard.blade.php` (Incorporates Plum-Beige design system, 2-tier filtering UI, standardized navigation)
 - `auth/` (Login, Register, Passwords, etc.)
 - `katalog/index.blade.php`, `katalog/detail.blade.php`
-- `owner/dashboard.blade.php`
+- `owner/dashboard.blade.php` (Aligned with Admin Dashboard's Plum-Beige aesthetic)
 - `owner/products/index.blade.php`, `create.blade.php`, `edit.blade.php`
 - `product/show.blade.php`
 - `profile/edit.blade.php`, `partials/...`

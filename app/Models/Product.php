@@ -28,4 +28,14 @@ class Product extends Model
     {
         return $this->belongsToMany(User::class, 'wishlists')->withTimestamps();
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return round($this->reviews()->avg('rating'), 1) ?: 0;
+    }
 }

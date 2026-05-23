@@ -10,6 +10,30 @@
                 <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Beranda</a>
                 <a href="{{ route('katalog.index') }}" class="{{ request()->routeIs('katalog.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Katalog</a>
                 <a href="{{ route('shops.index') }}" class="{{ request()->routeIs('shops.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Toko</a>
+                
+                @if(!Auth::check() || Auth::user()->role !== 'admin')
+                    @php
+                        $wishlistCount = 0;
+                        if(Auth::check()) {
+                            $wishlistCount = Auth::user()->favoriteProducts()->count();
+                        }
+                    @endphp
+                    @if(Auth::check())
+                        <a href="{{ route('wishlist.index') }}" class="relative text-gray-500 hover:text-[#7c4959] transition flex items-center h-full mr-2" title="Favorit Saya">
+                            <i class="fa-solid fa-heart text-xl"></i>
+                            @if($wishlistCount > 0)
+                                <span class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">
+                                    {{ $wishlistCount > 99 ? '99+' : $wishlistCount }}
+                                </span>
+                            @endif
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="relative text-gray-500 hover:text-[#7c4959] transition flex items-center h-full mr-2" title="Login untuk melihat favorit">
+                            <i class="fa-regular fa-heart text-xl"></i>
+                        </a>
+                    @endif
+                @endif
+
                 @if (Auth::check())
                     <div class="relative pl-4 border-l border-gray-300" x-data="{ open: false }">
                         <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-2 focus:outline-none">
@@ -17,6 +41,12 @@
                                 {{ substr(Auth::user()->name, 0, 1) }}
                             </div>
                             <span class="text-sm font-semibold text-gray-700 hidden md:block">{{ Auth::user()->name }}</span>
+            <span class="hidden md:inline-block ml-2 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full border 
+                {{ Auth::user()->role === 'admin' ? 'bg-red-100 text-red-700 border-red-200' : 
+                  (Auth::user()->role === 'owner' ? 'bg-blue-100 text-blue-700 border-blue-200' : 
+                  'bg-gray-100 text-gray-700 border-gray-200') }}">
+                {{ Auth::user()->role }}
+            </span>
                             <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
                         </button>
 
@@ -24,6 +54,7 @@
                             <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-gauge mr-2 text-[#7c4959]"></i> Dasbor Utama</a>
                             @if(Auth::user()->role === 'owner')
                                 <a href="{{ route('owner.products.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-store mr-2 text-[#7c4959]"></i> Dasbor Toko</a>
+                                <a href="{{ route('owner.shop.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-shop-lock mr-2 text-[#7c4959]"></i> Pengaturan Toko</a>
                             @endif
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-user-gear mr-2 text-[#7c4959]"></i> Kelola Profil</a>
                             
