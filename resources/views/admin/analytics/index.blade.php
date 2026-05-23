@@ -24,6 +24,9 @@
                     <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
                         <i class="fa-solid fa-box w-6"></i> Kelola Produk
                     </a>
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
+                        <i class="fa-solid fa-users w-6"></i> Kelola User
+                    </a>
                     <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 bg-red-50 text-red-700 rounded-lg font-bold">
                         <i class="fa-solid fa-chart-line w-6"></i> Analitik
                     </a>

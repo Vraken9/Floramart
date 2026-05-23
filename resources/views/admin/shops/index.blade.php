@@ -25,6 +25,9 @@
                     <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
                         <i class="fa-solid fa-box w-6"></i> Kelola Produk
                     </a>
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
+                        <i class="fa-solid fa-users w-6"></i> Kelola User
+                    </a>
                     <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
                         <i class="fa-solid fa-chart-line w-6"></i> Analitik
                     </a>
@@ -76,19 +79,41 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-right">
-                                        @if($shop->status !== 'pending')
+                                        @if(!in_array($shop->status, ['pending', 'rejected']))
                                             <div class="flex items-center justify-end gap-2">
                                                 <a href="{{ route('admin.shops.edit', $shop->id) }}" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-blue-600 border-blue-200 hover:bg-blue-50 transition-colors">
                                                     <i class="fa-solid fa-pen-to-square"></i> Edit
                                                 </a>
-                                                <form action="{{ route('admin.shops.toggle', $shop->id) }}" method="POST" class="inline-block">
+                                                
+                                                @if($shop->status !== 'approved')
+                                                <form action="{{ route('admin.shops.update-status', $shop->id) }}" method="POST" class="inline-block">
                                                     @csrf @method('PATCH')
-                                                    <button type="submit" onclick="return confirm('Yakin ingin mengubah status toko ini?')" 
-                                                        class="px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors 
-                                                        {{ $shop->status === 'approved' ? 'bg-white text-red-600 border-red-200 hover:bg-red-50' : 'bg-white text-green-600 border-green-200 hover:bg-green-50' }}">
-                                                        <i class="{{ $shop->status === 'approved' ? 'fa-solid fa-ban' : 'fa-solid fa-check-circle' }}"></i> {{ $shop->status === 'approved' ? 'Suspend' : 'Aktifkan' }}
+                                                    <input type="hidden" name="status" value="approved">
+                                                    <button type="submit" onclick="return confirm('Aktifkan kembali toko ini?')" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-green-600 border-green-200 hover:bg-green-50 transition-colors">
+                                                        <i class="fa-solid fa-check-circle"></i> Aktifkan
                                                     </button>
                                                 </form>
+                                                @endif
+
+                                                @if($shop->status !== 'suspended')
+                                                <form action="{{ route('admin.shops.update-status', $shop->id) }}" method="POST" class="inline-block">
+                                                    @csrf @method('PATCH')
+                                                    <input type="hidden" name="status" value="suspended">
+                                                    <button type="submit" onclick="return confirm('Suspend toko ini sementara?')" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-orange-600 border-orange-200 hover:bg-orange-50 transition-colors">
+                                                        <i class="fa-solid fa-pause"></i> Suspend
+                                                    </button>
+                                                </form>
+                                                @endif
+
+                                                @if($shop->status !== 'banned')
+                                                <form action="{{ route('admin.shops.update-status', $shop->id) }}" method="POST" class="inline-block">
+                                                    @csrf @method('PATCH')
+                                                    <input type="hidden" name="status" value="banned">
+                                                    <button type="submit" onclick="return confirm('Banned/Blokir permanen toko ini?')" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-red-600 border-red-200 hover:bg-red-50 transition-colors">
+                                                        <i class="fa-solid fa-ban"></i> Blokir
+                                                    </button>
+                                                </form>
+                                                @endif
                                             </div>
                                         @endif
                                     </td>

@@ -22,6 +22,16 @@ class ProductController extends Controller
             return redirect()->route('dashboard')->with('status', 'Akses ditolak. Anda belum memiliki toko.');
         }
 
+        // Jika toko sedang menunggu persetujuan
+        if (in_array($shop->status, ['pending', 'in_review'])) {
+            return view('owner.pending', compact('shop'));
+        }
+
+        // Jika toko disuspend atau dibanned
+        if (in_array($shop->status, ['suspended', 'banned'])) {
+            return view('owner.suspended', compact('shop'));
+        }
+
         // Ambil semua produk yang terikat dengan ID toko ini
         $products = Product::with('category')
             ->where('shop_id', $shop->id)

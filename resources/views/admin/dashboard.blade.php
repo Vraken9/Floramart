@@ -25,6 +25,9 @@
                     <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
                         <i class="fa-solid fa-box w-6"></i> Kelola Produk
                     </a>
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
+                        <i class="fa-solid fa-users w-6"></i> Kelola User
+                    </a>
                     <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
                         <i class="fa-solid fa-chart-line w-6"></i> Analitik
                     </a>
@@ -70,16 +73,18 @@
                                 <div class="py-4 flex justify-between items-center">
                                     <div>
                                         <p class="font-bold text-gray-900">{{ $shop->name }}</p>
-                                        <p class="text-xs text-gray-500">Pemilik: {{ $shop->user->name }} | Daerah: {{ $shop->district->name }}</p>
+                                        <p class="text-xs text-gray-500">Pemilik: {{ $shop->user->name }} | Daerah: {{ $shop->district->name }} | Status: <span class="uppercase text-[10px] font-bold px-2 py-0.5 rounded-full {{ $shop->status == 'pending' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700' }}">{{ $shop->status == 'pending' ? 'Menunggu' : 'Sedang Diverifikasi' }}</span></p>
                                     </div>
                                     <div class="flex gap-2">
                                         <form action="{{ route('admin.shops.approve', $shop->id) }}" method="POST">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors"><i class="fa-solid fa-check mr-1"></i> Setujui</button>
+                                            <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors"><i class="fa-solid fa-check mr-1"></i> Terima</button>
                                         </form>
-                                        <form action="{{ route('admin.shops.reject', $shop->id) }}" method="POST">
+
+                                        <form action="{{ route('admin.shops.reject', $shop->id) }}" method="POST" id="form-reject-{{ $shop->id }}">
                                             @csrf @method('PATCH')
-                                            <button type="submit" onclick="return confirm('Tolak pendaftaran toko ini?')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors"><i class="fa-solid fa-xmark mr-1"></i> Tolak</button>
+                                            <input type="hidden" name="rejected_reason" id="reason-{{ $shop->id }}">
+                                            <button type="button" onclick="rejectShop({{ $shop->id }})" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors"><i class="fa-solid fa-xmark mr-1"></i> Tolak</button>
                                         </form>
                                     </div>
                                 </div>
@@ -92,5 +97,18 @@
             </div>
         </main>
     </div>
+
+    <script>
+        function rejectShop(shopId) {
+            let reason = prompt("Silakan masukkan alasan mengapa toko ini ditolak:");
+            if (reason === null) return; // User cancelled
+            if (reason.trim() === "") {
+                alert("Alasan penolakan wajib diisi!");
+                return;
+            }
+            document.getElementById('reason-' + shopId).value = reason;
+            document.getElementById('form-reject-' + shopId).submit();
+        }
+    </script>
 </body>
 </html>

@@ -13,7 +13,7 @@ class DashboardController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'admin') {
-            $pendingShops = \App\Models\Shop::with(['user', 'district.regency'])->where('status', 'pending')->get();
+            $pendingShops = \App\Models\Shop::with(['user', 'district.regency'])->whereIn('status', ['pending', 'in_review'])->get();
             return view('admin.dashboard', compact('pendingShops'));
         } 
         
@@ -23,6 +23,7 @@ class DashboardController extends Controller
         
         // Default User Role
         $favoriteProducts = $user->favoriteProducts()->with(['shop.district.regency', 'category'])->get();
-        return view('dashboard', compact('favoriteProducts'));
+        $userShop = Shop::where('user_id', $user->id)->first();
+        return view('dashboard', compact('favoriteProducts', 'userShop'));
     }
 }

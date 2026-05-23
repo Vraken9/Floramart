@@ -25,6 +25,9 @@
                     <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 bg-red-50 text-red-700 rounded-lg font-bold">
                         <i class="fa-solid fa-box w-6"></i> Kelola Produk
                     </a>
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
+                        <i class="fa-solid fa-users w-6"></i> Kelola User
+                    </a>
                     <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
                         <i class="fa-solid fa-chart-line w-6"></i> Analitik
                     </a>
@@ -55,6 +58,9 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                         <h2 class="font-bold text-gray-800">Daftar Produk di <span x-text="selectedShop.name" class="text-red-700"></span></h2>
+                        <a :href="'/admin/products/create?shop_id=' + selectedShop.id" class="px-4 py-2 bg-red-700 text-white text-sm font-bold rounded-lg hover:bg-red-800 transition-colors">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Produk
+                        </a>
                     </div>
                     
                     <div class="overflow-x-auto">
@@ -82,14 +88,26 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border"
-                                                :class="product.is_active ? 'bg-green-100 text-green-700 border-green-200' : 'bg-gray-100 text-gray-700 border-gray-200'"
-                                                x-text="product.is_active ? 'Aktif' : 'Nonaktif'">
+                                                :class="product.is_hidden_by_admin ? 'bg-red-100 text-red-700 border-red-200' : (product.is_active ? 'bg-green-100 text-green-700 border-green-200' : 'bg-gray-100 text-gray-700 border-gray-200')"
+                                                x-text="product.is_hidden_by_admin ? 'Hidden' : (product.is_active ? 'Aktif' : 'Nonaktif')">
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-right">
-                                            <a :href="'/admin/products/' + product.id + '/edit'" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-blue-600 border-blue-200 hover:bg-blue-50 transition-colors inline-block">
-                                                <i class="fa-solid fa-pen-to-square"></i> Edit
-                                            </a>
+                                            <div class="flex items-center justify-end gap-2">
+                                                <a :href="'/admin/products/' + product.id + '/edit'" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-blue-600 border-blue-200 hover:bg-blue-50 transition-colors inline-block">
+                                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                                </a>
+                                                <form :action="'/admin/products/' + product.id + '/hide'" method="POST" class="inline-block">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-orange-600 border-orange-200 hover:bg-orange-50 transition-colors inline-block" x-text="product.is_hidden_by_admin ? 'Tampilkan' : 'Sembunyikan'"></button>
+                                                </form>
+                                                <form :action="'/admin/products/' + product.id" method="POST" class="inline-block">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" onclick="return confirm('Hapus permanen produk ini?')" class="px-3 py-1.5 text-xs font-bold rounded-lg border bg-white text-red-600 border-red-200 hover:bg-red-50 transition-colors inline-block">
+                                                        <i class="fa-solid fa-trash"></i> Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 </template>

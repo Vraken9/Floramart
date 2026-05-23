@@ -1,3 +1,6 @@
+<style>
+    [x-cloak] { display: none !important; }
+</style>
 <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -11,7 +14,7 @@
                 <a href="{{ route('katalog.index') }}" class="{{ request()->routeIs('katalog.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Katalog</a>
                 <a href="{{ route('shops.index') }}" class="{{ request()->routeIs('shops.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Toko</a>
                 
-                @if(!Auth::check() || Auth::user()->role !== 'admin')
+                @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'user'))
                     @php
                         $wishlistCount = 0;
                         if(Auth::check()) {
@@ -35,6 +38,9 @@
                 @endif
 
                 @if (Auth::check())
+                    <a href="{{ route('dashboard') }}" class="bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-bold uppercase shadow-sm mr-2 transition-colors">
+                        Dasbor
+                    </a>
                     <div class="relative pl-4 border-l border-gray-300" x-data="{ open: false }">
                         <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-2 focus:outline-none">
                             <div class="w-8 h-8 rounded-full bg-[#7c4959] text-white flex items-center justify-center font-bold text-xs uppercase shadow-sm">
@@ -51,7 +57,6 @@
                         </button>
 
                         <div x-show="open" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
-                            <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-gauge mr-2 text-[#7c4959]"></i> Dasbor Utama</a>
                             @if(Auth::user()->role === 'owner')
                                 <a href="{{ route('owner.products.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-store mr-2 text-[#7c4959]"></i> Dasbor Toko</a>
                                 <a href="{{ route('owner.shop.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-shop-lock mr-2 text-[#7c4959]"></i> Pengaturan Toko</a>

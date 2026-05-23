@@ -40,7 +40,7 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <form action="{{ route('admin.shops.update', $shop->id) }}" method="POST">
+                <form action="{{ route('admin.shops.update', $shop->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -63,6 +63,11 @@
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-1">Deskripsi Toko</label>
                             <textarea name="description" rows="4" class="w-full rounded-lg border-gray-300 focus:border-red-500 focus:ring-red-500">{{ old('description', $shop->description) }}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Logo Toko (Opsional)</label>
+                            <input type="file" name="logo" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100">
                         </div>
                     </div>
 

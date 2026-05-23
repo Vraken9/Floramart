@@ -15,9 +15,17 @@ class ShopController extends Controller
         // Fetch shop with necessary relations
         $shop = \App\Models\Shop::with(['district.regency', 'products.category'])->findOrFail($id);
         
+        // Record profile view
+        \App\Models\ShopView::create([
+            'shop_id' => $shop->id,
+            'user_id' => auth()->check() ? auth()->id() : null,
+            'ip_address' => request()->ip(),
+        ]);
+
         // Group products by category name for the 'shop.show' view
         $groupedProducts = $shop->products
             ->where('is_active', true)
+            ->where('is_hidden_by_admin', false)
             ->groupBy(function($product) {
                 return $product->category ? $product->category->name : 'Uncategorized';
             });

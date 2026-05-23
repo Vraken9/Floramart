@@ -44,4 +44,14 @@ class Shop extends Model
     {
         return $this->hasMany(Shop::class, 'parent_shop_id');
     }
+
+    public function productLeads()
+    {
+        return $this->hasMany(ProductLead::class);
+    }
+
+    public function shopViews()
+    {
+        return $this->hasMany(ShopView::class);
+    }
 }

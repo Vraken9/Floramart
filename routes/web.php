@@ -43,20 +43,28 @@ Route::middleware('auth')->group(function () {
 });
 // Rute Khusus Admin
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Existing route for approving pending shops
-    Route::patch('/shops/{id}/approve', [App\Http\Controllers\AdminController::class, 'approveShop'])->name('shops.approve');
-    
+
     // NEW ROUTES FOR PHASE 2A
     Route::get('/shops', [App\Http\Controllers\AdminController::class, 'shopsIndex'])->name('shops.index');
-    Route::patch('/shops/{id}/toggle-status', [App\Http\Controllers\AdminController::class, 'toggleShopStatus'])->name('shops.toggle');
+    Route::patch('/shops/{id}/update-status', [App\Http\Controllers\AdminController::class, 'updateShopStatus'])->name('shops.update-status');
+    Route::patch('/shops/{id}/approve', [App\Http\Controllers\AdminController::class, 'approveShop'])->name('shops.approve');
     Route::patch('/shops/{id}/reject', [App\Http\Controllers\AdminController::class, 'rejectShop'])->name('shops.reject');
     Route::get('/shops/{id}/edit', [App\Http\Controllers\AdminController::class, 'editShop'])->name('shops.edit');
     Route::put('/shops/{id}', [App\Http\Controllers\AdminController::class, 'updateShop'])->name('shops.update');
     
     // Manage Products
     Route::get('/products', [App\Http\Controllers\AdminController::class, 'productsIndex'])->name('products.index');
+    Route::get('/products/create', [App\Http\Controllers\AdminController::class, 'createProduct'])->name('products.create');
+    Route::post('/products', [App\Http\Controllers\AdminController::class, 'storeProduct'])->name('products.store');
     Route::get('/products/{id}/edit', [App\Http\Controllers\AdminController::class, 'editProduct'])->name('products.edit');
     Route::put('/products/{id}', [App\Http\Controllers\AdminController::class, 'updateProduct'])->name('products.update');
+    Route::patch('/products/{id}/hide', [App\Http\Controllers\AdminController::class, 'toggleHideProduct'])->name('products.hide');
+    Route::delete('/products/{id}', [App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('products.destroy');
+    
+    // Manage Users
+    Route::get('/users', [App\Http\Controllers\AdminController::class, 'usersIndex'])->name('users.index');
+    Route::patch('/users/{id}/role', [App\Http\Controllers\AdminController::class, 'updateUserRole'])->name('users.update-role');
+    Route::delete('/users/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.destroy');
     
     // Analytics
     Route::get('/analytics', [App\Http\Controllers\AdminController::class, 'analyticsIndex'])->name('analytics.index');
