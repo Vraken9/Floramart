@@ -10,7 +10,7 @@
 
 ---
 
-## 📖 Deskripsi Proyek
+##  Deskripsi Proyek
 
 **FloraMart** adalah sebuah aplikasi web *marketplace* yang dirancang secara spesifik untuk mewadahi ekosistem jual-beli bunga dan tanaman hias. Dibangun menggunakan arsitektur monolitik modern dengan **Laravel 11**, aplikasi ini memungkinkan pengguna untuk tidak hanya membeli produk, tetapi juga membuka toko bunga *(Florist)* mereka sendiri.
 
@@ -18,21 +18,21 @@ Aplikasi ini mendemonstrasikan kapabilitas implementasi *Role-Based Access Contr
 
 ---
 
-## 🎯 Fitur Berdasarkan Role
+##  Fitur Berdasarkan Role
 
 Aplikasi ini menggunakan 3 lapisan peran pengguna (*role*):
 
-### 1. 🛡️ Admin
+### 1.  Admin
 - Mengelola persetujuan (*approval*), penolakan, atau penangguhan (*suspend*) pendaftaran toko baru lengkap dengan sistem pencatatan alasan (*reason tracking*).
 - Menurunkan atau menaikkan *role* akun pengguna (Otomatis menghapus data toko apabila diturunkan menjadi *user* biasa).
 - Mengakses statistik dan data analisis platform secara penuh.
 
-### 2. 🏪 Owner (Pemilik Toko)
+### 2.  Owner (Pemilik Toko)
 - Mendaftar toko baru secara dinamis berdasarkan data wilayah (Provinsi, Kabupaten, Kecamatan).
 - Mengelola katalog produk bunga (Buat, Baca, Perbarui, Hapus).
 - Mengelola profil toko dan ketersediaan nomor WhatsApp untuk menerima pesanan langsung dari pelanggan.
 
-### 3. 👤 User (Pembeli)
+### 3.  User (Pembeli)
 - Menjelajahi katalog produk dari semua toko.
 - Menyimpan produk ke daftar "Bunga Favorit Saya" (Wishlist).
 - Menambah produk ke keranjang belanja (*Cart*).
@@ -40,7 +40,7 @@ Aplikasi ini menggunakan 3 lapisan peran pengguna (*role*):
 
 ---
 
-## 🛠️ Arsitektur & Entity-Relationship Diagram (ERD)
+##  Arsitektur & Entity-Relationship Diagram (ERD)
 
 Di bawah ini adalah pemodelan *database* (ERD) yang memperlihatkan alur dan relasi antar entitas di dalam FloraMart:
 
@@ -112,7 +112,7 @@ erDiagram
 
 ---
 
-## 🚀 Panduan Instalasi (Development)
+##  Panduan Instalasi (Development)
 
 Untuk menjalankan proyek ini di lingkungan lokal Anda, pastikan sistem Anda telah terpasang:
 - **PHP** >= 8.2
@@ -165,7 +165,7 @@ Untuk menjalankan proyek ini di lingkungan lokal Anda, pastikan sistem Anda tela
 
 ---
 
-## 👨‍💻 Developer & Kontak
+##  Developer & Kontak
 
 Proyek ini dibangun sebagai dedikasi terhadap pengembangan aplikasi web fungsional yang estetis dan interaktif.
 
