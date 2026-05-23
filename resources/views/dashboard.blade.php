@@ -30,14 +30,16 @@
                         </h3>
                         
                         @if($userShop)
-                            <div class="p-4 rounded-xl {{ $userShop->status == 'approved' ? 'bg-green-50 border border-green-100' : ($userShop->status == 'rejected' ? 'bg-red-50 border border-red-100' : 'bg-blue-50 border border-blue-100') }}">
+                            <div class="p-4 rounded-xl {{ $userShop->status == 'approved' ? 'bg-green-50 border border-green-100' : (in_array($userShop->status, ['rejected', 'suspended']) ? 'bg-red-50 border border-red-100' : 'bg-blue-50 border border-blue-100') }}">
                                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Status Pendaftaran</p>
                                 <p class="font-extrabold text-lg mb-2
-                                    {{ $userShop->status == 'approved' ? 'text-green-700' : ($userShop->status == 'rejected' ? 'text-red-700' : 'text-blue-700') }}">
+                                    {{ $userShop->status == 'approved' ? 'text-green-700' : (in_array($userShop->status, ['rejected', 'suspended']) ? 'text-red-700' : 'text-blue-700') }}">
                                     @if($userShop->status == 'approved')
                                         Aktif
                                     @elseif($userShop->status == 'rejected')
                                         Ditolak
+                                    @elseif($userShop->status == 'suspended')
+                                        Disuspend
                                     @else
                                         Sedang Diverifikasi
                                     @endif
@@ -48,13 +50,13 @@
                                     <a href="{{ route('owner.products.index') }}" class="block w-full text-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors">
                                         Masuk Dasbor Toko
                                     </a>
-                                @elseif($userShop->status == 'rejected')
-                                    <p class="text-xs text-red-600 mb-3">Alasan: {{ $userShop->rejected_reason ?? 'Tidak memenuhi syarat.' }}</p>
-                                    <a href="https://wa.me/6281234567890" target="_blank" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-colors">
+                                @elseif(in_array($userShop->status, ['rejected', 'suspended']))
+                                    <p class="text-xs text-red-600 mb-3">Alasan: {{ $userShop->rejected_reason ?? 'Menunggu konfirmasi admin.' }}</p>
+                                    <a href="https://wa.me/6289530123608" target="_blank" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-colors">
                                         <i class="fa-brands fa-whatsapp"></i> Hubungi Admin
                                     </a>
                                 @else
-                                    <a href="https://wa.me/6281234567890" target="_blank" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors">
+                                    <a href="https://wa.me/6289530123608" target="_blank" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors">
                                         <i class="fa-brands fa-whatsapp"></i> Hubungi Admin
                                     </a>
                                 @endif
@@ -69,6 +71,7 @@
                 </div>
 
                 <!-- Konten Utama (Favorit) -->
+                @if(Auth::user()->role === 'user')
                 <div class="lg:col-span-3">
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
                         <div class="flex items-center justify-between mb-6">
@@ -133,6 +136,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             
         </div>

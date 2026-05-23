@@ -94,7 +94,7 @@ if (!function_exists('formatRupiah')) {
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @forelse($products as $product)
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col group relative">
-                        @if(!Auth::check() || Auth::user()->role !== 'admin')
+                        @if(!Auth::check() || Auth::user()->role === 'user')
                             @if(Auth::check())
                                 <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
                                     @csrf
@@ -109,12 +109,12 @@ if (!function_exists('formatRupiah')) {
                             @endif
                         @endif
 
-                        <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-gray-100">
+                        <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'katalog']) }}" class="block aspect-square overflow-hidden bg-gray-100">
                             <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         </a>
                         <div class="p-4 flex flex-col flex-grow">
                             <div class="text-[10px] font-bold text-[#7c4959] uppercase tracking-wider mb-1">{{ $product->category->name }}</div>
-                            <a href="{{ route('product.show', $product->slug) }}" class="font-bold text-gray-900 leading-snug hover:text-[#7c4959] mb-2">{{ $product->name }}</a>
+                            <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'katalog']) }}" class="font-bold text-gray-900 leading-snug hover:text-[#7c4959] mb-2">{{ $product->name }}</a>
                             
                             <div class="flex items-center text-xs text-gray-500 gap-1.5 mb-4 border-t pt-3">
                                  <i class="fa-solid fa-store text-[#926a7a]"></i> 
@@ -156,7 +156,7 @@ if (!function_exists('formatRupiah')) {
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 @foreach($category->products as $product)
                                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col group relative">
-                                        @if(!Auth::check() || Auth::user()->role !== 'admin')
+                                        @if(!Auth::check() || Auth::user()->role === 'user')
                                             @if(Auth::check())
                                                 <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
                                                     @csrf
@@ -171,12 +171,12 @@ if (!function_exists('formatRupiah')) {
                                             @endif
                                         @endif
 
-                                        <a href="{{ route('product.show', $product->slug) }}" class="block aspect-square overflow-hidden bg-gray-100">
+                                        <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'katalog']) }}" class="block aspect-square overflow-hidden bg-gray-100">
                                             <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                         </a>
                                         <div class="p-4 flex flex-col flex-grow">
                                             <div class="text-[10px] font-bold text-[#7c4959] uppercase tracking-wider mb-1">{{ $product->category->name }}</div>
-                                            <a href="{{ route('product.show', $product->slug) }}" class="font-bold text-gray-900 leading-snug hover:text-[#7c4959] mb-2">{{ $product->name }}</a>
+                                            <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'katalog']) }}" class="font-bold text-gray-900 leading-snug hover:text-[#7c4959] mb-2">{{ $product->name }}</a>
                                             
                                             <div class="flex items-center text-xs text-gray-500 gap-1.5 mb-4 border-t pt-3">
                                                  <i class="fa-solid fa-store text-[#926a7a]"></i> 

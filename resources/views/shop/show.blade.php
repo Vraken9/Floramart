@@ -15,6 +15,13 @@
     <x-navigation />
 
     <main class="max-w-7xl mx-auto px-4 py-10">
+    <a href="{{ url()->previous() !== url()->current() ? url()->previous() : route('katalog.index') }}" class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-[#7c4959] transition-colors mb-6 group">
+        <svg class="h-4 w-4 mr-1.5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Kembali
+    </a>
+    
     <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 mb-10">
     <div class="flex flex-col md:flex-row items-center gap-6">
         <img src="{{ str_starts_with($shop->logo_path ?? '', 'http') ? $shop->logo_path : asset('storage/' . ($shop->logo_path ?? 'default.png')) }}" 
@@ -54,7 +61,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                     @foreach($products as $product)
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col group relative">
-                            @if(!Auth::check() || Auth::user()->role !== 'admin')
+                            @if(!Auth::check() || Auth::user()->role === 'user')
                                 @if(Auth::check())
                                     <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="absolute top-3 right-3 z-10">
                                         @csrf
@@ -68,14 +75,19 @@
                                     </a>
                                 @endif
                             @endif
-                            <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" class="aspect-square object-cover">
+                            <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'shop-' . $shop->id]) }}" class="block aspect-square overflow-hidden bg-gray-100">
+                                <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </a>
                             <div class="p-4 flex-grow">
-                                <h3 class="font-bold text-gray-900">{{ $product->name }}</h3>
+                                <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'shop-' . $shop->id]) }}" class="font-bold text-gray-900 hover:text-[#7c4959] line-clamp-2">{{ $product->name }}</a>
                                 <p class="text-[#7c4959] font-extrabold mt-2">Rp {{ number_format($product->price,0,',','.') }}</p>
                             </div>
-                            <div class="p-4 pt-0">
-                                <a href="https://wa.me/{{ $shop->whatsapp_number ?? '6289530123608' }}?text=Halo%20{{ $shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" target="_blank" class="block w-full py-2.5 bg-green-600 hover:bg-green-700 text-white text-center font-bold text-sm rounded-lg transition-colors">
-                                   <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
+                            <div class="p-4 pt-0 flex gap-2">
+                                <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'shop-' . $shop->id]) }}" class="flex-1 py-2 border border-[#7c4959] text-[#7c4959] hover:bg-[#7c4959] hover:text-white text-center font-bold text-xs rounded-lg transition-colors flex items-center justify-center">
+                                   Detail
+                                </a>
+                                <a href="https://wa.me/{{ $shop->whatsapp_number ?? '6289530123608' }}?text=Halo%20{{ $shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" target="_blank" class="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white text-center font-bold text-xs rounded-lg transition-colors flex items-center justify-center" title="Pesan via WhatsApp">
+                                   <i class="fa-brands fa-whatsapp mr-1"></i> Pesan
                                 </a>
                             </div>
                         </div>

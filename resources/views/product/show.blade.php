@@ -56,11 +56,25 @@
     <main class="bg-gray-50 min-h-screen py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <a href="{{ route('home') }}" class="inline-flex items-center text-xs font-semibold text-gray-500 hover:text-[#7c4959] transition-colors mb-6 group">
+            @php
+                $ref = request('ref');
+                $backUrl = route('home');
+                $backText = 'Kembali ke Beranda';
+                
+                if ($ref === 'katalog') {
+                    $backUrl = route('katalog.index');
+                    $backText = 'Kembali ke Katalog';
+                } elseif (str_starts_with($ref, 'shop-')) {
+                    $shopId = str_replace('shop-', '', $ref);
+                    $backUrl = route('shop.show', $shopId);
+                    $backText = 'Kembali ke Toko';
+                }
+            @endphp
+            <a href="{{ $backUrl }}" class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-[#7c4959] transition-colors mb-6 group">
                 <svg class="h-4 w-4 mr-1.5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Kembali ke Beranda
+                {{ $backText }}
             </a>
 
             <nav class="flex text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
@@ -131,7 +145,7 @@
                                 <i class="fa-brands fa-whatsapp mr-2 text-xl"></i> Pesan Sekarang
                             </a>
 
-                            @if(!Auth::check() || Auth::user()->role !== 'admin')
+                            @if(!Auth::check() || Auth::user()->role === 'user')
                                 @if(Auth::check())
                                     <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="sm:w-auto">
                                         @csrf

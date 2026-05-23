@@ -25,7 +25,7 @@
             <div class="absolute inset-0 bg-[#d4ccc0] opacity-10"></div>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div class="md:w-1/2 text-center md:text-left">
-                    <span class="inline-block py-1 px-3 rounded-full bg-plum/10 text-plum text-xs font-bold tracking-widest uppercase mb-6 border border-plum/20">Pusat Florist Banjarnegara</span>
+                    <span class="inline-block py-1 px-3 rounded-full bg-plum/10 text-plum text-xs font-bold tracking-widest uppercase mb-6 border border-plum/20">Pusat Florist Jawa Tengah</span>
                     <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight mb-6">
                         Sampaikan Pesan Cinta dengan <span class="text-plum">Kusuma Sempurna</span>
                     </h1>

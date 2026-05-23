@@ -52,11 +52,18 @@ class AdminController extends Controller
     public function updateShopStatus(\Illuminate\Http\Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:approved,suspended,banned'
+            'status' => 'required|in:approved,suspended,banned',
+            'suspend_reason' => 'nullable|string|max:500'
         ]);
 
         $shop = \App\Models\Shop::findOrFail($id);
         $shop->status = $request->status;
+
+        // Simpan alasan suspend/ban jika ada
+        if (in_array($request->status, ['suspended', 'banned']) && $request->filled('suspend_reason')) {
+            $shop->rejected_reason = $request->suspend_reason;
+        }
+
         $shop->save();
 
         $message = "Status toko {$shop->name} berhasil diubah menjadi {$request->status}.";
@@ -249,12 +256,22 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Anda tidak dapat mengubah role Anda sendiri.');
         }
 
-        // If demoting from owner to user, suspend their shop
+        // Jika demosi dari owner ke user, hapus toko beserta produknya
         if ($user->role === 'owner' && $request->role === 'user') {
             $shop = \App\Models\Shop::where('user_id', $user->id)->first();
             if ($shop) {
-                $shop->status = 'suspended';
-                $shop->save();
+                // Hapus file gambar produk lokal sebelum menghapus data
+                foreach ($shop->products as $product) {
+                    if ($product->image_path && !str_starts_with($product->image_path, 'http')) {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+                    }
+                }
+                // Hapus logo toko jika lokal
+                if ($shop->logo_path && !str_starts_with($shop->logo_path, 'http')) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($shop->logo_path);
+                }
+                // Hapus toko (produk terhapus otomatis via cascade)
+                $shop->delete();
             }
         }
 

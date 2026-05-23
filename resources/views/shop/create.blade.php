@@ -33,15 +33,44 @@
                             <textarea name="reason" id="reason" rows="2" required class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Tuliskan alasan mengapa Anda ingin membuka toko di FloraMart..."></textarea>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="district_id" class="block font-medium text-sm text-gray-700">Kecamatan (Lokasi Operasional) *</label>
-                            <select name="district_id" id="district_id" required class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option value="" disabled selected>-- Pilih Kecamatan --</option>
-                                <option value="1">Batur (Banjarnegara)</option>
-                                <option value="2">Pejawaran (Banjarnegara)</option>
-                                <option value="3">Purwanegara (Banjarnegara)</option>
-                                <option value="4">Purwokerto Selatan (Banyumas)</option>
-                            </select>
+                        <!-- Alpine.js Component untuk Dynamic Dropdown -->
+                        <div x-data="{
+                            regencies: {{ Js::from($regencies) }},
+                            selectedRegency: '',
+                            districts: [],
+                            selectedDistrict: '',
+                            
+                            updateDistricts() {
+                                this.selectedDistrict = '';
+                                if (!this.selectedRegency) {
+                                    this.districts = [];
+                                    return;
+                                }
+                                const regency = this.regencies.find(r => r.id == this.selectedRegency);
+                                this.districts = regency ? regency.districts : [];
+                            }
+                        }">
+                        
+                            <div class="mb-4">
+                                <label for="regency_id" class="block font-medium text-sm text-gray-700">Kabupaten/Kota (Lokasi Operasional) *</label>
+                                <select x-model="selectedRegency" @change="updateDistricts()" id="regency_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    <option value="" disabled selected>-- Pilih Kabupaten/Kota --</option>
+                                    <template x-for="regency in regencies" :key="regency.id">
+                                        <option :value="regency.id" x-text="regency.name"></option>
+                                    </template>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="district_id" class="block font-medium text-sm text-gray-700">Kecamatan (Lokasi Operasional) *</label>
+                                <select x-model="selectedDistrict" name="district_id" id="district_id" required class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" :disabled="districts.length === 0">
+                                    <option value="" disabled selected>-- Pilih Kecamatan --</option>
+                                    <template x-for="district in districts" :key="district.id">
+                                        <option :value="district.id" x-text="district.name"></option>
+                                    </template>
+                                </select>
+                            </div>
+                            
                         </div>
 
                         <div class="mb-4">

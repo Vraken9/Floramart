@@ -43,9 +43,9 @@ class ShopController extends Controller
         }
 
 
-        $provinces = Province::all();
+        $regencies = \App\Models\Regency::with('districts')->where('province_id', 33)->get(); // Jawa Tengah
 
-        return view('shop.create', compact('provinces'));
+        return view('shop.create', compact('regencies'));
     }
 
     public function store(Request $request)
@@ -60,7 +60,15 @@ class ShopController extends Controller
             'whatsapp_number' => 'required|string|max:20',
         ]);
 
-        // 2. Tambahkan 'reason' ke proses penyimpanan database
+        // 2. Sanitasi nomor WhatsApp (hapus karakter non-numerik, konversi 0 ke 62)
+        $waNumber = preg_replace('/[^0-9]/', '', $request->whatsapp_number);
+        if (substr($waNumber, 0, 1) === '0') {
+            $waNumber = '62' . substr($waNumber, 1);
+        } elseif (substr($waNumber, 0, 2) !== '62') {
+            $waNumber = '62' . $waNumber;
+        }
+
+        // 3. Simpan data toko ke database
         Shop::create([
             'user_id' => Auth::id(),
             'district_id' => $request->district_id,
@@ -68,7 +76,7 @@ class ShopController extends Controller
             'description' => $request->description,
             'reason' => $request->reason, // Tambahan simpan alasan
             'address_detail' => $request->address_detail,
-            'whatsapp_number' => $request->whatsapp_number,
+            'whatsapp_number' => $waNumber,
             'status' => 'pending',
         ]);
 

@@ -14,32 +14,11 @@
                 <a href="{{ route('katalog.index') }}" class="{{ request()->routeIs('katalog.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Katalog</a>
                 <a href="{{ route('shops.index') }}" class="{{ request()->routeIs('shops.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Toko</a>
                 
-                @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'user'))
-                    @php
-                        $wishlistCount = 0;
-                        if(Auth::check()) {
-                            $wishlistCount = Auth::user()->favoriteProducts()->count();
-                        }
-                    @endphp
-                    @if(Auth::check())
-                        <a href="{{ route('wishlist.index') }}" class="relative text-gray-500 hover:text-[#7c4959] transition flex items-center h-full mr-2" title="Favorit Saya">
-                            <i class="fa-solid fa-heart text-xl"></i>
-                            @if($wishlistCount > 0)
-                                <span class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">
-                                    {{ $wishlistCount > 99 ? '99+' : $wishlistCount }}
-                                </span>
-                            @endif
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="relative text-gray-500 hover:text-[#7c4959] transition flex items-center h-full mr-2" title="Login untuk melihat favorit">
-                            <i class="fa-regular fa-heart text-xl"></i>
-                        </a>
-                    @endif
-                @endif
+
 
                 @if (Auth::check())
-                    <a href="{{ route('dashboard') }}" class="bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-bold uppercase shadow-sm mr-2 transition-colors">
-                        Dasbor
+                    <a href="{{ route('dashboard') }}" class="bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-bold  mr-2 transition-colors">
+                        Dashboard
                     </a>
                     <div class="relative pl-4 border-l border-gray-300" x-data="{ open: false }">
                         <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-2 focus:outline-none">

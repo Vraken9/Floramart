@@ -100,10 +100,12 @@ class CartController extends Controller
 
         $shop = $cartItems->first()->product->shop;
         
-        // 1. Format Nomor WhatsApp
-        $waNumber = $shop->whatsapp_number;
-        if(str_starts_with($waNumber, '0')) {
+        // 1. Format & Sanitasi Nomor WhatsApp
+        $waNumber = preg_replace('/[^0-9]/', '', $shop->whatsapp_number);
+        if (substr($waNumber, 0, 1) === '0') {
             $waNumber = '62' . substr($waNumber, 1);
+        } elseif (substr($waNumber, 0, 2) !== '62') {
+            $waNumber = '62' . $waNumber;
         }
 
         // 2. Susun Pesan
