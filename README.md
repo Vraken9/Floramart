@@ -10,7 +10,7 @@
 
 ---
 
-##  Deskripsi Proyek
+## Deskripsi Proyek
 
 **FloraMart** adalah sebuah aplikasi web *marketplace* yang dirancang secara spesifik untuk mewadahi ekosistem jual-beli bunga dan tanaman hias. Dibangun menggunakan arsitektur monolitik modern dengan **Laravel 12**, aplikasi ini memungkinkan pengguna untuk tidak hanya membeli produk, tetapi juga membuka toko bunga *(Florist)* mereka sendiri.
 
@@ -18,29 +18,28 @@ Aplikasi ini mendemonstrasikan kapabilitas implementasi *Role-Based Access Contr
 
 ---
 
-##  Fitur Berdasarkan Role
+## Fitur Berdasarkan Role
 
 Aplikasi ini menggunakan 3 lapisan peran pengguna (*role*):
 
-### 1.  Admin
+### 1. Admin
 - Mengelola persetujuan (*approval*), penolakan, atau penangguhan (*suspend*) pendaftaran toko baru lengkap dengan sistem pencatatan alasan (*reason tracking*).
 - Menurunkan atau menaikkan *role* akun pengguna (Otomatis menghapus data toko apabila diturunkan menjadi *user* biasa).
 - Mengakses statistik dan data analisis platform secara penuh.
 
-### 2.  Owner (Pemilik Toko)
+### 2. Owner (Pemilik Toko)
 - Mendaftar toko baru secara dinamis berdasarkan data wilayah (Provinsi, Kabupaten, Kecamatan).
 - Mengelola katalog produk bunga (Buat, Baca, Perbarui, Hapus).
 - Mengelola profil toko dan ketersediaan nomor WhatsApp untuk menerima pesanan langsung dari pelanggan.
 
-### 3.  User (Pembeli)
-- Menjelajahi katalog produk dari semua toko.
-- Menyimpan produk ke daftar "Bunga Favorit Saya" (Wishlist).
-- Menambah produk ke keranjang belanja (*Cart*).
-- Melakukan *Checkout* langsung yang terhubung secara mulus ke nomor WhatsApp pembuat produk (*Owner*) dengan sistem sanitasi format nomor.
+### 3. User (Pembeli)
+- Menjelajahi katalog produk dari semua toko secara dinamis.
+- Menyimpan produk ke daftar Favorit (Wishlist) untuk pertimbangan kurasi.
+- Menginisiasi pesanan secara langsung yang terhubung ke nomor WhatsApp pihak pembuat produk (*Owner*) dengan sistem sanitasi format nomor.
 
 ---
 
-##  Arsitektur & Entity-Relationship Diagram (ERD)
+## Arsitektur & Entity-Relationship Diagram (ERD)
 
 Di bawah ini adalah pemodelan *database* (ERD) yang memperlihatkan alur dan relasi antar entitas di dalam FloraMart:
 
@@ -48,7 +47,6 @@ Di bawah ini adalah pemodelan *database* (ERD) yang memperlihatkan alur dan rela
 erDiagram
     USERS ||--o{ SHOPS : "owns (if owner)"
     USERS ||--o{ WISHLISTS : "saves"
-    USERS ||--o{ CARTS : "creates"
     USERS ||--o{ REVIEWS : "writes"
     
     SHOPS ||--o{ PRODUCTS : "sells"
@@ -57,10 +55,8 @@ erDiagram
     CATEGORIES ||--o{ PRODUCTS : "classifies"
     
     PRODUCTS ||--o{ WISHLISTS : "favorited in"
-    PRODUCTS ||--o{ CART_ITEMS : "added as"
+    PRODUCTS ||--o{ PRODUCT_LEADS : "generates"
     PRODUCTS ||--o{ REVIEWS : "receives"
-    
-    CARTS ||--o{ CART_ITEMS : "contains"
     
     USERS {
         bigint id PK
@@ -94,25 +90,16 @@ erDiagram
         boolean is_active
     }
     
-    CARTS {
+    PRODUCT_LEADS {
         bigint id PK
-        bigint user_id FK
-        bigint shop_id FK
-        integer total_amount
-    }
-    
-    CART_ITEMS {
-        bigint id PK
-        bigint cart_id FK
         bigint product_id FK
-        integer quantity
-        integer price
+        datetime created_at
     }
 ```
 
 ---
 
-##  Panduan Instalasi (Development)
+## Panduan Instalasi (Development)
 
 Untuk menjalankan proyek ini di lingkungan lokal Anda, pastikan sistem Anda telah terpasang:
 - **PHP** >= 8.2
@@ -183,7 +170,7 @@ Aplikasi ini sudah dilengkapi dengan `Dockerfile` dan `docker-compose.yml` untuk
 
 Secara bawaan (*local development*), sistem menggunakan konfigurasi `MAIL_MAILER=log`, di mana tautan verifikasi hanya masuk ke file `storage/logs/laravel.log`.
 
-Untuk tahap produksi *(live)*, ikuti langkah berikut agar email benar-benar terkirim ke *inbox* pengguna secara gratis dan profesional:
+Untuk tahap produksi *(live)*, ikuti langkah berikut agar email benar-benar terkirim ke kotak masuk pengguna secara gratis dan profesional:
 1. Daftar di layanan penyedia SMTP gratis seperti **Resend**, **Mailtrap**, atau **Brevo (Sendinblue)**.
 2. Dapatkan *API Key* / kredensial SMTP Anda.
 3. Ubah pengaturan di file `.env` server Anda menjadi:
@@ -197,16 +184,16 @@ Untuk tahap produksi *(live)*, ikuti langkah berikut agar email benar-benar terk
    MAIL_FROM_ADDRESS="noreply@domainanda.com"
    MAIL_FROM_NAME="FloraMart"
    ```
-Dengan konfigurasi ini, verifikasi email dapat berjalan otomatis tanpa mengelola *mail server* sendiri.
+Dengan konfigurasi ini, verifikasi email dapat berjalan otomatis tanpa mengelola mail server sendiri.
 
 ---
 
-##  Developer & Kontak
+## Developer & Kontak
 
 Proyek ini dibangun sebagai dedikasi terhadap pengembangan aplikasi web fungsional yang estetis dan interaktif.
 
 **Dikembangkan oleh:**
 - **Mualif Akhyar**
-- 📸 Instagram: [@mualifakhyar_](https://www.instagram.com/mualifakhyar_)
+- Instagram: [@mualifakhyar_](https://www.instagram.com/mualifakhyar_)
 
 *Silakan hubungi melalui media sosial di atas untuk pertanyaan, masukan, atau diskusi teknis.*
