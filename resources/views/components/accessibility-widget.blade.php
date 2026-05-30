@@ -209,7 +209,8 @@
     // Highlight Logic
     function highlightDOMElements(targetsArray) {
         if (!targetsArray || targetsArray.length === 0) return;
-        const elements = document.querySelectorAll('button, a, div, span, label, p, img');
+        // Hanya target elemen yang benar-benar bisa diklik
+        const elements = document.querySelectorAll('button, a, input[type="submit"], input[type="button"], [role="button"]');
         let firstFoundElement = null;
 
         targetsArray.forEach(targetObj => {
@@ -218,14 +219,13 @@
             if (!targetText) return;
             
             let foundElement = null;
-            const lowerTarget = targetText.toLowerCase();
+            const lowerTarget = targetText.toLowerCase().trim();
             
             for (let el of elements) {
-                const text = (el.innerText || el.textContent || el.getAttribute('aria-label') || el.alt || '').toLowerCase();
-                if (text.includes(lowerTarget)) {
-                    if (!foundElement || foundElement.contains(el) || el.tagName === 'BUTTON' || el.tagName === 'A') {
-                        foundElement = el;
-                    }
+                const text = (el.innerText || el.value || el.getAttribute('aria-label') || el.title || '').toLowerCase().trim();
+                if (text === lowerTarget || text.includes(lowerTarget)) {
+                    foundElement = el;
+                    if (text === lowerTarget) break; // Perfect match
                 }
             }
 
