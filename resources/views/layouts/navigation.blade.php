@@ -142,3 +142,4 @@
 
 <x-accessibility-filters />
 <x-accessibility-widget />
+<x-chatbot-widget />

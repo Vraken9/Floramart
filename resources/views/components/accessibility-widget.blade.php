@@ -2,31 +2,45 @@
 
 <style>
     @keyframes visioBlink {
-        0% { outline-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-        50% { outline-color: #FF4500; box-shadow: 0 0 5px rgba(255, 69, 0, 0.5); }
-        100% { outline-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        0% { outline-color: #FFFF00; box-shadow: 0 0 20px rgba(255, 255, 0, 0.9); }
+        50% { outline-color: #000000; box-shadow: 0 0 5px rgba(0, 0, 0, 0.8); }
+        100% { outline-color: #FFFF00; box-shadow: 0 0 20px rgba(255, 255, 0, 0.9); }
     }
     .visioadapt-highlight-target {
-        outline: 4px dashed #FFD700 !important;
-        outline-offset: 4px !important;
+        outline: 6px dashed #FFFF00 !important;
+        outline-offset: 6px !important;
         animation: visioBlink 1.5s infinite !important;
         position: relative !important;
+        z-index: 999998 !important;
+        background-color: rgba(255, 255, 0, 0.1) !important;
     }
     .visioadapt-tooltip {
         position: absolute;
-        bottom: 110%;
+        bottom: calc(100% + 15px);
         left: 50%;
         transform: translateX(-50%);
-        background-color: #000;
-        color: #FFD700;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
+        background-color: #000000 !important;
+        color: #FFFF00 !important;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 900;
         white-space: nowrap;
         z-index: 999999;
         pointer-events: none;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.9);
+        border: 3px solid #FFFF00;
+        letter-spacing: 0.5px;
+    }
+    .visioadapt-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 8px;
+        border-style: solid;
+        border-color: #FFFF00 transparent transparent transparent;
     }
     
     #a11y-widget-container {
@@ -272,34 +286,37 @@
         overlay.style.bottom = "80px";
         overlay.style.left = "20px";
         overlay.style.maxWidth = "400px";
-        overlay.style.backgroundColor = success ? "#0f172a" : "#7f1d1d"; // Lebih gelap untuk kontras tinggi
-        overlay.style.color = "#ffffff";
-        overlay.style.padding = "20px";
+        overlay.style.backgroundColor = success ? "#000000" : "#7f1d1d"; 
+        overlay.style.color = "#FFFF00";
+        overlay.style.padding = "24px";
         overlay.style.borderRadius = "12px";
-        overlay.style.boxShadow = "0 10px 25px rgba(0,0,0,0.5)";
+        overlay.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
         overlay.style.zIndex = "999999";
-        overlay.style.borderLeft = success ? "6px solid #10b981" : "6px solid #b91c1c";
+        overlay.style.border = success ? "3px solid #FFFF00" : "3px solid #b91c1c";
+        overlay.style.borderLeft = success ? "12px solid #FFFF00" : "12px solid #b91c1c";
 
         const title = document.createElement("h4");
-        title.innerHTML = '<i class="fa-solid fa-robot"></i> Asisten Aksesibilitas';
-        title.style.margin = "0 0 8px 0";
-        title.style.color = success ? "#10b981" : "#ffffff";
+        title.innerHTML = '<i class="fa-solid fa-robot"></i> Asisten Aksesibilitas AI';
+        title.style.margin = "0 0 12px 0";
+        title.style.color = success ? "#FFFF00" : "#ffffff";
+        title.style.fontSize = "18px";
+        title.style.fontWeight = "900";
         overlay.appendChild(title);
 
         const text = document.createElement("p");
         text.innerHTML = displayText.replace(/\n/g, '<br>');
-        text.style.fontSize = "15px"; // Diperbesar
-        text.style.fontWeight = "600"; // Dipertebal
-        text.style.letterSpacing = "0.5px"; // Jarak antar huruf diperlebar
-        text.style.margin = "0 0 16px 0";
-        text.style.lineHeight = "1.6";
+        text.style.fontSize = "16px"; 
+        text.style.fontWeight = "700"; 
+        text.style.letterSpacing = "0.8px"; 
+        text.style.margin = "0 0 20px 0";
+        text.style.lineHeight = "1.7";
         overlay.appendChild(text);
 
         const closeBtn = document.createElement("button");
-        closeBtn.textContent = "Tutup Panduan";
-        closeBtn.style.padding = "8px 16px";
-        closeBtn.style.backgroundColor = success ? "#10b981" : "#b91c1c";
-        closeBtn.style.color = "white";
+        closeBtn.textContent = "TUTUP PANDUAN";
+        closeBtn.style.padding = "12px 16px";
+        closeBtn.style.backgroundColor = success ? "#FFFF00" : "#b91c1c";
+        closeBtn.style.color = "#000000";
         closeBtn.style.border = "none";
         closeBtn.style.borderRadius = "6px";
         closeBtn.style.cursor = "pointer";

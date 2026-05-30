@@ -25,7 +25,8 @@ Route::get('/shop/{id}', [App\Http\Controllers\ShopController::class, 'show'])->
 Route::get('/bunga/{id}/wa-redirect', [\App\Http\Controllers\LeadController::class, 'redirectWhatsApp'])->name('product.whatsapp');
 
 // API Khusus Aksesibilitas AI
-Route::post('/api/accessibility/analyze', [\App\Http\Controllers\AccessibilityController::class, 'analyze'])->name('accessibility.analyze');
+Route::post('/api/accessibility/analyze', [App\Http\Controllers\AccessibilityController::class, 'analyze'])->name('accessibility.analyze');
+Route::post('/api/chatbot/ask', [App\Http\Controllers\ChatbotController::class, 'ask'])->name('chatbot.ask');
 
 // Rute Keranjang Belanja (Cart)
 Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
