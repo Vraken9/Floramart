@@ -1,52 +1,67 @@
-FROM php:8.2-apache
+# ---------------------------------------------------------
+# STAGE 1: Node.js (Vite & Tailwind CSS Build)
+# ---------------------------------------------------------
+FROM node:20-alpine AS node-builder
 
-# 1. Atur port default untuk Cloud Run
-ENV PORT=8080
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
 
-# 2. Instal dependensi dasar dan setup Node.js 20.x (agar Vite/Tailwind sukses di-build)
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
+COPY . .
+RUN npm run build
+
+
+# ---------------------------------------------------------
+# STAGE 2: PHP, Composer, and Nginx setup
+# ---------------------------------------------------------
+FROM php:8.2-fpm-alpine
+
+# Install system dependencies & Nginx
+RUN apk add --no-cache \
+    nginx \
     libpng-dev \
-    libonig-dev \
-    libxml2-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
     zip \
     unzip \
-    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    git \
+    curl \
+    oniguruma-dev
 
-# 3. Instal ektensi PHP yang dibutuhkan Laravel
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+# Configure and install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd pdo_mysql mbstring zip bcmath
 
-# 4. Aktifkan mod_rewrite Apache (wajib untuk sistem routing Laravel)
-RUN a2enmod rewrite
-
-# 5. Dapatkan Composer versi terbaru
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 6. Atur direktori kerja (working directory)
 WORKDIR /var/www/html
 
-# 7. Salin semua file proyek dari lokal ke dalam container
+# Copy application source code
 COPY . .
 
-# 8. Instal dependensi PHP via Composer (Mode Production)
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+# Copy Vite build assets from node-builder
+COPY --from=node-builder /app/public/build /var/www/html/public/build
 
-# 9. Instal dependensi Node.js dan build aset frontend (Tailwind & Alpine)
-RUN npm install && npm run build
+# Install PHP dependencies (no-dev, optimize autoloader)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
-# 10. Atur hak akses (permissions) untuk folder storage dan cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Configure Nginx
+COPY nginx.conf /etc/nginx/http.d/default.conf
 
-# 11. Ubah DocumentRoot Apache ke folder /public milik Laravel
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!/var/www/html/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# Setup Entrypoint
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# 12. Paksa Apache mendengarkan port 8080 sesuai permintaan Cloud Run
-RUN sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+# Set Directory Permissions for Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Mulai server Apache
-CMD ["apache2-foreground"]
+# Create Nginx PID and run directories for Alpine
+RUN mkdir -p /run/nginx
+
+# Expose port 8080 for Google Cloud Run
+EXPOSE 8080
+
+CMD ["/usr/local/bin/entrypoint.sh"]

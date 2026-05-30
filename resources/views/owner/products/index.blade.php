@@ -9,80 +9,99 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="antialiased bg-gray-50 text-gray-900 font-sans flex flex-col min-h-screen">
+<body class="antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans flex flex-col min-h-screen">
     <x-navigation />
 
     <main class="flex-grow py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <h2 class="font-bold text-2xl text-[#7c4959] leading-tight flex items-center">
-                    <i class="fa-solid fa-store mr-3"></i> {{ __('Dasbor Manajemen Toko') }}
+        <div class="w-full max-w-[85%] 2xl:max-w-[1400px] mx-auto sm:px-6 lg:px-8">
+            <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-8">
+                <h2 class="font-light text-2xl text-gray-900 dark:text-gray-100 tracking-tight flex items-center">
+                    Dashboard <span class="font-bold text-[#7c4959] ml-1">Manajemen Toko</span>
+                    @if($shop->status == 'approved')
+                        <span class="ml-4 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest bg-green-50 text-green-700 border border-green-100 rounded-full">Aktif</span>
+                    @else
+                        <span class="ml-4 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest bg-yellow-50 text-yellow-700 border border-yellow-100 rounded-full">{{ $shop->status }}</span>
+                    @endif
                 </h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-[#7c4959]">
-                    <div class="text-sm font-bold text-gray-500 uppercase tracking-wider"><i class="fa-solid fa-box mr-1"></i> Total Produk Aktif</div>
-                    <div class="mt-2 text-4xl font-extrabold text-[#7c4959]">{{ $products->where('is_active', true)->count() }}</div>
-                </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-[#926a7a]">
-                    <div class="text-sm font-bold text-gray-500 uppercase tracking-wider"><i class="fa-brands fa-whatsapp text-green-500 mr-1"></i> Total Klik WA (Leads)</div>
-                    @php
-                        // Calculate total leads safely
-                        $totalLeads = $products->sum(function($prod) { return $prod->leads ? $prod->leads->count() : 0; });
-                    @endphp
-                    <div class="mt-2 text-4xl font-extrabold text-[#926a7a]">{{ $totalLeads }}</div>
-                </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-[#d4ccc0]">
-                    <div class="text-sm font-bold text-gray-500 uppercase tracking-wider"><i class="fa-solid fa-shield-halved mr-1"></i> Status Toko</div>
-                    <div class="mt-2 text-2xl font-bold uppercase {{ $shop->status == 'approved' ? 'text-green-600' : 'text-yellow-600' }}">
-                        {{ $shop->status }}
+            <!-- Analitik Toko -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-[#7c4959] rounded-2xl shadow-sm border border-[#5d3642] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
+                    <div class="w-12 h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm backdrop-blur-sm">
+                        <i class="fa-solid fa-box text-xl"></i>
                     </div>
+                    <p class="text-sm font-bold text-white/90 mb-1">Total Produk</p>
+                    <p class="text-3xl font-black text-white">{{ $products->where('is_active', true)->count() }}</p>
+                </div>
+                
+                <div class="bg-[#926a7a] rounded-2xl shadow-sm border border-[#7c4959] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
+                    <div class="w-12 h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm backdrop-blur-sm">
+                        <i class="fa-solid fa-eye text-xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-white/90 mb-1">Kunjungan Toko</p>
+                    <p class="text-3xl font-black text-white">{{ number_format($totalShopClicks ?? 0) }}</p>
+                </div>
+                
+                <div class="bg-[#ac9a9c] rounded-2xl shadow-sm border border-[#926a7a] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
+                    <div class="w-12 h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm backdrop-blur-sm">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-white/90 mb-1">Klik WhatsApp</p>
+                    <p class="text-3xl font-black text-white">{{ number_format($totalWaClicks ?? 0) }}</p>
+                </div>
+                
+                <div class="bg-[#d4ccc0] rounded-2xl shadow-sm border border-[#ac9a9c] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
+                    <div class="w-12 h-12 bg-white text-[#7c4959] rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                        <i class="fa-solid fa-heart text-xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-[#7c4959]/90 mb-1">Difavoritkan</p>
+                    <p class="text-3xl font-black text-[#7c4959]">{{ number_format($totalFavorites ?? 0) }}</p>
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-[#d4ccc0]/50">
-                <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <h3 class="text-lg font-bold text-gray-800">Katalog Produk Anda</h3>
-                    <a href="{{ route('owner.products.create') }}" class="bg-[#7c4959] text-white px-5 py-2.5 rounded-md text-sm font-bold hover:bg-[#5d3642] shadow-sm transition-colors flex items-center">
-                        <i class="fa-solid fa-plus mr-2"></i> Tambah Bunga Baru
+            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-200">
+                <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50">
+                    <h3 class="text-lg font-extrabold text-gray-800"><i class="fa-solid fa-list mr-2 text-pink-500"></i> Katalog Produk Anda</h3>
+                    <a href="{{ route('owner.products.create') }}" class="btn-a11y-admin bg-pink-500 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-pink-600 shadow-md transition-colors flex items-center">
+                        <i class="fa-solid fa-circle-plus mr-2"></i> Tambah Bunga Baru
                     </a>
                 </div>
                 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto p-4">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Detail Produk</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Harga</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Kategori</th>
-                                <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status Visual</th>
-                                <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Manajemen</th>
+                        <thead>
+                            <tr class="bg-gray-100 rounded-lg">
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider rounded-tl-lg rounded-bl-lg">Detail Produk</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider">Harga</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider">Kategori</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-extrabold text-gray-600 uppercase tracking-wider">Visual</th>
+                                <th scope="col" class="px-6 py-4 text-right text-xs font-extrabold text-gray-600 uppercase tracking-wider rounded-tr-lg rounded-br-lg">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-gray-100">
                             @forelse($products as $product)
-                                <tr class="hover:bg-gray-50 transition-colors">
+                                <tr class="hover:bg-pink-50/30 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-12 w-12 rounded-md overflow-hidden bg-gray-100 border border-gray-200">
+                                            <div class="flex-shrink-0 h-14 w-14 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
                                                 @if($product->image_path)
-                                                    <img class="h-12 w-12 object-cover" src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" alt="">
+                                                    <img class="h-14 w-14 object-cover" src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" alt="">
                                                 @else
-                                                    <div class="h-12 w-12 flex items-center justify-center"><i class="fa-solid fa-image text-gray-400"></i></div>
+                                                    <div class="h-14 w-14 flex items-center justify-center text-gray-400"><i class="fa-solid fa-image"></i></div>
                                                 @endif
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-bold text-gray-900">{{ $product->name }}</div>
-                                                <div class="text-xs text-green-600 font-semibold mt-0.5"><i class="fa-brands fa-whatsapp"></i> {{ $product->leads ? $product->leads->count() : 0 }} Interaksi WA</div>
+                                                <div class="text-sm font-extrabold text-gray-900 text-a11y-admin">{{ $product->name }}</div>
+                                                <div class="text-xs text-green-600 font-bold mt-1"><i class="fa-brands fa-whatsapp"></i> {{ $product->leads ? $product->leads->count() : 0 }} Leads</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-bold text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
+                                        <div class="text-sm font-extrabold text-gray-800 text-a11y-admin">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-[#d4ccc0]/30 text-[#7c4959]">
+                                        <span class="px-3 py-1 inline-flex text-xs font-bold rounded-full bg-purple-100 text-purple-700 border border-purple-200 text-a11y-admin">
                                             {{ $product->category->name ?? '-' }}
                                         </span>
                                     </td>
@@ -90,18 +109,26 @@
                                         <form action="{{ route('owner.products.toggle', $product->id) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full shadow-sm transition-transform hover:scale-105 {{ $product->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
-                                                {{ $product->is_active ? '✅ Ditampilkan' : '❌ Disembunyikan' }}
+                                            <button type="submit" class="btn-a11y-admin px-4 py-2 inline-flex text-xs font-bold rounded-lg shadow-sm transition-transform hover:scale-105 text-white {{ $product->is_active ? 'bg-[#926a7a] hover:bg-[#7c4959]' : 'bg-[#7c4959] hover:bg-[#5d3642]' }}">
+                                                @if($product->is_active)
+                                                    <i class="fa-solid fa-eye mr-1"></i> Ditampilkan
+                                                @else
+                                                    <i class="fa-solid fa-eye-slash mr-1"></i> Disembunyikan
+                                                @endif
                                             </button>
                                         </form>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <td class="px-6 py-4 whitespace-nowrap text-right">
                                         <div class="flex justify-end gap-2">
-                                            <a href="{{ route('owner.products.edit', $product->id) }}" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-md transition-colors" title="Edit Data"><i class="fa-solid fa-pen"></i></a>
-                                            <form action="{{ route('owner.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('PERINGATAN: Tindakan ini permanen. Yakin ingin menghapus bunga ini dari katalog Anda?');">
+                                            <a href="{{ route('owner.products.edit', $product->id) }}" class="btn-a11y-admin flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-[#ac9a9c] rounded-lg hover:bg-[#926a7a] transition-colors shadow-sm">
+                                                <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                            </a>
+                                            <form action="{{ route('owner.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('PERINGATAN: Yakin ingin menghapus produk ini secara permanen?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-md transition-colors" title="Hapus Permanen"><i class="fa-solid fa-trash"></i></button>
+                                                <button type="submit" class="btn-a11y-admin flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-[#7c4959] rounded-lg hover:bg-[#5d3642] transition-colors shadow-sm">
+                                                    <i class="fa-solid fa-trash mr-1"></i> Hapus
+                                                </button>
                                             </form>
                                         </div>
                                     </td>

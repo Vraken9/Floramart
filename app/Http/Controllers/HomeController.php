@@ -45,16 +45,18 @@ class HomeController extends Controller
                 $query->where('name', 'like', '%' . $request->search . '%');
             }
             if ($request->filled('category')) {
-                $query->where('category_id', $request->category);
+                $query->whereHas('category', function($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->category . '%');
+                });
             }
             if ($request->filled('regency')) {
-                $query->whereHas('shop.district', function($q) use ($request) {
-                    $q->where('regency_id', $request->regency);
+                $query->whereHas('shop.district.regency', function($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->regency . '%');
                 });
             }
             if ($request->filled('district')) {
-                $query->whereHas('shop', function($q) use ($request) {
-                    $q->where('district_id', $request->district);
+                $query->whereHas('shop.district', function($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->district . '%');
                 });
             }
 
@@ -97,13 +99,18 @@ class HomeController extends Controller
         $query = \App\Models\Shop::with('district.regency')->where('status', 'approved');
 
         // Apply filters
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
         if ($request->filled('regency')) {
-            $query->whereHas('district', function($q) use ($request) {
-                $q->where('regency_id', $request->regency);
+            $query->whereHas('district.regency', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->regency . '%');
             });
         }
         if ($request->filled('district')) {
-            $query->where('district_id', $request->district);
+            $query->whereHas('district', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->district . '%');
+            });
         }
 
         $shops = $query->latest()->get();
