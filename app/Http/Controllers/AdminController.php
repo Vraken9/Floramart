@@ -91,9 +91,9 @@ class AdminController extends Controller
 
         if ($request->hasFile('logo')) {
             if ($shop->logo_path && !str_starts_with($shop->logo_path, 'http')) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($shop->logo_path);
+                \Illuminate\Support\Facades\Storage::disk('images_public')->delete($shop->logo_path);
             }
-            $data['logo_path'] = $request->file('logo')->store('shop_logos', 'public');
+            $data['logo_path'] = $request->file('logo')->store('shop_logos', 'images_public');
         }
 
         $shop->update($data);
@@ -161,7 +161,7 @@ class AdminController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image_file')) {
-            $imagePath = $request->file('image_file')->store('products', 'public');
+            $imagePath = $request->file('image_file')->store('products', 'images_public');
         } elseif ($request->filled('image_url')) {
             $imagePath = $request->image_url;
         }
@@ -197,9 +197,9 @@ class AdminController extends Controller
 
         if ($request->hasFile('image_file')) {
             if ($product->image_path && !str_starts_with($product->image_path, 'http')) {
-               \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+               \Illuminate\Support\Facades\Storage::disk('images_public')->delete($product->image_path);
             }
-            $imagePath = $request->file('image_file')->store('products', 'public');
+            $imagePath = $request->file('image_file')->store('products', 'images_public');
         } elseif ($request->filled('image_url')) {
             $imagePath = $request->image_url;
         }
@@ -230,7 +230,7 @@ class AdminController extends Controller
     {
         $product = \App\Models\Product::findOrFail($id);
         if ($product->image_path && !str_starts_with($product->image_path, 'http')) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+            \Illuminate\Support\Facades\Storage::disk('images_public')->delete($product->image_path);
         }
         $product->delete();
         
@@ -263,12 +263,12 @@ class AdminController extends Controller
                 // Hapus file gambar produk lokal sebelum menghapus data
                 foreach ($shop->products as $product) {
                     if ($product->image_path && !str_starts_with($product->image_path, 'http')) {
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+                        \Illuminate\Support\Facades\Storage::disk('images_public')->delete($product->image_path);
                     }
                 }
                 // Hapus logo toko jika lokal
                 if ($shop->logo_path && !str_starts_with($shop->logo_path, 'http')) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete($shop->logo_path);
+                    \Illuminate\Support\Facades\Storage::disk('images_public')->delete($shop->logo_path);
                 }
                 // Hapus toko (produk terhapus otomatis via cascade)
                 $shop->delete();

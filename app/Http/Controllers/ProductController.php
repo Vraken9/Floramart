@@ -80,7 +80,7 @@ class ProductController extends Controller
         $imagePath = null;
         if ($request->hasFile('image_file')) {
             // Jika memilih upload dari laptop
-            $imagePath = $request->file('image_file')->store('products', 'public');
+            $imagePath = $request->file('image_file')->store('products', 'images_public');
         } elseif ($request->filled('image_url')) {
             // Jika memilih menggunakan Link Eksternal / Cloud
             $imagePath = $request->image_url;
@@ -137,9 +137,9 @@ class ProductController extends Controller
         if ($request->hasFile('image_file')) {
             // Hapus foto lama di lokal jika sebelumnya menggunakan metode upload file
             if ($product->image_path && !str_starts_with($product->image_path, 'http')) {
-               Storage::disk('public')->delete($product->image_path);
+               Storage::disk('images_public')->delete($product->image_path);
             }
-            $imagePath = $request->file('image_file')->store('products', 'public');
+            $imagePath = $request->file('image_file')->store('products', 'images_public');
         } elseif ($request->filled('image_url')) {
             $imagePath = $request->image_url;
         }
@@ -164,7 +164,7 @@ class ProductController extends Controller
 
         // Hapus file gambar dari penyimpanan lokal jika ada
         if ($product->image_path && !str_starts_with($product->image_path, 'http')) {
-            Storage::disk('public')->delete($product->image_path);
+            Storage::disk('images_public')->delete($product->image_path);
         }
 
         $product->delete();

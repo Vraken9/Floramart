@@ -71,7 +71,7 @@
                                             
                                             <!-- Product Image -->
                                             <div class="sm:w-32 h-32 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
-                                                <img src="{{ str_starts_with($item->product->image_path, 'http') ? $item->product->image_path : asset('storage/' . $item->product->image_path) }}" 
+                                                <img src="{{ str_starts_with($item->product->image_path, 'http') ? $item->product->image_path : asset('images/' . $item->product->image_path) }}" 
                                                      alt="{{ $item->product->name }}" 
                                                      class="w-full h-full object-cover">
                                             </div>

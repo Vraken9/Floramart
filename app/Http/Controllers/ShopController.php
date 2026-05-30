@@ -118,9 +118,9 @@ class ShopController extends Controller
 
         if ($request->hasFile('logo')) {
             if ($shop->logo_path && !str_starts_with($shop->logo_path, 'http')) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($shop->logo_path);
+                \Illuminate\Support\Facades\Storage::disk('images_public')->delete($shop->logo_path);
             }
-            $data['logo_path'] = $request->file('logo')->store('shop_logos', 'public');
+            $data['logo_path'] = $request->file('logo')->store('shop_logos', 'images_public');
         }
 
         $shop->update($data);

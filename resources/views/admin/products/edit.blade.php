@@ -11,28 +11,10 @@
 <body class="bg-gray-50 text-gray-800">
     <x-navigation />
 
-    <div class="flex max-w-7xl mx-auto px-4 py-8 gap-6">
-        <aside class="w-64 flex-shrink-0">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-24">
-                <div class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-4 px-3">Menu Admin</div>
-                <nav class="space-y-1">
-                    <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-chart-pie w-6"></i> Ringkasan
-                    </a>
-                    <a href="{{ route('admin.shops.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-store w-6"></i> Kelola Toko
-                    </a>
-                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 bg-red-50 text-red-700 rounded-lg font-bold">
-                        <i class="fa-solid fa-box w-6"></i> Kelola Produk
-                    </a>
-                    <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-chart-line w-6"></i> Analitik
-                    </a>
-                </nav>
-            </div>
-        </aside>
+    <div class="flex flex-col lg:flex-row max-w-7xl mx-auto px-4 py-4 lg:py-8 gap-6">
+        <x-admin-sidebar active="produk" />
 
-        <main class="flex-grow space-y-6">
+        <main class="flex-grow space-y-6 min-w-0">
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-extrabold text-gray-900">Edit Produk (Super Admin)</h1>
                 <a href="{{ route('admin.products.index') }}" class="text-sm font-semibold text-gray-500 hover:text-gray-800">
@@ -40,10 +22,10 @@
                 </a>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6 lg:p-8">
                 <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" x-data="{
                     uploadType: '{{ str_starts_with($product->image_path, 'http') ? 'url' : 'file' }}',
-                    imagePreview: '{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}',
+                    imagePreview: '{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('images/' . $product->image_path) }}',
                     handleFileChange(event) {
                         const file = event.target.files[0];
                         if (file) {

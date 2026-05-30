@@ -26,57 +26,57 @@
             </div>
 
             <!-- Analitik Toko -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-[#7c4959] rounded-2xl shadow-sm border border-[#5d3642] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
-                    <div class="w-12 h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm backdrop-blur-sm">
-                        <i class="fa-solid fa-box text-xl"></i>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
+                <div class="bg-[#7c4959] rounded-2xl shadow-sm border border-[#5d3642] p-4 lg:p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105 hover:shadow-md">
+                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3 shadow-sm backdrop-blur-sm">
+                        <i class="fa-solid fa-box text-lg lg:text-xl"></i>
                     </div>
-                    <p class="text-sm font-bold text-white/90 mb-1">Total Produk</p>
-                    <p class="text-3xl font-black text-white">{{ $products->where('is_active', true)->count() }}</p>
+                    <p class="text-xs lg:text-sm font-bold text-white/90 mb-1">Total Produk</p>
+                    <p class="text-2xl lg:text-3xl font-black text-white">{{ $products->where('is_active', true)->count() }}</p>
                 </div>
                 
-                <div class="bg-[#926a7a] rounded-2xl shadow-sm border border-[#7c4959] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
-                    <div class="w-12 h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm backdrop-blur-sm">
-                        <i class="fa-solid fa-eye text-xl"></i>
+                <div class="bg-[#926a7a] rounded-2xl shadow-sm border border-[#7c4959] p-4 lg:p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105 hover:shadow-md">
+                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3 shadow-sm backdrop-blur-sm">
+                        <i class="fa-solid fa-eye text-lg lg:text-xl"></i>
                     </div>
-                    <p class="text-sm font-bold text-white/90 mb-1">Kunjungan Toko</p>
-                    <p class="text-3xl font-black text-white">{{ number_format($totalShopClicks ?? 0) }}</p>
+                    <p class="text-xs lg:text-sm font-bold text-white/90 mb-1">Kunjungan Toko</p>
+                    <p class="text-2xl lg:text-3xl font-black text-white">{{ number_format($totalShopClicks ?? 0) }}</p>
                 </div>
                 
-                <div class="bg-[#ac9a9c] rounded-2xl shadow-sm border border-[#926a7a] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
-                    <div class="w-12 h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm backdrop-blur-sm">
-                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                <div class="bg-[#ac9a9c] rounded-2xl shadow-sm border border-[#926a7a] p-4 lg:p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105 hover:shadow-md">
+                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white/20 text-white rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3 shadow-sm backdrop-blur-sm">
+                        <i class="fa-brands fa-whatsapp text-lg lg:text-xl"></i>
                     </div>
-                    <p class="text-sm font-bold text-white/90 mb-1">Klik WhatsApp</p>
-                    <p class="text-3xl font-black text-white">{{ number_format($totalWaClicks ?? 0) }}</p>
+                    <p class="text-xs lg:text-sm font-bold text-white/90 mb-1">Klik WhatsApp</p>
+                    <p class="text-2xl lg:text-3xl font-black text-white">{{ number_format($totalWaClicks ?? 0) }}</p>
                 </div>
                 
-                <div class="bg-[#d4ccc0] rounded-2xl shadow-sm border border-[#ac9a9c] p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
-                    <div class="w-12 h-12 bg-white text-[#7c4959] rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
-                        <i class="fa-solid fa-heart text-xl"></i>
+                <div class="bg-[#d4ccc0] rounded-2xl shadow-sm border border-[#ac9a9c] p-4 lg:p-6 flex flex-col justify-center text-center transform transition duration-300 hover:scale-105 hover:shadow-md">
+                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white text-[#7c4959] rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3 shadow-sm">
+                        <i class="fa-solid fa-heart text-lg lg:text-xl"></i>
                     </div>
-                    <p class="text-sm font-bold text-[#7c4959]/90 mb-1">Difavoritkan</p>
-                    <p class="text-3xl font-black text-[#7c4959]">{{ number_format($totalFavorites ?? 0) }}</p>
+                    <p class="text-xs lg:text-sm font-bold text-[#7c4959]/90 mb-1">Difavoritkan</p>
+                    <p class="text-2xl lg:text-3xl font-black text-[#7c4959]">{{ number_format($totalFavorites ?? 0) }}</p>
                 </div>
             </div>
 
             <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-200">
-                <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50">
-                    <h3 class="text-lg font-extrabold text-gray-800"><i class="fa-solid fa-list mr-2 text-pink-500"></i> Katalog Produk Anda</h3>
-                    <a href="{{ route('owner.products.create') }}" class="btn-a11y-admin bg-pink-500 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-pink-600 shadow-md transition-colors flex items-center">
+                <div class="p-4 lg:p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gray-50">
+                    <h3 class="text-base lg:text-lg font-extrabold text-gray-800"><i class="fa-solid fa-list mr-2 text-pink-500"></i> Katalog Produk Anda</h3>
+                    <a href="{{ route('owner.products.create') }}" class="btn-a11y-admin bg-pink-500 text-white px-5 lg:px-6 py-2 lg:py-3 rounded-full text-xs lg:text-sm font-bold hover:bg-pink-600 shadow-md transition-colors flex items-center whitespace-nowrap">
                         <i class="fa-solid fa-circle-plus mr-2"></i> Tambah Bunga Baru
                     </a>
                 </div>
                 
-                <div class="overflow-x-auto p-4">
+                <div class="overflow-x-auto w-full">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr class="bg-gray-100 rounded-lg">
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider rounded-tl-lg rounded-bl-lg">Detail Produk</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider">Harga</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider">Kategori</th>
-                                <th scope="col" class="px-6 py-4 text-center text-xs font-extrabold text-gray-600 uppercase tracking-wider">Visual</th>
-                                <th scope="col" class="px-6 py-4 text-right text-xs font-extrabold text-gray-600 uppercase tracking-wider rounded-tr-lg rounded-br-lg">Aksi</th>
+                            <tr class="bg-gray-100">
+                                <th scope="col" class="px-4 lg:px-6 py-3 lg:py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider whitespace-nowrap">Detail Produk</th>
+                                <th scope="col" class="px-4 lg:px-6 py-3 lg:py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider whitespace-nowrap">Harga</th>
+                                <th scope="col" class="px-4 lg:px-6 py-3 lg:py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider whitespace-nowrap">Kategori</th>
+                                <th scope="col" class="px-4 lg:px-6 py-3 lg:py-4 text-center text-xs font-extrabold text-gray-600 uppercase tracking-wider whitespace-nowrap">Visual</th>
+                                <th scope="col" class="px-4 lg:px-6 py-3 lg:py-4 text-right text-xs font-extrabold text-gray-600 uppercase tracking-wider whitespace-nowrap">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
@@ -86,7 +86,7 @@
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-14 w-14 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
                                                 @if($product->image_path)
-                                                    <img class="h-14 w-14 object-cover" src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" alt="">
+                                                    <img class="h-14 w-14 object-cover" src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('images/' . $product->image_path) }}" alt="">
                                                 @else
                                                     <div class="h-14 w-14 flex items-center justify-center text-gray-400"><i class="fa-solid fa-image"></i></div>
                                                 @endif
@@ -118,16 +118,16 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <td class="px-4 lg:px-6 py-3 lg:py-4 whitespace-nowrap text-right">
                                         <div class="flex justify-end gap-2">
-                                            <a href="{{ route('owner.products.edit', $product->id) }}" class="btn-a11y-admin flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-[#ac9a9c] rounded-lg hover:bg-[#926a7a] transition-colors shadow-sm">
-                                                <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                            <a href="{{ route('owner.products.edit', $product->id) }}" class="btn-a11y-admin flex items-center justify-center px-3 lg:px-4 py-2 text-xs font-bold text-white bg-[#ac9a9c] rounded-lg hover:bg-[#926a7a] transition-colors shadow-sm">
+                                                <i class="fa-solid fa-pen-to-square lg:mr-1"></i> <span class="hidden lg:inline">Edit</span>
                                             </a>
                                             <form action="{{ route('owner.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('PERINGATAN: Yakin ingin menghapus produk ini secara permanen?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn-a11y-admin flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-[#7c4959] rounded-lg hover:bg-[#5d3642] transition-colors shadow-sm">
-                                                    <i class="fa-solid fa-trash mr-1"></i> Hapus
+                                                <button type="submit" class="btn-a11y-admin flex items-center justify-center px-3 lg:px-4 py-2 text-xs font-bold text-white bg-[#7c4959] rounded-lg hover:bg-[#5d3642] transition-colors shadow-sm">
+                                                    <i class="fa-solid fa-trash lg:mr-1"></i> <span class="hidden lg:inline">Hapus</span>
                                                 </button>
                                             </form>
                                         </div>
