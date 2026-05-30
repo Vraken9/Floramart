@@ -10,47 +10,40 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="antialiased bg-gray-50 text-gray-900 font-sans flex flex-col min-h-screen">
-
     <x-navigation />
 
     <main class="flex-grow pb-16 pt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-10 text-center">
-                <h1 class="text-4xl font-extrabold text-[#7c4959] tracking-tight mb-4">Direktori Toko Florist</h1>
-                <p class="text-gray-600 max-w-2xl mx-auto">Jelajahi perajin lokal terbaik di seluruh Banjarnegara. Pilih lokasi Anda dan temukan karya seni merajut bunga langsung dari sumbernya.</p>
+                <h1 class="text-a11y-admin text-4xl font-extrabold text-[#7c4959] tracking-tight mb-4">Direktori Toko Florist</h1>
+                <p class="text-a11y-admin text-gray-600 max-w-2xl mx-auto">Jelajahi perajin lokal terbaik di seluruh Banjarnegara. Pilih lokasi Anda dan temukan karya seni merajut bunga langsung dari sumbernya.</p>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8" x-data="{ 
-                regencies: {{ $regencies->toJson() }},
-                selectedRegency: '{{ request('regency') }}',
-                selectedDistrict: '{{ request('district') }}',
-                get districts() {
-                    if (!this.selectedRegency) return [];
-                    const regency = this.regencies.find(r => r.id == this.selectedRegency);
-                    return regency ? regency.districts : [];
-                }
-            }">
-                <form method="GET" action="{{ route('shops.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+                <form method="GET" action="{{ route('shops.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kabupaten</label>
-                        <select name="regency" x-model="selectedRegency" @change="selectedDistrict = ''" class="block w-full border-gray-300 rounded-md text-sm py-2.5">
-                            <option value="">Semua Kabupaten</option>
-                            <template x-for="reg in regencies" :key="reg.id">
-                                <option :value="reg.id" x-text="reg.name"></option>
-                            </template>
-                        </select>
+                        <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Nama Toko</label>
+                        <div class="relative">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari toko..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 border-gray-300 rounded-md text-sm focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] focus:outline-none">
+                            <i class="fa-solid fa-store absolute left-3 top-3 text-gray-400"></i>
+                        </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kecamatan</label>
-                        <select name="district" x-model="selectedDistrict" :disabled="!selectedRegency" class="block w-full border-gray-300 rounded-md text-sm py-2.5 disabled:bg-gray-100">
-                            <option value="">Semua Kecamatan</option>
-                            <template x-for="dist in districts" :key="dist.id">
-                                <option :value="dist.id" x-text="dist.name"></option>
-                            </template>
-                        </select>
+                        <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kabupaten/Kota</label>
+                        <div class="relative">
+                            <input type="text" name="regency" value="{{ request('regency') }}" placeholder="Contoh: Banjarnegara..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 border-gray-300 rounded-md text-sm focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] focus:outline-none">
+                            <i class="fa-solid fa-city absolute left-3 top-3 text-gray-400"></i>
+                        </div>
                     </div>
-                    <button type="submit" class="w-full bg-[#7c4959] text-white py-2.5 rounded-md font-bold text-sm hover:bg-[#5d3642]">
-                        Filter Toko
+                    <div>
+                        <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kecamatan</label>
+                        <div class="relative">
+                            <input type="text" name="district" value="{{ request('district') }}" placeholder="Contoh: Bawang..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 border-gray-300 rounded-md text-sm focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] focus:outline-none">
+                            <i class="fa-solid fa-map-location-dot absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-a11y-admin w-full bg-[#7c4959] text-white py-2.5 rounded-md font-bold text-sm hover:bg-[#5d3642] h-[42px] flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-search"></i> Cari
                     </button>
                 </form>
             </div>
@@ -59,9 +52,13 @@
                 @forelse($shops as $shop)
                     <div class="bg-white rounded-2xl border border-[#d4ccc0]/40 overflow-hidden group hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center text-center">
                         <a href="{{ route('shop.show', $shop->id) }}" class="inline-block relative mb-4">
-                            <div class="w-24 h-24 rounded-full bg-[#7c4959] text-white flex items-center justify-center text-3xl font-extrabold shadow-sm group-hover:scale-105 transition-transform duration-300">
-                                {{ strtoupper(substr($shop->name, 0, 1)) }}
-                            </div>
+                            @if($shop->logo_path)
+                                <img src="{{ str_starts_with($shop->logo_path, 'http') ? $shop->logo_path : asset('storage/' . $shop->logo_path) }}" alt="{{ $shop->name }}" class="w-24 h-24 rounded-full object-cover shadow-sm group-hover:scale-105 transition-transform duration-300 border-2 border-[#d4ccc0]">
+                            @else
+                                <div class="w-24 h-24 rounded-full bg-[#7c4959] text-white flex items-center justify-center text-3xl font-extrabold shadow-sm group-hover:scale-105 transition-transform duration-300">
+                                    {{ strtoupper(substr($shop->name, 0, 1)) }}
+                                </div>
+                            @endif
                         </a>
                         <a href="{{ route('shop.show', $shop->id) }}" class="text-xl font-bold text-gray-900 hover:text-[#7c4959] transition-colors mb-2">
                             {{ $shop->name }}
@@ -83,7 +80,7 @@
                         <p class="text-sm text-gray-500 leading-relaxed mb-6 line-clamp-3">
                             {{ $shop->description ?? 'Toko bunga terpercaya yang menyediakan berbagai macam buket dan karangan bunga segar dari Banjarnegara.' }}
                         </p>
-                        <a href="{{ route('shop.show', $shop->id) }}" class="mt-auto inline-flex justify-center items-center px-4 py-2 border border-[#d4ccc0]/50 text-gray-700 hover:border-[#7c4959] hover:text-[#7c4959] hover:bg-[#7c4959]/5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all w-full">
+                        <a href="{{ route('shop.show', $shop->id) }}" class="btn-a11y-admin mt-auto inline-flex justify-center items-center px-4 py-2 border border-[#d4ccc0]/50 text-gray-700 hover:border-[#7c4959] hover:text-[#7c4959] hover:bg-[#7c4959]/5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all w-full">
                             Kunjungi Toko
                         </a>
                     </div>
@@ -140,6 +137,5 @@
             </div>
         </div>
     </footer>
-
 </body>
 </html>

@@ -37,7 +37,19 @@ class ProductController extends Controller
             ->where('shop_id', $shop->id)
             ->get();
 
-        return view('owner.products.index', compact('products', 'shop'));
+        // Hitung Kunjungan Toko (Asumsi ada model ShopView)
+        $totalShopClicks = \App\Models\ShopView::where('shop_id', $shop->id)->count();
+
+        // Hitung Klik WhatsApp secara langsung (tabel product_leads punya shop_id)
+        $totalWaClicks = \App\Models\ProductLead::where('shop_id', $shop->id)->count();
+
+        // Hitung Total Difavoritkan (dari pivot table wishlists)
+        $productIds = $products->pluck('id');
+        $totalFavorites = \Illuminate\Support\Facades\DB::table('wishlists')
+            ->whereIn('product_id', $productIds)
+            ->count();
+
+        return view('owner.products.index', compact('products', 'shop', 'totalShopClicks', 'totalWaClicks', 'totalFavorites'));
     }
 
     // 2. Menampilkan form tambah produk baru

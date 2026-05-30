@@ -13,78 +13,85 @@
 
     <div class="flex max-w-7xl mx-auto px-4 py-8 gap-6">
         <aside class="w-64 flex-shrink-0">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-24">
-                <div class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-4 px-3">Menu Admin</div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sticky top-24">
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 px-3">Navigasi Utama</div>
                 <nav class="space-y-1">
-                    <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2.5 bg-red-50 text-red-700 rounded-lg font-bold">
-                        <i class="fa-solid fa-chart-pie w-6"></i> Ringkasan
+                    <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2.5 bg-gray-50 text-[#7c4959] rounded-lg font-medium text-sm">
+                        Ringkasan
                     </a>
-                    <a href="{{ route('admin.shops.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-store w-6"></i> Kelola Toko
+                    <a href="{{ route('admin.shops.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Kelola Toko
                     </a>
-                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-box w-6"></i> Kelola Produk
+                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Kelola Produk
                     </a>
-                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-users w-6"></i> Kelola User
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Kelola Pengguna
                     </a>
-                    <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-chart-line w-6"></i> Analitik
+                    <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Analitik
                     </a>
                 </nav>
             </div>
         </aside>
 
-        <main class="flex-grow space-y-6">
-            <h1 class="text-2xl font-extrabold text-gray-900">Dasbor Utama</h1>
+        <main class="flex-grow space-y-8">
+            <div class="border-b border-gray-200 pb-4">
+                <h1 class="text-2xl font-light text-gray-900 tracking-tight">Ikhtisar <span class="font-bold text-[#7c4959]">Sistem</span></h1>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-store"></i></div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-semibold">Total Toko Aktif</p>
-                        <p class="text-2xl font-extrabold text-gray-900">{{ \App\Models\Shop::where('status', 'approved')->count() }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200 shadow-sm flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
+                    <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-md">
+                        <i class="fa-solid fa-store text-xl"></i>
                     </div>
+                    <p class="text-sm font-extrabold text-green-900 mb-1">Toko Aktif</p>
+                    <p class="text-3xl font-black text-green-700">{{ \App\Models\Shop::where('status', 'approved')->count() }}</p>
                 </div>
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
-                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-box"></i></div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-semibold">Total Produk</p>
-                        <p class="text-2xl font-extrabold text-gray-900">{{ \App\Models\Product::count() }}</p>
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200 shadow-sm flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
+                    <div class="w-12 h-12 bg-purple-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-md">
+                        <i class="fa-solid fa-box text-xl"></i>
                     </div>
+                    <p class="text-sm font-extrabold text-purple-900 mb-1">Total Produk</p>
+                    <p class="text-3xl font-black text-purple-700">{{ \App\Models\Product::count() }}</p>
                 </div>
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div>
-                    <div>
-                        <p class="text-sm text-gray-500 font-semibold">Total Pengguna</p>
-                        <p class="text-2xl font-extrabold text-gray-900">{{ \App\Models\User::count() }}</p>
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200 shadow-sm flex flex-col justify-center text-center transform transition duration-300 hover:scale-105">
+                    <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-md">
+                        <i class="fa-solid fa-users text-xl"></i>
                     </div>
+                    <p class="text-sm font-extrabold text-blue-900 mb-1">Pengguna Terdaftar</p>
+                    <p class="text-3xl font-black text-blue-700">{{ \App\Models\User::count() }}</p>
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                    <h2 class="font-bold text-gray-800">Menunggu Persetujuan (Pending)</h2>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-5 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
+                    <i class="fa-solid fa-hourglass-half text-orange-500"></i>
+                    <h2 class="text-lg font-extrabold text-gray-800">Menunggu Verifikasi</h2>
                 </div>
-                <div class="p-6">
+                <div class="p-0">
                     @if(isset($pendingShops) && $pendingShops->count() > 0)
                         <div class="divide-y divide-gray-100">
                             @foreach($pendingShops as $shop)
-                                <div class="py-4 flex justify-between items-center">
+                                <div class="px-6 py-5 flex justify-between items-center hover:bg-orange-50/30 transition-colors">
                                     <div>
-                                        <p class="font-bold text-gray-900">{{ $shop->name }}</p>
-                                        <p class="text-xs text-gray-500">Pemilik: {{ $shop->user->name }} | Daerah: {{ $shop->district->name }} | Status: <span class="uppercase text-[10px] font-bold px-2 py-0.5 rounded-full {{ $shop->status == 'pending' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700' }}">{{ $shop->status == 'pending' ? 'Menunggu' : 'Sedang Diverifikasi' }}</span></p>
+                                        <p class="font-extrabold text-gray-900 text-sm mb-1 text-a11y-admin">{{ $shop->name }}</p>
+                                        <p class="text-xs font-bold text-gray-500"><i class="fa-solid fa-user mr-1"></i> {{ $shop->user->name }} &bull; <i class="fa-solid fa-map-location-dot mx-1"></i> {{ $shop->district->name }}</p>
                                     </div>
                                     <div class="flex gap-2">
                                         <form action="{{ route('admin.shops.approve', $shop->id) }}" method="POST">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors"><i class="fa-solid fa-check mr-1"></i> Terima</button>
+                                            <button type="submit" class="btn-a11y-admin px-4 py-2 inline-flex items-center text-xs font-bold rounded-lg shadow-sm transition-transform hover:scale-105 bg-emerald-400 text-white hover:bg-emerald-500">
+                                                <i class="fa-solid fa-check mr-1"></i> Terima
+                                            </button>
                                         </form>
 
                                         <form action="{{ route('admin.shops.reject', $shop->id) }}" method="POST" id="form-reject-{{ $shop->id }}">
                                             @csrf @method('PATCH')
                                             <input type="hidden" name="rejected_reason" id="reason-{{ $shop->id }}">
-                                            <button type="button" onclick="rejectShop({{ $shop->id }})" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors"><i class="fa-solid fa-xmark mr-1"></i> Tolak</button>
+                                            <button type="button" onclick="rejectShop({{ $shop->id }})" class="btn-a11y-admin px-4 py-2 inline-flex items-center text-xs font-bold rounded-lg shadow-sm transition-transform hover:scale-105 bg-rose-400 text-white hover:bg-rose-500">
+                                                <i class="fa-solid fa-xmark mr-1"></i> Tolak
+                                            </button>
                                         </form>
                                     </div>
                                 </div>

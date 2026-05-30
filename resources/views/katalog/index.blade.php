@@ -26,59 +26,43 @@ if (!function_exists('formatRupiah')) {
         .hover-bg-plum-dark:hover { background-color: #5d3642; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
-
+<body class="bg-gray-50 flex flex-col min-h-screen">
     <x-navigation />
 
         <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
         
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8" x-data="{ 
-            regencies: {{ isset($regencies) ? $regencies->toJson() : '[]' }},
-            selectedRegency: '{{ request('regency') }}',
-            selectedDistrict: '{{ request('district') }}',
-            get districts() {
-                if (!this.selectedRegency) return [];
-                const regency = this.regencies.find(r => r.id == this.selectedRegency);
-                return regency ? regency.districts : [];
-            }
-        }">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
             <form method="GET" action="{{ route('katalog.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Cari Bunga</label>
+                    <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Nama Bunga</label>
                     <div class="relative">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Mawar..." class="w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Contoh: Mawar..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
                         <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kategori</label>
-                    <select name="category" class="block w-full border-gray-300 focus:border-[#7c4959] focus:ring-[#7c4959] rounded-md text-sm py-2.5">
-                        <option value="">Semua Kategori</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                        @endforeach
-                    </select>
+                    <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kategori</label>
+                    <div class="relative">
+                        <input type="text" name="category" value="{{ request('category') }}" placeholder="Contoh: Buket..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
+                        <i class="fa-solid fa-layer-group absolute left-3 top-3 text-gray-400"></i>
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kabupaten/Kota</label>
-                    <select name="regency" x-model="selectedRegency" @change="selectedDistrict = ''" class="block w-full border-gray-300 focus:border-[#7c4959] focus:ring-[#7c4959] rounded-md text-sm py-2.5">
-                        <option value="">Semua Kabupaten</option>
-                        <template x-for="reg in regencies" :key="reg.id">
-                            <option :value="reg.id" x-text="reg.name" :selected="reg.id == selectedRegency"></option>
-                        </template>
-                    </select>
+                    <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kabupaten/Kota</label>
+                    <div class="relative">
+                        <input type="text" name="regency" value="{{ request('regency') }}" placeholder="Contoh: Banjarnegara..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
+                        <i class="fa-solid fa-city absolute left-3 top-3 text-gray-400"></i>
+                    </div>
                 </div>
                 <div class="flex gap-2 items-end">
                     <div class="flex-grow">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kecamatan</label>
-                        <select name="district" x-model="selectedDistrict" :disabled="!selectedRegency" class="block w-full border-gray-300 focus:border-[#7c4959] focus:ring-[#7c4959] rounded-md text-sm py-2.5 disabled:bg-gray-100 disabled:text-gray-400">
-                            <option value="">Semua Kecamatan</option>
-                            <template x-for="dist in districts" :key="dist.id">
-                                <option :value="dist.id" x-text="dist.name" :selected="dist.id == selectedDistrict"></option>
-                            </template>
-                        </select>
+                        <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kecamatan</label>
+                        <div class="relative">
+                            <input type="text" name="district" value="{{ request('district') }}" placeholder="Contoh: Bawang..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
+                            <i class="fa-solid fa-map-location-dot absolute left-3 top-3 text-gray-400"></i>
+                        </div>
                     </div>
-                    <button type="submit" class="inline-flex justify-center items-center px-4 py-2.5 bg-[#7c4959] text-white rounded-md font-bold text-sm uppercase hover:bg-[#5d3642] transition-colors">
+                    <button type="submit" class="btn-a11y-admin inline-flex justify-center items-center px-4 py-2.5 bg-[#7c4959] text-white rounded-md font-bold text-sm uppercase hover:bg-[#5d3642] transition-colors h-[42px]">
                         <i class="fa-solid fa-filter"></i>
                     </button>
                 </div>
@@ -125,8 +109,8 @@ if (!function_exists('formatRupiah')) {
 
                             <div class="mt-auto">
                                 <div class="text-lg font-extrabold text-gray-900 mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
-                                <a href="https://wa.me/6289530123608?text=Halo%20{{ $product->shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" 
-                                   target="_blank" class="block w-full py-2.5 bg-green-600 hover:bg-green-700 text-white text-center font-bold text-sm rounded-lg transition-colors">
+                                <a href="https://wa.me/{{ $product->shop->whatsapp_number }}?text=Halo%20{{ $product->shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" 
+                                   target="_blank" class="btn-a11y-pesan block w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-center font-bold text-sm rounded-lg border border-emerald-800 shadow-sm transition-colors">
                                    <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
                                 </a>
                             </div>
@@ -148,7 +132,7 @@ if (!function_exists('formatRupiah')) {
                                     <h3 class="text-2xl font-bold text-gray-800 mb-1">{{ $category->name }}</h3>
                                     <p class="text-sm text-gray-500">{{ $category->description ?? 'Rekomendasi kusuma terbaik' }}</p>
                                 </div>
-                                <a href="{{ route('katalog.index', ['category' => $category->id]) }}" class="text-sm font-semibold text-[#7c4959] hover:text-[#5d3642] flex items-center gap-1 transition-colors">
+                                <a href="{{ route('katalog.index', ['category' => $category->name]) }}" class="text-sm font-semibold text-[#7c4959] hover:text-[#5d3642] flex items-center gap-1 transition-colors">
                                     Lihat Semua <i class="fa-solid fa-arrow-right text-xs"></i>
                                 </a>
                             </div>
@@ -188,7 +172,7 @@ if (!function_exists('formatRupiah')) {
                                             <div class="mt-auto">
                                                 <div class="text-lg font-extrabold text-gray-900 mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
                                                 <a href="https://wa.me/6289530123608?text=Halo%20{{ $product->shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" 
-                                                   target="_blank" class="block w-full py-2.5 bg-green-600 hover:bg-green-700 text-white text-center font-bold text-sm rounded-lg transition-colors">
+                                                   target="_blank" class="btn-a11y-pesan block w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-center font-bold text-sm rounded-lg border border-emerald-800 shadow-sm transition-colors">
                                                    <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
                                                 </a>
                                             </div>

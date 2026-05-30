@@ -14,22 +14,36 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        <!-- Anti-FOUC Script -->
+        <script>
+            (function() {
+                const theme = localStorage.getItem('floramart_theme');
+                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                }
+                const a11y = localStorage.getItem('floramart_colorblind_type');
+                if (a11y && a11y !== 'Normal') {
+                    document.documentElement.classList.add('a11y-active');
+                }
+            })();
+        </script>
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased dark:bg-gray-900 dark:text-gray-100">
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             <x-navigation />
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white dark:bg-gray-800 shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 dark:text-gray-200">
                         {{ $header }}
                     </div>
                 </header>
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="dark:bg-gray-900">
                 {{ $slot }}
             </main>
         </div>

@@ -25,6 +25,15 @@
                 </div>
             </div>
 
+            <div class="hidden sm:flex sm:items-center">
+                <!-- Accessibility Toggle -->
+                <div class="me-4 flex items-center">
+                    <button onclick="toggleAccessibilityMode()" class="text-gray-500 hover:text-[#7c4959] focus:outline-none flex items-center gap-1.5" title="Toggle Mode Aksesibilitas">
+                        <i id="a11yModeIconDashboard" class="fa-solid fa-universal-access"></i>
+                        <span class="text-xs font-semibold hidden md:inline">Aksesibilitas</span>
+                    </button>
+                </div>
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 @auth
@@ -59,9 +68,9 @@
                     </x-slot>
                 </x-dropdown>
                 @else
-                <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
+                <a href="{{ route('login') }}" class="btn-a11y-auth-login text-sm text-gray-700 underline">Log in</a>
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
+                    <a href="{{ route('register') }}" class="btn-a11y-auth-register ml-4 text-sm text-gray-700 underline">Register</a>
                 @endif
                 @endauth
             </div>
@@ -121,12 +130,15 @@
             </div>
             @else
             <div class="px-4 pb-2">
-                <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900">Log in</a>
+                <a href="{{ route('login') }}" class="btn-a11y-auth-login text-sm font-medium text-gray-700 hover:text-gray-900">Log in</a>
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="ml-4 text-sm font-medium text-gray-700 hover:text-gray-900">Register</a>
+                    <a href="{{ route('register') }}" class="btn-a11y-auth-register ml-4 text-sm font-medium text-gray-700 hover:text-gray-900">Register</a>
                 @endif
             </div>
             @endauth
         </div>
     </div>
 </nav>
+
+<x-accessibility-filters />
+<x-accessibility-widget />

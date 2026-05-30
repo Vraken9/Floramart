@@ -1,0 +1,17 @@
+node_modules
+vendor
+.env
+.git
+.gitignore
+.editorconfig
+.idea
+.vscode
+storage/*.key
+storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/app/public/*
+tests/
+phpunit.xml
+README.md

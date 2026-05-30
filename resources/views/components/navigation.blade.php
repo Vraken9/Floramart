@@ -14,9 +14,16 @@
                 <a href="{{ route('katalog.index') }}" class="{{ request()->routeIs('katalog.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Katalog</a>
                 <a href="{{ route('shops.index') }}" class="{{ request()->routeIs('shops.index') ? 'text-[#7c4959] border-b-2 border-[#7c4959]' : 'text-gray-500 hover:text-[#7c4959]' }} font-semibold transition">Toko</a>
                 
-
-
-                @if (Auth::check())
+                <!-- Accessibility Dropdown -->
+                <div class="ms-4 me-2 flex items-center border-l pl-4 border-gray-300 gap-2">
+                    <button onclick="toggleDarkMode()" class="text-gray-500 hover:text-[#7c4959] focus:outline-none" title="Toggle Dark Mode">
+                        <i id="darkModeIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <button onclick="toggleAccessibilityMode()" class="text-gray-500 hover:text-[#7c4959] focus:outline-none flex items-center gap-1.5" title="Toggle Mode Aksesibilitas">
+                        <i id="a11yModeIcon" class="fa-solid fa-universal-access"></i>
+                        <span class="text-xs font-semibold hidden md:inline">Aksesibilitas</span>
+                    </button>
+                </div>  @if (Auth::check())
                     <a href="{{ route('dashboard') }}" class="bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-bold  mr-2 transition-colors">
                         Dashboard
                     </a>
@@ -51,10 +58,13 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-[#7c4959] font-semibold border-l pl-4 border-gray-300">Masuk</a>
-                    <a href="{{ route('register') }}" class="bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-semibold uppercase shadow-sm">Daftar</a>
+                    <a href="{{ route('login') }}" class="btn-a11y-auth-login text-gray-600 hover:text-[#7c4959] font-semibold border-l pl-4 border-gray-300 transition-colors">Masuk</a>
+                    <a href="{{ route('register') }}" class="btn-a11y-auth-register bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-semibold uppercase shadow-sm transition-colors">Daftar</a>
                 @endif
             </div>
         </div>
     </div>
 </nav>
+
+<x-accessibility-filters />
+<x-accessibility-widget />

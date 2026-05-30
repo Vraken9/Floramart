@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div class="mt-4 md:mt-0 flex gap-3">
-                    <a href="{{ route('profile.edit') }}" class="px-5 py-2.5 bg-white border-2 border-gray-200 text-gray-700 font-bold rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all text-sm">
+                    <a href="{{ route('profile.edit') }}" class="btn-a11y-admin px-5 py-2.5 bg-white border-2 border-[#d4ccc0] text-gray-700 font-bold rounded-xl hover:border-[#ac9a9c] hover:bg-[#d4ccc0]/20 transition-all text-sm">
                         <i class="fa-solid fa-user-pen mr-2"></i> Edit Profil
                     </a>
                 </div>
@@ -47,23 +47,29 @@
                                 <p class="text-sm text-gray-600 mb-3 font-medium">Toko: <strong>{{ $userShop->name }}</strong></p>
                                 
                                 @if($userShop->status == 'approved')
-                                    <a href="{{ route('owner.products.index') }}" class="block w-full text-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors">
+                                    <a href="{{ route('owner.products.index') }}" class="btn-a11y-admin block w-full text-center px-4 py-2 bg-[#7c4959] text-white rounded-lg text-sm font-bold hover:bg-[#5d3642] transition-colors">
                                         Masuk Dasbor Toko
                                     </a>
                                 @elseif(in_array($userShop->status, ['rejected', 'suspended']))
                                     <p class="text-xs text-red-600 mb-3">Alasan: {{ $userShop->rejected_reason ?? 'Menunggu konfirmasi admin.' }}</p>
-                                    <a href="https://wa.me/6289530123608" target="_blank" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-colors">
+                                    @if($hasPendingShop)
+                                    <a href="https://wa.me/6289530123608" target="_blank" class="btn-a11y-admin block w-full text-center px-4 py-2 bg-[#7c4959] text-white rounded-lg text-sm font-bold hover:bg-[#5d3642] transition-colors">
                                         <i class="fa-brands fa-whatsapp"></i> Hubungi Admin
                                     </a>
                                 @else
-                                    <a href="https://wa.me/6289530123608" target="_blank" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors">
+                                    <a href="https://wa.me/6289530123608" target="_blank" class="btn-a11y-admin block w-full text-center px-4 py-2 bg-[#926a7a] text-white rounded-lg text-sm font-bold hover:bg-[#7c4959] transition-colors">
+                                        <i class="fa-brands fa-whatsapp"></i> Hubungi Admin
+                                    </a>
+                                @endif
+                                @else
+                                    <a href="https://wa.me/6289530123608" target="_blank" class="btn-a11y-admin block w-full text-center px-4 py-2 bg-[#ac9a9c] text-white rounded-lg text-sm font-bold hover:bg-[#926a7a] transition-colors">
                                         <i class="fa-brands fa-whatsapp"></i> Hubungi Admin
                                     </a>
                                 @endif
                             </div>
                         @else
                             <p class="text-sm text-gray-500 mb-4 leading-relaxed">Punya bisnis merangkai bunga? Bergabunglah sebagai mitra florist FloraMart dan jangkau lebih banyak pelanggan secara online.</p>
-                            <a href="{{ route('shop.create') }}" class="block w-full text-center px-4 py-2.5 bg-[#7c4959] text-white rounded-xl text-sm font-bold hover:bg-[#5d3642] shadow-sm transition-colors">
+                            <a href="{{ route('shop.create') }}" class="btn-a11y-admin block w-full text-center px-4 py-2.5 bg-[#7c4959] text-white rounded-xl text-sm font-bold hover:bg-[#5d3642] shadow-sm transition-colors">
                                 <i class="fa-solid fa-shop mr-1"></i> Daftar Sebagai Owner
                             </a>
                         @endif
@@ -101,7 +107,7 @@
                                     </div>
                                     <div class="p-4 flex-grow flex flex-col justify-between bg-white">
                                         <div>
-                                            <h3 class="text-sm font-semibold text-gray-800 line-clamp-1 group-hover:text-[#7c4959] transition-colors mb-1">{{ $product->name }}</h3>
+                                            <h3 class="text-a11y-admin text-sm font-semibold text-gray-800 line-clamp-1 group-hover:text-[#7c4959] transition-colors mb-1">{{ $product->name }}</h3>
                                             <div class="flex items-center text-xs text-gray-500 mb-3">
                                                 <svg class="h-3.5 w-3.5 text-[#926a7a] mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -112,10 +118,10 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <div class="text-base font-bold text-gray-900 mb-2">
+                                            <div class="text-a11y-admin text-base font-bold text-gray-900 mb-2">
                                                 Rp {{ number_format($product->price, 0, ',', '.') }}
                                             </div>
-                                            <a href="{{ route('product.show', $product->slug) }}" class="block w-full border border-[#d4ccc0]/50 text-gray-700 hover:border-[#7c4959] hover:text-[#7c4959] hover:bg-[#7c4959]/5 rounded-lg text-xs font-semibold py-2 transition-all text-center mt-2">
+                                            <a href="{{ route('product.show', $product->slug) }}" class="btn-a11y-admin block w-full border border-[#d4ccc0]/50 text-gray-700 hover:border-[#7c4959] hover:text-[#7c4959] hover:bg-[#7c4959]/5 rounded-lg text-xs font-semibold py-2 transition-all text-center mt-2">
                                                 Lihat Detail
                                             </a>
                                         </div>

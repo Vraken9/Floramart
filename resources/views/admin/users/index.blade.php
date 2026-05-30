@@ -13,23 +13,23 @@
 
     <div class="flex max-w-7xl mx-auto px-4 py-8 gap-6">
         <aside class="w-64 flex-shrink-0">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-24">
-                <div class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-4 px-3">Menu Admin</div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sticky top-24">
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 px-3">Navigasi Utama</div>
                 <nav class="space-y-1">
-                    <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-chart-pie w-6"></i> Ringkasan
+                    <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Ringkasan
                     </a>
-                    <a href="{{ route('admin.shops.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-store w-6"></i> Kelola Toko
+                    <a href="{{ route('admin.shops.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Kelola Toko
                     </a>
-                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-box w-6"></i> Kelola Produk
+                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Kelola Produk
                     </a>
-                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 bg-red-50 text-red-700 rounded-lg font-bold">
-                        <i class="fa-solid fa-users w-6"></i> Kelola User
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2.5 bg-gray-50 text-[#7c4959] rounded-lg font-medium text-sm">
+                        Kelola Pengguna
                     </a>
-                    <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-chart-line w-6"></i> Analitik
+                    <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium text-sm transition-colors">
+                        Analitik
                     </a>
                 </nav>
             </div>
@@ -48,60 +48,57 @@
                 </div>
             @endif
 
-            <h1 class="text-2xl font-extrabold text-gray-900">Manajemen Pengguna</h1>
+            <div class="border-b border-gray-200 pb-4">
+                <h1 class="text-2xl font-light text-gray-900 tracking-tight">Manajemen <span class="font-bold text-[#7c4959]">Pengguna</span></h1>
+            </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                    <h2 class="font-bold text-gray-800">Daftar Semua Pengguna</h2>
+            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-200">
+                <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50">
+                    <h3 class="text-lg font-extrabold text-gray-800"><i class="fa-solid fa-users mr-2 text-indigo-500"></i> Katalog Pengguna</h3>
                 </div>
                 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                <div class="overflow-x-auto p-4">
+                    <table class="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
-                                <th class="px-6 py-4 font-bold border-b border-gray-200">Nama</th>
-                                <th class="px-6 py-4 font-bold border-b border-gray-200">Email</th>
-                                <th class="px-6 py-4 font-bold border-b border-gray-200">Terdaftar Sejak</th>
-                                <th class="px-6 py-4 font-bold border-b border-gray-200">Role & Aksi</th>
+                            <tr class="bg-gray-100 rounded-lg">
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider rounded-tl-lg rounded-bl-lg">Info Pengguna</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-extrabold text-gray-600 uppercase tracking-wider">Peran (Role)</th>
+                                <th scope="col" class="px-6 py-4 text-right text-xs font-extrabold text-gray-600 uppercase tracking-wider rounded-tr-lg rounded-br-lg">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody class="bg-white divide-y divide-gray-100">
                             @foreach($users as $user)
-                                <tr class="hover:bg-gray-50 transition-colors">
+                                <tr class="hover:bg-indigo-50/30 transition-colors">
                                     <td class="px-6 py-4">
-                                        <p class="font-bold text-gray-900">{{ $user->name }}</p>
+                                        <p class="font-extrabold text-sm text-gray-900 text-a11y-admin">{{ $user->name }}</p>
+                                        <p class="text-xs font-bold text-gray-500 mt-1"><i class="fa-solid fa-envelope text-indigo-400"></i> {{ $user->email }}</p>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <p class="text-sm font-semibold text-gray-700">{{ $user->email }}</p>
+                                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full border text-a11y-admin
+                                            {{ $user->role === 'admin' ? 'bg-red-100 text-red-700 border-red-200' : 
+                                              ($user->role === 'owner' ? 'bg-purple-100 text-purple-700 border-purple-200' : 
+                                              'bg-blue-100 text-blue-700 border-blue-200') }}">
+                                            {{ $user->role }}
+                                        </span>
                                     </td>
-                                    <td class="px-6 py-4">
-                                        <p class="text-sm text-gray-500">{{ $user->created_at->format('d M Y') }}</p>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center gap-4">
-                                            <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border 
-                                                {{ $user->role === 'admin' ? 'bg-red-100 text-red-700 border-red-200' : 
-                                                  ($user->role === 'owner' ? 'bg-blue-100 text-blue-700 border-blue-200' : 
-                                                  'bg-gray-100 text-gray-700 border-gray-200') }}">
-                                                {{ $user->role }}
-                                            </span>
-
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex justify-end gap-2">
                                             @if($user->id !== auth()->id())
                                                 @if($user->role === 'owner')
-                                                    <form action="{{ route('admin.users.update-role', $user->id) }}" method="POST">
-                                                        @csrf @method('PATCH')
-                                                        <input type="hidden" name="role" value="user">
-                                                        <button type="submit" onclick="return confirm('Turunkan role pengguna ini menjadi User biasa?')" class="px-3 py-1.5 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 border border-yellow-200 text-xs font-bold rounded transition-colors">
-                                                            <i class="fa-solid fa-arrow-down"></i> Turunkan
-                                                        </button>
-                                                    </form>
+                                                <form action="{{ route('admin.users.update-role', $user->id) }}" method="POST" class="inline-block">
+                                                    @csrf @method('PATCH')
+                                                    <input type="hidden" name="role" value="user">
+                                                    <button type="submit" onclick="return confirm('Turunkan role pengguna ini menjadi User biasa?')" class="btn-a11y-admin flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-[#ac9a9c] rounded-lg hover:bg-[#926a7a] transition-colors shadow-sm">
+                                                        <i class="fa-solid fa-arrow-down mr-1"></i> Turunkan
+                                                    </button>
+                                                </form>
                                                 @elseif($user->role === 'user')
-                                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
-                                                        @csrf @method('DELETE')
-                                                        <button type="submit" onclick="return confirm('Yakin ingin menghapus akun pengguna ini secara permanen?')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold rounded transition-colors">
-                                                            <i class="fa-solid fa-trash"></i> Hapus
-                                                        </button>
-                                                    </form>
+                                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-block">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" onclick="return confirm('Hapus permanen user ini beserta tokonya (jika ada)?')" class="btn-a11y-admin flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-[#7c4959] rounded-lg hover:bg-[#5d3642] transition-colors shadow-sm">
+                                                        <i class="fa-solid fa-trash mr-1"></i> Hapus
+                                                    </button>
+                                                </form>
                                                 @endif
                                             @endif
                                         </div>

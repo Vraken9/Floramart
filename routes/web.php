@@ -24,6 +24,9 @@ Route::get('/product/{slug}', [App\Http\Controllers\HomeController::class, 'show
 Route::get('/shop/{id}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.show');
 Route::get('/bunga/{id}/wa-redirect', [\App\Http\Controllers\LeadController::class, 'redirectWhatsApp'])->name('product.whatsapp');
 
+// API Khusus Aksesibilitas AI
+Route::post('/api/accessibility/analyze', [\App\Http\Controllers\AccessibilityController::class, 'analyze'])->name('accessibility.analyze');
+
 // Rute Keranjang Belanja (Cart)
 Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
@@ -80,4 +83,13 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/owner/shop/edit', [App\Http\Controllers\ShopController::class, 'edit'])->name('owner.shop.edit');
     Route::put('/owner/shop/update', [App\Http\Controllers\ShopController::class, 'update'])->name('owner.shop.update');
 });
+
+Route::post('/accessibility-mode', function (\Illuminate\Http\Request $request) {
+    if (auth()->check()) {
+        auth()->user()->update(['accessibility_mode' => $request->boolean('accessibility_mode')]);
+        return response()->json(['success' => true]);
+    }
+    return response()->json(['success' => false], 401);
+})->name('accessibility.toggle');
+
 require __DIR__.'/auth.php';

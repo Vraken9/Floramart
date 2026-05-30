@@ -11,27 +11,7 @@
 </head>
 <body class="bg-gray-50">
 
-    <nav class="bg-white border-b border-[#d4ccc0]/50 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-2xl font-extrabold text-[#7c4959] tracking-tight">Flora<span class="text-[#926a7a]">Mart</span></a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-gray-700 hover:text-[#7c4959] transition-colors">Dasbor Anda</a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-[#7c4959] transition-colors">Masuk</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-[#7c4959] text-white rounded-md text-xs font-semibold uppercase tracking-widest hover:bg-[#5d3642] shadow-sm transition-all">Daftar</a>
-                            @endif
-                        @endauth
-                    @endif
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-navigation />
 
 
     @php
@@ -70,9 +50,9 @@
                     $backText = 'Kembali ke Toko';
                 }
             @endphp
-            <a href="{{ $backUrl }}" class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-[#7c4959] transition-colors mb-6 group">
-                <svg class="h-4 w-4 mr-1.5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <a href="{{ $backUrl }}" class="btn-a11y-admin inline-flex items-center px-4 py-2 bg-white border border-[#d4ccc0] text-sm font-bold text-gray-700 rounded-full shadow-sm hover:shadow hover:text-[#7c4959] hover:border-[#7c4959] transition-all mb-8 group">
+                <svg class="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform text-[#7c4959]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 {{ $backText }}
             </a>
@@ -103,26 +83,26 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-2xl shadow-sm border border-[#d4ccc0]/50 overflow-hidden">
+            <div class="bg-white rounded-3xl shadow-lg border border-rose-100 overflow-hidden mb-12">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
 
-                    <div class="bg-[#d4ccc0]/10 p-8 md:p-12 flex items-center justify-center relative group">
+                    <div class="bg-rose-50 p-8 md:p-12 flex items-center justify-center relative group">
                         @if(str_starts_with($product->image_path, 'http'))
-                            <img src="{{ $product->image_path }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-500">
+                            <img src="{{ $product->image_path }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-2xl shadow-xl group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-multiply">
                         @else
-                            <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-500">
+                            <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-2xl shadow-xl group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-multiply">
                         @endif
-                        <span class="absolute top-6 left-6 px-3 py-1 text-xs font-bold tracking-wider uppercase bg-white/90 backdrop-blur-sm text-[#7c4959] rounded shadow-sm border border-[#d4ccc0]/30">
+                        <span class="absolute top-6 left-6 px-4 py-1.5 text-xs font-black tracking-widest uppercase bg-white/90 backdrop-blur-md text-[#7c4959] rounded-full shadow-md border border-rose-100">
                             {{ $product->category->name }}
                         </span>
                     </div>
 
                     <div class="p-8 md:p-12 flex flex-col justify-center">
-                        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{{ $product->name }}</h1>
+                        <h1 class="text-a11y-admin text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{{ $product->name }}</h1>
 
                         <div class="flex items-center text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
                             <span class="font-medium text-[#7c4959] bg-[#7c4959]/10 px-2.5 py-0.5 rounded-full mr-3">Toko Terverifikasi</span>
-                            <a href="{{ route('shop.show', $product->shop->id) }}" class="flex items-center hover:text-[#7c4959] hover:underline font-medium transition-colors">
+                            <a href="{{ route('shop.show', $product->shop->id) }}" class="text-a11y-admin flex items-center hover:text-[#7c4959] hover:underline font-medium transition-colors">
                                 <svg class="h-4 w-4 mr-1 text-[#926a7a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
@@ -131,25 +111,25 @@
                         </div>
 
                         <div class="mb-8">
-                            <p class="text-sm text-gray-500 mb-1 uppercase tracking-wider font-semibold">Harga Spesial</p>
-                            <p class="text-4xl font-extrabold text-gray-900">Rp {{ $hargaFormat }}</p>
+                            <p class="text-a11y-admin text-sm text-gray-500 mb-1 uppercase tracking-wider font-semibold">Harga Spesial</p>
+                            <p class="text-a11y-admin text-4xl font-extrabold text-gray-900">Rp {{ $hargaFormat }}</p>
                         </div>
 
                         <div class="mb-10">
-                            <h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wider">Detail Produk</h3>
-                            <p class="text-gray-600 leading-relaxed text-base">{{ $product->description }}</p>
+                            <h3 class="text-a11y-admin text-sm font-bold text-gray-900 mb-3 uppercase tracking-wider">Detail Produk</h3>
+                            <p class="text-a11y-admin text-gray-600 leading-relaxed text-base">{{ $product->description }}</p>
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-4 mt-auto">
-                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" class="flex-1 inline-flex justify-center items-center px-4 py-4 bg-green-600 border border-transparent rounded-xl font-bold text-white tracking-wider hover:bg-green-700 shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 text-lg">
-                                <i class="fa-brands fa-whatsapp mr-2 text-xl"></i> Pesan Sekarang
+                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" class="btn-a11y-pesan flex-1 inline-flex justify-center items-center px-4 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 border border-emerald-800 rounded-2xl font-black text-white tracking-wider shadow-lg shadow-emerald-700/30 hover:shadow-xl hover:shadow-emerald-700/40 hover:-translate-y-1 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600 text-lg">
+                                <i class="fa-brands fa-whatsapp mr-2 text-2xl"></i> Pesan Sekarang
                             </a>
 
                             @if(!Auth::check() || Auth::user()->role === 'user')
                                 @if(Auth::check())
                                     <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="sm:w-auto">
                                         @csrf
-                                        <button type="submit" class="w-full h-full sm:w-16 inline-flex justify-center items-center px-4 py-4 bg-white border-2 border-[#d4ccc0] text-[#7c4959] rounded-xl hover:bg-[#d4ccc0]/10 hover:border-[#7c4959] transition-all focus:outline-none" title="Favorit">
+                                        <button type="submit" class="btn-a11y-admin w-full h-full sm:w-16 inline-flex justify-center items-center px-4 py-4 bg-white border-2 border-[#d4ccc0] text-[#7c4959] rounded-xl hover:bg-[#d4ccc0]/10 hover:border-[#7c4959] transition-all focus:outline-none" title="Favorit">
                                             @if($isFavorited)
                                                 <i class="fa-solid fa-heart text-2xl text-red-500"></i>
                                             @else
@@ -187,7 +167,7 @@
             <!-- Review Section -->
             <div class="mt-16 bg-white rounded-2xl shadow-sm border border-[#d4ccc0]/50 overflow-hidden">
                 <div class="px-8 py-6 border-b border-gray-100 bg-[#fdfbf7] flex items-center justify-between">
-                    <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <h2 class="text-a11y-admin text-2xl font-bold text-gray-900 flex items-center gap-2">
                         <i class="fa-solid fa-star text-yellow-400"></i> Ulasan Pembeli
                         <span class="text-lg font-medium text-gray-500">({{ $product->average_rating }} / 5)</span>
                     </h2>
@@ -203,11 +183,11 @@
                         @if(!$hasReviewed)
                             <!-- Review Form -->
                             <div class="mb-10 bg-gray-50 rounded-xl p-6 border border-gray-100">
-                                <h3 class="text-lg font-bold text-gray-900 mb-4">Tulis Ulasan Anda</h3>
+                                <h3 class="text-a11y-admin text-lg font-bold text-gray-900 mb-4">Tulis Ulasan Anda</h3>
                                 <form action="{{ route('review.store', $product->id) }}" method="POST">
                                     @csrf
                                     <div class="mb-4">
-                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Penilaian</label>
+                                        <label class="text-a11y-admin block text-sm font-semibold text-gray-700 mb-2">Penilaian</label>
                                         <div class="flex items-center gap-4" x-data="{ rating: 5, hoverRating: 0 }">
                                             <div class="flex">
                                                 <template x-for="i in 5">
@@ -223,10 +203,10 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="comment" class="block text-sm font-semibold text-gray-700 mb-2">Komentar (Opsional)</label>
-                                        <textarea name="comment" id="comment" rows="3" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#7c4959] focus:ring focus:ring-[#7c4959]/20" placeholder="Bagaimana pengalaman Anda dengan bunga ini?"></textarea>
+                                        <label for="comment" class="text-a11y-admin block text-sm font-semibold text-gray-700 mb-2">Komentar (Opsional)</label>
+                                        <textarea name="comment" id="comment" rows="3" class="input-a11y-admin w-full border-gray-300 rounded-lg shadow-sm focus:border-[#7c4959] focus:ring focus:ring-[#7c4959]/20" placeholder="Bagaimana pengalaman Anda dengan bunga ini?"></textarea>
                                     </div>
-                                    <button type="submit" class="px-6 py-2 bg-[#7c4959] hover:bg-[#5d3642] text-white font-bold rounded-lg shadow-sm transition-colors">
+                                    <button type="submit" class="btn-a11y-admin px-6 py-2 bg-[#7c4959] hover:bg-[#5d3642] text-white font-bold rounded-lg shadow-sm transition-colors">
                                         Kirim Ulasan
                                     </button>
                                 </form>

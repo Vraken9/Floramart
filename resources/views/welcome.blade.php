@@ -15,32 +15,46 @@
         .border-plum { border-color: #7c4959; }
         .hover-bg-plum-dark:hover { background-color: #5d3642; }
     </style>
+    
+    <!-- Anti-FOUC Script -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('floramart_theme');
+            if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            const a11y = localStorage.getItem('floramart_colorblind_type');
+            if (a11y && a11y !== 'Normal') {
+                document.documentElement.classList.add('a11y-active');
+            }
+        })();
+    </script>
 </head>
 <body class="bg-white text-gray-900 antialiased flex flex-col min-h-screen">
-
     <x-navigation />
 
     <main class="flex-grow">
         <section class="relative bg-gray-50 py-20 overflow-hidden">
-            <div class="absolute inset-0 bg-[#d4ccc0] opacity-10"></div>
+            <div class="absolute inset-0 opacity-100" style="background-image: url('{{ asset('storage/products/background.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+            <div class="absolute inset-0 bg-white/60"></div>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div class="md:w-1/2 text-center md:text-left">
                     <span class="inline-block py-1 px-3 rounded-full bg-plum/10 text-plum text-xs font-bold tracking-widest uppercase mb-6 border border-plum/20">Pusat Florist Jawa Tengah</span>
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight mb-6">
+                    <h1 class="text-a11y-admin text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight mb-6">
                         Sampaikan Pesan Cinta dengan <span class="text-plum">Kusuma Sempurna</span>
                     </h1>
-                    <p class="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
+                    <p class="text-a11y-admin text-lg text-gray-600 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
                         Platform resmi yang menghubungkan Anda langsung dengan pengrajin karangan bunga dan florist lokal terpercaya. Transaksi mudah, pengiriman instan.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <a href="{{ route('katalog.index') }}" class="px-8 py-4 bg-plum text-white rounded-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">Mulai Belanja</a>
-                        <a href="{{ route('shops.index') }}" class="px-8 py-4 bg-white text-plum border border-gray-200 rounded-lg font-bold hover:bg-gray-50 transition-colors">Lihat Mitra Florist</a>
+                        <a href="{{ route('katalog.index') }}" class="btn-a11y-admin px-8 py-4 bg-plum text-white rounded-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">Mulai Belanja</a>
+                        <a href="{{ route('shops.index') }}" class="btn-a11y-admin px-8 py-4 bg-white text-plum border border-gray-200 rounded-lg font-bold hover:bg-gray-50 transition-colors">Lihat Mitra Florist</a>
                     </div>
                 </div>
                 <div class="md:w-1/2 hidden md:block">
                     <div class="aspect-[4/3] bg-gray-200 rounded-2xl shadow-2xl overflow-hidden border-8 border-white">
                         <div class="w-full h-full bg-plum/20 flex items-center justify-center">
-                            <i class="fa-solid fa-seedling text-8xl text-white opacity-50"></i>
+                            <img src="{{ asset('storage/products/banner.png') }}" alt="FloraMart Banner" class="w-full h-full object-cover">
                         </div>
                     </div>
                 </div>

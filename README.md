@@ -1,199 +1,226 @@
 <div align="center">
-  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
-  <img src="https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
-  <img src="https://img.shields.io/badge/Alpine.js-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white" alt="AlpineJS">
+  <img src="https://img.shields.io/badge/Google_AI_Studio-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google AI Studio">
+  <img src="https://img.shields.io/badge/Antigravity-000000?style=for-the-badge&logo=ai&logoColor=white" alt="Antigravity">
+  <img src="https://img.shields.io/badge/Laravel_12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Alpine.js-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white" alt="Alpine.js">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/Google_Cloud_Run-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white" alt="Cloud Run">
+  <img src="https://img.shields.io/badge/Cloud_SQL-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white" alt="Cloud SQL">
   <br>
-  <h1>FloraMart Marketplace</h1>
-  <p>Platform E-Commerce Modern Khusus untuk Pengrajin dan Pecinta Bunga</p>
+  <h1>FloraMart: Multi-Tenant Floriculture Marketplace</h1>
 </div>
 
 ---
 
-## Deskripsi Proyek
+## Overview & Competition Pitch
 
-**FloraMart** adalah sebuah aplikasi web *marketplace* yang dirancang secara spesifik untuk mewadahi ekosistem jual-beli bunga dan tanaman hias. Dibangun menggunakan arsitektur monolitik modern dengan **Laravel 12**, aplikasi ini memungkinkan pengguna untuk tidak hanya membeli produk, tetapi juga membuka toko bunga *(Florist)* mereka sendiri.
+FloraMart is a specialized multi-tenant e-commerce platform designed to bridge the gap between traditional florists and digital consumers. Operating as a marketplace, it enables local florists to establish digital storefronts while providing customers with an intuitive, geographically filtered catalog to source fresh flowers directly from local artisans. The application is built entirely on a monolithic Laravel 12 architecture, prioritizing speed, maintainability, and seamless user experiences.
 
-Aplikasi ini mendemonstrasikan kapabilitas implementasi *Role-Based Access Control* (RBAC), antarmuka dinamis (Tailwind CSS + Alpine.js), keamanan transaksi pesanan via WhatsApp, serta sistem *database* relasional yang kompleks dan terstruktur.
+For the **#JuaraVibeCoding Study Jam**, FloraMart is submitted under the **"Inclusive Access"** category, approaching inclusivity from two critical angles. First, it enables **Business Inclusion** for UMKM (Micro, Small, and Medium Enterprises). Traditional florists often lack the technical literacy to manage complex digital payment gateways and inventory systems. FloraMart solves this by utilizing a Direct WhatsApp Lead Generation system, allowing florists to receive orders through a familiar platform while the system tracks the lead natively. Second, it ensures **User Inclusion** via a sophisticated AI Accessibility Assistant powered by Google Gemini Vision. This feature analyzes the screen context and guides colorblind users (Protanopia, Deuteranopia, Tritanopia, and Achromatopsia) through the platform using shape and position-based descriptions, effectively removing visual navigation barriers.
 
----
+## Core Features
 
-## Fitur Berdasarkan Role
+* **Role-Based Access Control (RBAC):** Distinct interfaces and permissions for Platform Administrators (managing users, shops, and platform analytics), Shop Owners (managing individual catalogs and shop statuses), and Customers.
+* **Direct WhatsApp Lead Generation:** Streamlined checkout process that redirects customers directly to the florist's WhatsApp, simplifying the transaction for traditional merchants while logging the lead for analytics.
+* **2-Tier Geographic Filtering:** Advanced filtering utilizing Province, Regency, and District data models, ensuring customers find the closest florists to guarantee flower freshness and minimize delivery logistics.
+* **AI Accessibility Assistant:** Gemini-powered vision integration that reads the active UI and generates highly empathetic, color-agnostic navigational instructions for visually impaired users.
+* **Comprehensive E-Commerce Suite:** Fully functional shopping cart, wishlist management, and customer review systems.
 
-Aplikasi ini menggunakan 3 lapisan peran pengguna (*role*):
+## System Architecture
 
-### 1. Admin
-- Mengelola persetujuan (*approval*), penolakan, atau penangguhan (*suspend*) pendaftaran toko baru lengkap dengan sistem pencatatan alasan (*reason tracking*).
-- Menurunkan atau menaikkan *role* akun pengguna (Otomatis menghapus data toko apabila diturunkan menjadi *user* biasa).
-- Mengakses statistik dan data analisis platform secara penuh.
+```mermaid
+graph TD
+    Client[Web Client] --> Nginx[Nginx Web Server]
+    Nginx --> PHP[PHP-FPM / Laravel 12]
+    
+    subgraph Google Cloud Run
+        Nginx
+        PHP
+    end
+    
+    PHP -->|Database Queries| CloudSQL[(Google Cloud SQL)]
+    PHP -->|Media Access| LocalStorage[(Local Storage)]
+    PHP -->|Vision Processing| GeminiAPI[Google Gemini API]
+    Client -->|Direct Lead Generation| WhatsApp[WhatsApp API]
+```
 
-### 2. Owner (Pemilik Toko)
-- Mendaftar toko baru secara dinamis berdasarkan data wilayah (Provinsi, Kabupaten, Kecamatan).
-- Mengelola katalog produk bunga (Buat, Baca, Perbarui, Hapus).
-- Mengelola profil toko dan ketersediaan nomor WhatsApp untuk menerima pesanan langsung dari pelanggan.
-
-### 3. User (Pembeli)
-- Menjelajahi katalog produk dari semua toko secara dinamis.
-- Menyimpan produk ke daftar Favorit (Wishlist) untuk pertimbangan kurasi.
-- Menginisiasi pesanan secara langsung yang terhubung ke nomor WhatsApp pihak pembuat produk (*Owner*) dengan sistem sanitasi format nomor.
-
----
-
-## Arsitektur & Entity-Relationship Diagram (ERD)
-
-Di bawah ini adalah pemodelan *database* (ERD) yang memperlihatkan alur dan relasi antar entitas di dalam FloraMart:
+## Entity Relationship Diagram (ERD)
 
 ```mermaid
 erDiagram
-    USERS ||--o{ SHOPS : "owns (if owner)"
-    USERS ||--o{ WISHLISTS : "saves"
-    USERS ||--o{ REVIEWS : "writes"
-    
-    SHOPS ||--o{ PRODUCTS : "sells"
-    SHOPS }|--|| REGENCIES : "located in"
-    
-    CATEGORIES ||--o{ PRODUCTS : "classifies"
-    
-    PRODUCTS ||--o{ WISHLISTS : "favorited in"
-    PRODUCTS ||--o{ PRODUCT_LEADS : "generates"
-    PRODUCTS ||--o{ REVIEWS : "receives"
-    
     USERS {
         bigint id PK
-        string name
-        string email
-        string password
-        enum role "admin, owner, user"
-        datetime email_verified_at
+        varchar name
+        varchar email
+        timestamp email_verified_at
+        varchar password
+        varchar accessibility_mode
+        varchar role
+        varchar remember_token
+        timestamp created_at
+        timestamp updated_at
     }
-    
     SHOPS {
         bigint id PK
         bigint user_id FK
-        bigint regency_id FK
-        string name
-        string whatsapp_number
-        string logo_path
-        enum status "pending, approved, rejected, suspended"
-        string rejected_reason
+        bigint district_id FK
+        varchar name
+        varchar slug
+        text description
+        varchar status "enum: pending, in_review, approved, rejected, suspended, banned"
+        timestamp created_at
+        timestamp updated_at
     }
-    
+    CATEGORIES {
+        bigint id PK
+        varchar name
+        varchar slug
+        timestamp created_at
+        timestamp updated_at
+    }
     PRODUCTS {
         bigint id PK
         bigint shop_id FK
         bigint category_id FK
-        string name
-        string slug
+        varchar name
+        varchar slug
         text description
-        integer price
-        string image_path
-        boolean is_active
+        int price
+        varchar image_path
+        tinyint is_active
+        tinyint is_hidden_by_admin
+        timestamp created_at
+        timestamp updated_at
     }
-    
     PRODUCT_LEADS {
         bigint id PK
         bigint product_id FK
-        datetime created_at
+        bigint user_id FK
+        timestamp created_at
+        timestamp updated_at
     }
+    CARTS {
+        bigint id PK
+        bigint user_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+    CART_ITEMS {
+        bigint id PK
+        bigint cart_id FK
+        bigint product_id FK
+        int quantity
+        timestamp created_at
+        timestamp updated_at
+    }
+    REVIEWS {
+        bigint id PK
+        bigint product_id FK
+        bigint user_id FK
+        int rating
+        text comment
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    USERS ||--o{ SHOPS : "owns"
+    USERS ||--o{ CARTS : "has"
+    USERS ||--o{ REVIEWS : "writes"
+    USERS ||--o{ PRODUCT_LEADS : "generates"
+    SHOPS ||--o{ PRODUCTS : "sells"
+    CATEGORIES ||--o{ PRODUCTS : "categorizes"
+    PRODUCTS ||--o{ PRODUCT_LEADS : "receives"
+    PRODUCTS ||--o{ REVIEWS : "receives"
+    PRODUCTS ||--o{ CART_ITEMS : "added_to"
+    CARTS ||--o{ CART_ITEMS : "contains"
 ```
 
----
+## Local Development Installation
 
-## Panduan Instalasi (Development)
+Follow these steps to configure the application in a local environment:
 
-Untuk menjalankan proyek ini di lingkungan lokal Anda, pastikan sistem Anda telah terpasang:
-- **PHP** >= 8.2
-- **Composer** (Dependency Manager)
-- **Node.js** & **NPM**
-- **MySQL** / MariaDB
-
-### Langkah-Langkah:
-
-1. **Clone Repositori**
+1. **Clone the Repository**
    ```bash
-   git clone https://github.com/Vraken9/Floramart.git
-   cd Floramart
+   git clone <repository-url>
+   cd floramart
    ```
 
-2. **Instalasi Dependensi PHP & Node.js**
+2. **Install Dependencies**
    ```bash
    composer install
    npm install
    ```
 
-3. **Konfigurasi Environment**
-   Salin file konfigurasi bawaan dan hasilkan kunci aplikasi baru:
+3. **Environment Configuration**
+   Copy the example environment file and configure it:
    ```bash
    cp .env.example .env
+   ```
+   *CRITICAL: You must provide a valid Gemini API key in your `.env` for the accessibility features to function.*
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=floramart
+   DB_USERNAME=root
+   DB_PASSWORD=
+
+   GEMINI_API_KEY=your_google_gemini_api_key_here
+   ```
+
+4. **Generate Application Key**
+   ```bash
    php artisan key:generate
    ```
-   *Penting:* Buka file `.env` dan sesuaikan koneksi database (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) dengan lokal Anda.
 
-4. **Migrasi dan Injeksi Data Dummy (Penting untuk Penilaian)**
-   Perintah ini akan membuat struktur tabel dan mengisi database dengan *dummy data* berskala besar (Ratusan produk beserta 9 toko) agar web langsung dapat diuji.
+5. **Run Migrations and Seeders**
+   Initialize the database schema and populate it with essential base data and products.
    ```bash
-   php artisan migrate:fresh --seed
-   php artisan db:seed --class=DummyDataSeeder
+   php artisan migrate
+   php artisan db:seed --class=ProductSeeder
    ```
 
-5. **Tautkan Storage**
-   Untuk memastikan gambar lokal bisa diakses dari antarmuka web:
+6. **Create Storage Link**
+   Ensure product images and uploaded media are publicly accessible.
    ```bash
    php artisan storage:link
    ```
 
-6. **Jalankan Aplikasi**
-   Jalankan server Vite (untuk *hot-reload* aset) dan Laravel secara bersamaan:
+7. **Compile Assets and Start Server**
    ```bash
-   npm run dev
+   npm run build
+   # OR for active development: npm run dev
+   
    php artisan serve
    ```
-   Aplikasi kini dapat diakses melalui `http://localhost:8000`.
 
----
+## Docker & Cloud Run Deployment Guide
 
-## Panduan Deployment dengan Docker (Produksi)
+This application is strictly structured for stateless deployment on Google Cloud Run. The root directory contains specific configuration files to facilitate containerization:
 
-Aplikasi ini sudah dilengkapi dengan `Dockerfile` dan `docker-compose.yml` untuk memudahkan proses *deployment* di server VPS atau Cloud.
+*   **Dockerfile:** Utilizes a highly optimized, multi-stage build process based on Alpine Linux. It compiles frontend assets using Node.js in the first stage, then transfers the compiled artifacts to a PHP 8.2-FPM and Nginx environment. It automatically installs production-only Composer dependencies (`--no-dev --optimize-autoloader`).
+*   **entrypoint.sh:** Acts as the container execution command. Prior to starting the Nginx and PHP-FPM daemons, it runs necessary Laravel cache commands (`config:cache`, `route:cache`, `view:cache`) and establishes the local storage symlink required for media persistence.
+*   **nginx.conf:** Contains tailored routing rules pointing to the `/public` directory, managing `index.php` routing securely without exposing framework internals.
 
-1. Salin repositori ke server Anda.
-2. Pastikan file `.env` sudah dikonfigurasi (terutama kredensial *database*).
-3. Jalankan perintah berikut di dalam direktori proyek:
-   ```bash
-   docker-compose up -d --build
-   ```
-4. Aplikasi akan berjalan otomatis di *port* `8000`. Anda bisa menghubungkannya dengan *Reverse Proxy* seperti Nginx atau Traefik untuk mengarahkannya ke *domain* utama Anda.
+To deploy, authenticate with Google Cloud CLI, build the image via Cloud Build, and deploy to Cloud Run ensuring port `8080` is exposed and the necessary `.env` variables (including the Cloud SQL connection string and `GEMINI_API_KEY`) are passed to the service.
 
----
+## Production Email Verification (SMTP)
 
-## Strategi Verifikasi Email di Tahap Produksi
+For production environments, ensure you configure an SMTP provider (such as Resend or Mailtrap) within the `.env` variables to handle user registration and email verification securely:
 
-Secara bawaan (*local development*), sistem menggunakan konfigurasi `MAIL_MAILER=log`, di mana tautan verifikasi hanya masuk ke file `storage/logs/laravel.log`.
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.resend.com
+MAIL_PORT=465
+MAIL_USERNAME=resend
+MAIL_PASSWORD=your_secure_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@floramart.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
 
-Untuk tahap produksi *(live)*, ikuti langkah berikut agar email benar-benar terkirim ke kotak masuk pengguna secara gratis dan profesional:
-1. Daftar di layanan penyedia SMTP gratis seperti **Resend**, **Mailtrap**, atau **Brevo (Sendinblue)**.
-2. Dapatkan *API Key* / kredensial SMTP Anda.
-3. Ubah pengaturan di file `.env` server Anda menjadi:
-   ```env
-   MAIL_MAILER=smtp
-   MAIL_HOST=smtp.resend.com
-   MAIL_PORT=465
-   MAIL_USERNAME=resend
-   MAIL_PASSWORD=re_kode_rahasia_anda_di_sini
-   MAIL_ENCRYPTION=tls
-   MAIL_FROM_ADDRESS="noreply@domainanda.com"
-   MAIL_FROM_NAME="FloraMart"
-   ```
-Dengan konfigurasi ini, verifikasi email dapat berjalan otomatis tanpa mengelola mail server sendiri.
+## Developer Contact
 
----
-
-## Developer & Kontak
-
-Proyek ini dibangun sebagai dedikasi terhadap pengembangan aplikasi web fungsional yang estetis dan interaktif.
-
-**Dikembangkan oleh:**
-- **Mualif Akhyar**
-- Instagram: [@mualifakhyar_](https://www.instagram.com/mualifakhyar_)
-
-*Silakan hubungi melalui media sosial di atas untuk pertanyaan, masukan, atau diskusi teknis.*
+**Mualif Akhyar**
+Instagram: [@mualifakhyar_](https://instagram.com/mualifakhyar_)
