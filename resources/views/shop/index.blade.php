@@ -53,7 +53,7 @@
                     <div class="bg-white rounded-2xl border border-[#d4ccc0]/40 overflow-hidden group hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center text-center">
                         <a href="{{ route('shop.show', $shop->id) }}" class="inline-block relative mb-4">
                             @if($shop->logo_path)
-                                <img src="{{ str_starts_with($shop->logo_path, 'http') ? $shop->logo_path : asset('storage/' . $shop->logo_path) }}" alt="{{ $shop->name }}" class="w-24 h-24 rounded-full object-cover shadow-sm group-hover:scale-105 transition-transform duration-300 border-2 border-[#d4ccc0]">
+                                <img src="{{ str_starts_with($shop->logo_path, 'http') ? $shop->logo_path : asset('images/' . $shop->logo_path) }}" alt="{{ $shop->name }}" class="w-24 h-24 rounded-full object-cover shadow-sm group-hover:scale-105 transition-transform duration-300 border-2 border-[#d4ccc0]">
                             @else
                                 <div class="w-24 h-24 rounded-full bg-[#7c4959] text-white flex items-center justify-center text-3xl font-extrabold shadow-sm group-hover:scale-105 transition-transform duration-300">
                                     {{ strtoupper(substr($shop->name, 0, 1)) }}

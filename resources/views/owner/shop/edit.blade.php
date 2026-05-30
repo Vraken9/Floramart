@@ -12,7 +12,7 @@
     <x-navigation />
 
     <main class="max-w-4xl mx-auto px-4 py-10">
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+        <div class="bg-white p-4 md:p-6 lg:p-8 rounded-2xl shadow-sm border border-gray-200">
             <h1 class="text-2xl font-extrabold text-gray-900 mb-6 border-b pb-4"><i class="fa-solid fa-store text-[#7c4959] mr-2"></i> Pengaturan Profil Toko</h1>
             
             @if(session('success'))
@@ -28,7 +28,7 @@
                 <div class="flex items-center space-x-6">
                     <div class="shrink-0">
                         <img class="h-24 w-24 object-cover rounded-full border-4 border-gray-100 shadow-sm" 
-                             src="{{ str_starts_with($shop->logo_path ?? '', 'http') ? $shop->logo_path : asset('storage/' . ($shop->logo_path ?? 'default.png')) }}" 
+                             src="{{ str_starts_with($shop->logo_path ?? '', 'http') ? $shop->logo_path : asset('images/' . ($shop->logo_path ?? 'default.png')) }}" 
                              alt="Logo Toko">
                     </div>
                     <label class="block">
