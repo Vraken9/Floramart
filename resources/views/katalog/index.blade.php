@@ -40,7 +40,7 @@ if (!function_exists('formatRupiah')) {
                 <span><i class="fa-solid fa-sliders mr-2 text-[#7c4959]"></i> Filter & Pencarian</span>
                 <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="filterOpen && 'rotate-180'"></i>
             </button>
-            <div x-show="filterOpen" x-cloak x-transition class="mt-2 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <div x-show="filterOpen" x-cloak x-transition class="mt-2 bg-white p-4 rounded-xl shadow-sm border border-gray-200" data-a11y="filter-area">
                 <form method="GET" action="{{ route('katalog.index') }}" class="space-y-3">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Nama Bunga</label>
@@ -73,7 +73,7 @@ if (!function_exists('formatRupiah')) {
         </div>
 
         {{-- DESKTOP: Standard Filter (unchanged) --}}
-        <div class="hidden md:block bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+        <div class="hidden md:block bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8" data-a11y="filter-area">
             <form method="GET" action="{{ route('katalog.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <div>
                     <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Nama Bunga</label>

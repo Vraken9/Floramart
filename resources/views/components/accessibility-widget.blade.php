@@ -2,32 +2,7 @@
 
 <style>
     .visioadapt-tooltip {
-        position: absolute;
-        bottom: calc(100% + 12px);
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgb(15 23 42 / 0.95); /* bg-slate-900/95 */
-        backdrop-filter: blur(8px);
-        color: #f8fafc; /* text-slate-50 */
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-size: 13px;
-        font-weight: 600;
-        white-space: nowrap;
-        z-index: 999999;
-        pointer-events: none;
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
-        border: 1px solid rgb(51 65 85); /* border-slate-700 */
-    }
-    .visioadapt-tooltip::after {
-        content: '';
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        border-width: 6px;
-        border-style: solid;
-        border-color: rgb(15 23 42) transparent transparent transparent;
+        /* Styling is now handled by Tailwind utility classes dynamically */
     }
     
     #a11y-widget-container {
@@ -230,15 +205,40 @@
             }
 
             if (foundElement) {
-                // Tailwind classes for beautiful highlight ring
-                foundElement.classList.add("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[999998]");
+                // Tailwind classes for beautiful highlight ring and Z-Index 50 as requested
+                foundElement.classList.add("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]");
+                
                 const tooltip = document.createElement("div");
-                tooltip.className = "visioadapt-tooltip";
+                // Tailwind classes for tooltip as requested: max-w-xs break-words whitespace-normal p-3 bg-slate-800 text-white rounded shadow-xl
+                tooltip.className = "visioadapt-tooltip absolute max-w-xs break-words whitespace-normal p-3 bg-slate-800 text-white rounded shadow-xl text-sm font-semibold z-[999999] pointer-events-none";
                 tooltip.textContent = targetLabel || targetText;
                 
-                try {
-                    foundElement.appendChild(tooltip);
-                } catch(e) {}
+                // Append directly to body to escape overflow-hidden containers (Task 2)
+                document.body.appendChild(tooltip); 
+                
+                // Calculate absolute position based on viewport
+                const rect = foundElement.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+                const ttWidth = tooltip.offsetWidth;
+                const ttHeight = tooltip.offsetHeight;
+
+                // Default: place above the element
+                let topPos = rect.top + scrollTop - ttHeight - 12;
+                let leftPos = rect.left + scrollLeft + (rect.width / 2) - (ttWidth / 2);
+
+                // Task 1: Prevent cutting off at the top viewport (Navbar items)
+                if (rect.top - ttHeight < 20) {
+                    topPos = rect.bottom + scrollTop + 12; // Place below the element instead
+                }
+
+                // Prevent cutting off at left/right edges of screen
+                if (leftPos < 10) leftPos = 10;
+                if (leftPos + ttWidth > window.innerWidth - 10) leftPos = window.innerWidth - ttWidth - 10;
+
+                tooltip.style.top = topPos + "px";
+                tooltip.style.left = leftPos + "px";
 
                 if (!firstFoundElement) firstFoundElement = foundElement;
             }
@@ -252,10 +252,11 @@
     function removeAllHighlights() {
         const targets = document.querySelectorAll('.animate-pulse.ring-emerald-500');
         targets.forEach(el => {
-            el.classList.remove("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[999998]");
-            const tooltips = el.querySelectorAll('.visioadapt-tooltip');
-            tooltips.forEach(t => t.remove());
+            el.classList.remove("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[999998]");
         });
+        
+        const tooltips = document.querySelectorAll('.visioadapt-tooltip');
+        tooltips.forEach(t => t.remove());
     }
 
     function displayOverlay(message, success = true) {
