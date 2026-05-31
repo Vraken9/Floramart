@@ -209,12 +209,15 @@
             }
 
             if (foundElement) {
-                // Tailwind classes for beautiful highlight ring and Z-Index 60 as requested (Color-Blind safe Blue)
-                foundElement.classList.add("ring-4", "ring-blue-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[60]");
+                // Task 1: Fix Z-Index for auth-area so it sits above everything else
+                let zClass = actionId === 'auth-area' ? "z-[9999]" : "z-[60]";
+                foundElement.classList.add("ring-4", "ring-blue-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", zClass);
                 
                 const tooltip = document.createElement("div");
+                let tooltipZ = actionId === 'auth-area' ? "z-[10000]" : "z-[100]";
+
                 // Background solid bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 w-max max-w-sm
-                tooltip.className = "visioadapt-tooltip absolute bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 text-sm font-semibold z-[100] pointer-events-none w-max max-w-sm";
+                tooltip.className = `visioadapt-tooltip absolute bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 text-sm font-semibold pointer-events-none w-max max-w-sm ${tooltipZ}`;
                 tooltip.textContent = targetLabel || targetText;
 
                 // Position based on actionId
@@ -222,7 +225,7 @@
                     tooltip.classList.add('top-full', 'right-0', 'mt-3');
                 } else if (actionId === 'filter-area') {
                     // Specific design for filter area requested by user
-                    tooltip.className = "visioadapt-tooltip absolute top-full left-0 md:left-1/2 md:-translate-x-1/2 mt-4 z-[100] w-max max-w-md bg-slate-600/95 text-white text-sm p-3 rounded-lg shadow-xl border border-slate-500 pointer-events-none";
+                    tooltip.className = `visioadapt-tooltip absolute top-full left-0 md:left-1/2 md:-translate-x-1/2 mt-4 w-max max-w-md bg-slate-600/95 text-white text-sm p-3 rounded-lg shadow-xl border border-slate-500 pointer-events-none ${tooltipZ}`;
                 } else {
                     // Default fallback
                     tooltip.classList.add('top-full', 'left-1/2', '-translate-x-1/2', 'mt-3');
@@ -251,7 +254,7 @@
     function removeAllHighlights() {
         const targets = document.querySelectorAll('.animate-pulse.ring-blue-500, .animate-pulse.ring-emerald-500');
         targets.forEach(el => {
-            el.classList.remove("ring-4", "ring-blue-500", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[60]", "z-[999998]");
+            el.classList.remove("ring-4", "ring-blue-500", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[60]", "z-[9999]", "z-[999998]");
         });
         
         const tooltips = document.querySelectorAll('.visioadapt-tooltip');
