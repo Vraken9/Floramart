@@ -217,7 +217,8 @@
                 if (actionId === 'auth-area') {
                     tooltip.classList.add('top-full', 'right-0', 'mt-3');
                 } else if (actionId === 'filter-area') {
-                    tooltip.classList.add('top-full', 'left-0', 'mt-4');
+                    // Specific design for filter area requested by user
+                    tooltip.className = "visioadapt-tooltip absolute top-full left-0 md:left-1/2 md:-translate-x-1/2 mt-4 z-[100] w-max max-w-md bg-slate-600/95 text-white text-sm p-3 rounded-lg shadow-xl border border-slate-500 pointer-events-none";
                 } else {
                     // Default fallback
                     tooltip.classList.add('top-full', 'left-1/2', '-translate-x-1/2', 'mt-3');

@@ -29,7 +29,7 @@ Instruksi Analisis:
 4. Jelaskan isi layar ini dengan detail, informatif, dan komunikatif.
 
 PENTING: Anda HARUS mencocokkan niat pengguna (atau tindakan utama di layar) dengan salah satu ID Aksi berikut ini jika relevan:
-- \"filter-area\": Seluruh baris form filter (Nama Bunga, Kategori, Kabupaten, dll). Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan kolom ini untuk memfilter bunga berdasarkan nama, kategori, atau mencari toko terdekat di wilayah Anda.\"
+- \"filter-area\": Seluruh baris form filter (Nama Bunga, Kategori, Kabupaten, dll). Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan area filter ini untuk mempermudah pencarian Anda. Ketikkan nama bunga, pilih kategori, atau tentukan lokasi (Kabupaten/Kecamatan) untuk menemukan toko bunga yang paling dekat dengan Anda.\"
 - \"auth-area\": Grup tombol masuk dan daftar. Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan tombol Masuk atau Daftar untuk mengakses akun Anda dan menyimpan riwayat transaksi.\"
 - \"input-search\": Kotak pencarian produk tunggal.
 - \"input-category\": Filter kategori tunggal.
