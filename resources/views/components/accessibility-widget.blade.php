@@ -186,9 +186,13 @@
 
             // 1. Prioritize finding element by action_id (CSS attribute selector)
             if (actionId) {
-                const preciseEl = document.querySelector(`[data-a11y="${actionId}"]`);
-                if (preciseEl) {
-                    foundElement = preciseEl;
+                const preciseEls = document.querySelectorAll(`[data-a11y="${actionId}"]`);
+                for (let el of preciseEls) {
+                    // Task 1: Pastikan elemen target benar-benar terlihat (mengatasi filter mobile yang disembunyikan di desktop)
+                    if (el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0) {
+                        foundElement = el;
+                        break;
+                    }
                 }
             }
 
@@ -205,8 +209,8 @@
             }
 
             if (foundElement) {
-                // Tailwind classes for beautiful highlight ring and Z-Index 60 as requested
-                foundElement.classList.add("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[60]");
+                // Tailwind classes for beautiful highlight ring and Z-Index 60 as requested (Color-Blind safe Blue)
+                foundElement.classList.add("ring-4", "ring-blue-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[60]");
                 
                 const tooltip = document.createElement("div");
                 // Background solid bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 w-max max-w-sm
@@ -245,9 +249,9 @@
     }
 
     function removeAllHighlights() {
-        const targets = document.querySelectorAll('.animate-pulse.ring-emerald-500');
+        const targets = document.querySelectorAll('.animate-pulse.ring-blue-500, .animate-pulse.ring-emerald-500');
         targets.forEach(el => {
-            el.classList.remove("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[60]", "z-[999998]");
+            el.classList.remove("ring-4", "ring-blue-500", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[60]", "z-[999998]");
         });
         
         const tooltips = document.querySelectorAll('.visioadapt-tooltip');
@@ -285,22 +289,28 @@
 
         const overlay = document.createElement("div");
         overlay.id = "visio-adapt-overlay";
-        // Convert to Tailwind UI classes
+        // Convert to Tailwind UI classes (Color-blind safe border blue)
         overlay.className = "fixed bottom-[80px] left-5 max-w-sm md:max-w-md z-[999999] p-5 md:p-6 rounded-2xl shadow-2xl backdrop-blur-md border-l-4 " + 
-                            (success ? "bg-slate-900/95 border-emerald-500" : "bg-red-900/95 border-red-500");
+                            (success ? "bg-slate-900 border-blue-500" : "bg-red-900/95 border-red-500");
 
         const title = document.createElement("h4");
         title.innerHTML = '<i class="fa-solid fa-robot mr-2"></i> Panduan AI';
-        title.className = "flex items-center text-lg font-bold mb-3 " + (success ? "text-emerald-400" : "text-red-400");
+        title.className = "flex items-center text-lg font-bold mb-3 " + (success ? "text-blue-400" : "text-red-400");
         overlay.appendChild(title);
 
         const text = document.createElement("div");
         
-        // Basic Markdown parser for **bold** tags to make them emerald
-        let formattedText = displayText.replace(/\n/g, '<br>');
-        formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span class="text-emerald-400 font-bold">$1</span>');
+        // Task 2: Typography chunking with safe colors
+        let paragraphs = displayText.split(/\n\n+/);
+        let htmlContent = '';
+        paragraphs.forEach(p => {
+            if (p.trim() !== '') {
+                let pText = p.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<span class="text-blue-400 font-bold">$1</span>');
+                htmlContent += `<p class="mb-4">${pText}</p>`;
+            }
+        });
         
-        text.innerHTML = formattedText;
+        text.innerHTML = htmlContent;
         text.className = "text-slate-200 text-sm md:text-base leading-relaxed mb-5 font-medium"; 
         overlay.appendChild(text);
 

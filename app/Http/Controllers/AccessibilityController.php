@@ -26,7 +26,7 @@ Instruksi Analisis:
 1. Jika di layar terlihat pengguna belum masuk (ada tombol 'Masuk' atau 'Daftar'), arahkan mereka untuk masuk/daftar terlebih dahulu agar dapat bertransaksi.
 2. Jika terdapat kotak pencarian atau form filter, WAJIB arahkan pengguna dengan menyorot area tersebut secara keseluruhan.
 3. Jika sedang melihat produk atau toko, berikan petunjuk langkah selanjutnya.
-4. Jelaskan isi layar ini dengan detail, informatif, dan komunikatif.
+4. Jelaskan isi layar ini dengan detail, informatif, dan komunikatif. Pecah penjelasan menjadi 3-4 paragraf yang dipisahkan dengan baris baru ganda (\n\n). Gunakan format **Teks Tebal** untuk memberikan penekanan pada sub-judul poin.
 
 PENTING: Anda HARUS mencocokkan niat pengguna (atau tindakan utama di layar) dengan salah satu ID Aksi berikut ini jika relevan:
 - \"filter-area\": Seluruh baris form filter (Nama Bunga, Kategori, Kabupaten, dll). Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan area filter ini untuk mempermudah pencarian Anda. Ketikkan nama bunga, pilih kategori, atau tentukan lokasi (Kabupaten/Kecamatan) untuk menemukan toko bunga yang paling dekat dengan Anda.\"
