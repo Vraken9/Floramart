@@ -1,7 +1,7 @@
 <style>
     [x-cloak] { display: none !important; }
 </style>
-<nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50" x-data="{ mobileOpen: false }">
+<nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-[9999]" x-data="{ mobileOpen: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-14 md:h-16">
             <!-- Logo -->
