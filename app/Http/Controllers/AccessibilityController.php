@@ -52,7 +52,7 @@ Catatan Penting: Identifikasi hingga 4 tindakan UTAMA. Jika tindakan tersebut co
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json'
-            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' . $apiKey, [
+            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . $apiKey, [
                 'contents' => [
                     [
                         'parts' => [
@@ -77,7 +77,11 @@ Catatan Penting: Identifikasi hingga 4 tindakan UTAMA. Jika tindakan tersebut co
                 return response()->json(['result' => $resultText], 200);
             }
 
-            return response()->json(['error' => 'Gagal menghubungi server AI: ' . $response->body()], 500);
+            if ($response->status() === 429) {
+                return response()->json(['pesan' => 'Maaf, panduan AI sedang memproses terlalu banyak permintaan. Silakan tunggu beberapa detik dan coba lagi.'], 200);
+            }
+
+            return response()->json(['pesan' => 'Server AI gagal dihubungi.'], 500);
             
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

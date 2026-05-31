@@ -58,7 +58,7 @@ Pertanyaan pengguna: \"$userMessage\"";
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json'
-            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' . $apiKey, [
+            ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . $apiKey, [
                 'contents' => [
                     [
                         'parts' => [
@@ -78,6 +78,10 @@ Pertanyaan pengguna: \"$userMessage\"";
                 $data = $response->json();
                 $reply = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Maaf, saya tidak bisa memproses permintaan Anda saat ini.';
                 return response()->json(['reply' => $reply], 200);
+            }
+
+            if ($response->status() === 429) {
+                return response()->json(['error' => 'Maaf, server AI sedang sibuk (Rate Limit). Silakan tunggu sekitar 30 detik sebelum mencoba lagi.'], 429);
             }
 
             return response()->json(['error' => 'Gagal menghubungi server AI. Details: ' . $response->body()], 500);
