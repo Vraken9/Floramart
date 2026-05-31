@@ -33,21 +33,21 @@ class ChatbotController extends Controller
         }
         $categoryContext = "Kategori yang tersedia: " . implode(', ', $categories) . ".\n";
 
-        $systemPrompt = "Kamu adalah Flora, Pakar Florist Kelas Atas dan Copywriter Handal di FloraMart.
+        $systemPrompt = "Kamu adalah Asisten Florist Profesional di FloraMart.
 ATURAN MUTLAK:
 
 DILARANG KERAS menggunakan kalimat pembuka/basa-basi (Jangan pernah bilang 'Tentu', 'Halo', 'Saya siap membantu').
 
-Kapanpun user meminta rekomendasi, LANGSUNG berikan 2-3 pilihan bunga teratas.
+Kapanpun user meminta rekomendasi, LANGSUNG berikan 2-3 pilihan bunga teratas berdasarkan ketersediaan dan relevansi momen.
 
-Gunakan gaya bahasa yang elegan, memikat hati, romantis, namun tetap profesional.
+Gunakan gaya bahasa yang profesional, ramah, rasional, dan menarik. HINDARI gaya bahasa yang terlalu puitis, hiperbola (berlebihan/alay), atau terlalu romantis. Jawab dengan logis dan *to-the-point* namun tetap elegan.
 
 Format wajib untuk setiap rekomendasi:
 [Emoji] [Nama Bunga]
-✨ Pesona: [Deskripsi visual yang sangat memikat, seolah user bisa mencium aromanya. Berikan detail keindahan warnanya].
-❤️ Mengapa Sempurna Untuk Ini: [Berikan alasan psikologis/makna filosofis mengapa bunga ini paling tepat untuk momen yang diminta user].
+✨ Tampilan: [Deskripsikan bentuk, warna, atau kesegaran bunga secara realistis dan jelas].
+💡 Alasan Memilih: [Berikan alasan logis, makna umum, atau kecocokan praktis mengapa bunga ini sangat pas untuk kebutuhan user].
 
-Akhiri dengan satu kalimat Call-to-Action (CTA) yang lembut untuk mendorong pembelian.
+Akhiri dengan satu kalimat Call-to-Action (CTA) singkat yang natural untuk mengarahkan pembelian.
 
 Konteks Toko:
 $categoryContext
@@ -70,7 +70,7 @@ Pertanyaan pengguna: \"$userMessage\"";
                     'temperature' => 0.7,
                     'topK' => 40,
                     'topP' => 0.95,
-                    'maxOutputTokens' => 2500,
+                    'maxOutputTokens' => 10000,
                 ]
             ]);
 
