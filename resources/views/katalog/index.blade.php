@@ -155,7 +155,7 @@ if (!function_exists('formatRupiah')) {
 
                             <div class="mt-auto">
                                 <div class="text-sm md:text-lg font-extrabold text-gray-900 mb-2 md:mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
-                                <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-order bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:py-2.5 px-3 md:px-4 rounded-lg md:rounded-xl text-xs md:text-sm transition-colors text-center shadow-sm hover:shadow-md flex items-center justify-center">
+                                <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-pesan block w-full py-2 md:py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-center font-bold text-xs md:text-sm rounded-lg border border-emerald-800 shadow-sm transition-colors">
                                    <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
                                 </a>
                             </div>
@@ -220,7 +220,7 @@ if (!function_exists('formatRupiah')) {
 
                                             <div class="mt-auto">
                                                 <div class="text-sm md:text-lg font-extrabold text-gray-900 mb-2 md:mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
-                                                <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-order bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded text-[10px] md:text-xs transition-colors flex items-center shadow-sm w-full md:w-auto justify-center md:justify-start">
+                                                <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-pesan block w-full py-2 md:py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-center font-bold text-xs md:text-sm rounded-lg border border-emerald-800 shadow-sm transition-colors">
                                                    <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
                                                 </a>
                                             </div>
