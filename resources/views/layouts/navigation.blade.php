@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false, darkMode: localStorage.getItem('floramart_theme') === 'dark' }" x-init="$watch('darkMode', val => { localStorage.setItem('floramart_theme', val ? 'dark' : 'light'); if(val) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); })" class="bg-white border-b border-gray-100 relative z-[9999]">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -68,10 +68,12 @@
                     </x-slot>
                 </x-dropdown>
                 @else
-                <a href="{{ route('login') }}" class="btn-a11y-auth-login text-sm text-gray-700 underline">Log in</a>
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="btn-a11y-auth-register ml-4 text-sm text-gray-700 underline">Register</a>
-                @endif
+                <div data-a11y="auth-area" class="flex items-center">
+                    <a href="{{ route('login') }}" class="btn-a11y-auth-login text-sm text-gray-700 underline">Log in</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn-a11y-auth-register ml-4 text-sm text-gray-700 underline">Register</a>
+                    @endif
+                </div>
                 @endauth
             </div>
 
@@ -105,6 +107,13 @@
         </div>
 
         <!-- Responsive Settings Options -->
+        <div class="pt-2 pb-1 space-y-1">
+            <button @click="darkMode = !darkMode" class="w-full flex items-center pl-3 pr-4 py-2 border-l-4 border-transparent text-left text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
+                <i class="fa-solid mr-2 w-5 text-center" :class="darkMode ? 'fa-sun text-yellow-500' : 'fa-moon'"></i>
+                <span x-text="darkMode ? 'Mode Terang' : 'Mode Gelap'"></span>
+            </button>
+        </div>
+
         <div class="pt-4 pb-1 border-t border-gray-200">
             @auth
             <div class="px-4">
@@ -129,7 +138,7 @@
                 </form>
             </div>
             @else
-            <div class="px-4 pb-2">
+            <div data-a11y="auth-area" class="px-4 pb-2 flex items-center">
                 <a href="{{ route('login') }}" class="btn-a11y-auth-login text-sm font-medium text-gray-700 hover:text-gray-900">Log in</a>
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="btn-a11y-auth-register ml-4 text-sm font-medium text-gray-700 hover:text-gray-900">Register</a>
@@ -142,3 +151,4 @@
 
 <x-accessibility-filters />
 <x-accessibility-widget />
+<x-chatbot-widget />

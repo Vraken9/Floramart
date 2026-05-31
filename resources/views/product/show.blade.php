@@ -86,19 +86,21 @@
             <div class="bg-white rounded-3xl shadow-lg border border-rose-100 overflow-hidden mb-12">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
 
-                    <div class="bg-rose-50 p-8 md:p-12 flex items-center justify-center relative group">
-                        @if(str_starts_with($product->image_path, 'http'))
-                            <img src="{{ $product->image_path }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-2xl shadow-xl group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-multiply">
+                    <div class="bg-rose-50 p-4 md:p-12 flex items-center justify-center relative group">
+                        @if($product->image_path && str_starts_with($product->image_path, 'http'))
+                            <img src="{{ $product->image_path }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[350px] md:max-h-[500px] object-contain rounded-xl md:rounded-2xl shadow-xl group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-multiply">
+                        @elseif($product->image_path)
+                            <img src="{{ asset('images/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[350px] md:max-h-[500px] object-contain rounded-xl md:rounded-2xl shadow-xl group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-multiply">
                         @else
-                            <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-2xl shadow-xl group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-multiply">
+                            <div class="w-full h-64 flex items-center justify-center bg-gray-200 rounded-xl"><i class="fa-solid fa-image text-5xl text-gray-400"></i></div>
                         @endif
-                        <span class="absolute top-6 left-6 px-4 py-1.5 text-xs font-black tracking-widest uppercase bg-white/90 backdrop-blur-md text-[#7c4959] rounded-full shadow-md border border-rose-100">
-                            {{ $product->category->name }}
+                        <span class="absolute top-3 left-3 md:top-6 md:left-6 px-3 md:px-4 py-1 md:py-1.5 text-[10px] md:text-xs font-black tracking-widest uppercase bg-white/90 backdrop-blur-md text-[#7c4959] rounded-full shadow-md border border-rose-100">
+                            {{ $product->category->name ?? '' }}
                         </span>
                     </div>
 
-                    <div class="p-8 md:p-12 flex flex-col justify-center">
-                        <h1 class="text-a11y-admin text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{{ $product->name }}</h1>
+                    <div class="p-5 md:p-12 flex flex-col justify-center">
+                        <h1 class="text-a11y-admin text-2xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{{ $product->name }}</h1>
 
                         <div class="flex items-center text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
                             <span class="font-medium text-[#7c4959] bg-[#7c4959]/10 px-2.5 py-0.5 rounded-full mr-3">Toko Terverifikasi</span>
@@ -110,9 +112,9 @@
                             </a>
                         </div>
 
-                        <div class="mb-8">
-                            <p class="text-a11y-admin text-sm text-gray-500 mb-1 uppercase tracking-wider font-semibold">Harga Spesial</p>
-                            <p class="text-a11y-admin text-4xl font-extrabold text-gray-900">Rp {{ $hargaFormat }}</p>
+                        <div class="mb-6 md:mb-8">
+                            <p class="text-a11y-admin text-xs md:text-sm text-gray-500 mb-1 uppercase tracking-wider font-semibold">Harga Spesial</p>
+                            <p class="text-a11y-admin text-2xl md:text-4xl font-extrabold text-gray-900">Rp {{ $hargaFormat }}</p>
                         </div>
 
                         <div class="mb-10">
@@ -121,7 +123,7 @@
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-4 mt-auto">
-                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" class="btn-a11y-pesan flex-1 inline-flex justify-center items-center px-4 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 border border-emerald-800 rounded-2xl font-black text-white tracking-wider shadow-lg shadow-emerald-700/30 hover:shadow-xl hover:shadow-emerald-700/40 hover:-translate-y-1 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600 text-lg">
+                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-pesan flex-1 inline-flex justify-center items-center px-4 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 border border-emerald-800 rounded-2xl font-black text-white tracking-wider shadow-lg shadow-emerald-700/30 hover:shadow-xl hover:shadow-emerald-700/40 hover:-translate-y-1 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600 text-lg">
                                 <i class="fa-brands fa-whatsapp mr-2 text-2xl"></i> Pesan Sekarang
                             </a>
 

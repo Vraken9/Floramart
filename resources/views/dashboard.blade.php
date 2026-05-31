@@ -96,10 +96,12 @@
                                     </form>
 
                                     <div class="aspect-square bg-gray-50 overflow-hidden relative">
-                                        @if(str_starts_with($product->image_path, 'http'))
+                                        @if($product->image_path && str_starts_with($product->image_path, 'http'))
                                             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ $product->image_path }}" alt="{{ $product->name }}">
+                                        @elseif($product->image_path)
+                                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ asset('images/' . $product->image_path) }}" alt="{{ $product->name }}">
                                         @else
-                                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}">
+                                            <div class="w-full h-full flex items-center justify-center bg-gray-200"><i class="fa-solid fa-image text-3xl text-gray-400"></i></div>
                                         @endif
                                         <span class="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold tracking-wider uppercase bg-white/95 text-[#7c4959] rounded-sm shadow-sm">
                                             {{ $product->category->name }}

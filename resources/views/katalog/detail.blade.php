@@ -85,7 +85,7 @@
                         @if(str_starts_with($product->image_path, 'http'))
                             <img src="{{ $product->image_path }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-500">
                         @else
-                            <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-500">
+                            <img src="{{ asset('images/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[500px] object-contain rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-500">
                         @endif
                         <span class="absolute top-6 left-6 px-3 py-1 text-xs font-bold tracking-wider uppercase bg-white/90 backdrop-blur-sm text-[#7c4959] rounded shadow-sm border border-[#d4ccc0]/30">
                             {{ $product->category->name }}

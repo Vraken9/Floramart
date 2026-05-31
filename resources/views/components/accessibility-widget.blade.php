@@ -1,32 +1,8 @@
 <!-- resources/views/components/accessibility-widget.blade.php -->
 
 <style>
-    @keyframes visioBlink {
-        0% { outline-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-        50% { outline-color: #FF4500; box-shadow: 0 0 5px rgba(255, 69, 0, 0.5); }
-        100% { outline-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-    }
-    .visioadapt-highlight-target {
-        outline: 4px dashed #FFD700 !important;
-        outline-offset: 4px !important;
-        animation: visioBlink 1.5s infinite !important;
-        position: relative !important;
-    }
     .visioadapt-tooltip {
-        position: absolute;
-        bottom: 110%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #000;
-        color: #FFD700;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
-        white-space: nowrap;
-        z-index: 999999;
-        pointer-events: none;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        /* Styling is now handled by Tailwind utility classes dynamically */
     }
     
     #a11y-widget-container {
@@ -195,34 +171,73 @@
     // Highlight Logic
     function highlightDOMElements(targetsArray) {
         if (!targetsArray || targetsArray.length === 0) return;
-        const elements = document.querySelectorAll('button, a, div, span, label, p, img');
+        // Hanya target elemen yang benar-benar bisa diklik
+        const elements = document.querySelectorAll('button, a, input[type="submit"], input[type="button"], [role="button"]');
         let firstFoundElement = null;
 
         targetsArray.forEach(targetObj => {
             let targetText = targetObj.teks;
+            let actionId = targetObj.action_id;
             let targetLabel = targetObj.label;
-            if (!targetText) return;
+            
+            if (!targetText && !actionId) return;
             
             let foundElement = null;
-            const lowerTarget = targetText.toLowerCase();
-            
-            for (let el of elements) {
-                const text = (el.innerText || el.textContent || el.getAttribute('aria-label') || el.alt || '').toLowerCase();
-                if (text.includes(lowerTarget)) {
-                    if (!foundElement || foundElement.contains(el) || el.tagName === 'BUTTON' || el.tagName === 'A') {
+
+            // 1. Prioritize finding element by action_id (CSS attribute selector)
+            if (actionId) {
+                const preciseEls = document.querySelectorAll(`[data-a11y="${actionId}"]`);
+                for (let el of preciseEls) {
+                    // Task 1: Pastikan elemen target benar-benar terlihat (mengatasi filter mobile yang disembunyikan di desktop)
+                    if (el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0) {
                         foundElement = el;
+                        break;
+                    }
+                }
+            }
+
+            // 2. Fallback to text searching if action_id is not found or not provided
+            if (!foundElement && targetText) {
+                const lowerTarget = targetText.toLowerCase().trim();
+                for (let el of elements) {
+                    const text = (el.innerText || el.value || el.getAttribute('aria-label') || el.title || '').toLowerCase().trim();
+                    if (text === lowerTarget || text.includes(lowerTarget)) {
+                        foundElement = el;
+                        if (text === lowerTarget) break; // Perfect match
                     }
                 }
             }
 
             if (foundElement) {
-                foundElement.classList.add("visioadapt-highlight-target");
+                // Task 1: Fix Z-Index for auth-area so it sits above everything else
+                let zClass = actionId === 'auth-area' ? "z-[9999]" : "z-[60]";
+                foundElement.classList.add("ring-4", "ring-blue-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", zClass);
+                
                 const tooltip = document.createElement("div");
-                tooltip.className = "visioadapt-tooltip";
+                let tooltipZ = actionId === 'auth-area' ? "z-[10000]" : "z-[100]";
+
+                // Mobile-responsive tooltip: smaller on small screens
+                tooltip.className = `visioadapt-tooltip absolute bg-slate-800 text-white p-2 sm:p-3 rounded-lg shadow-2xl border border-slate-600 text-xs sm:text-sm font-semibold pointer-events-none max-w-[200px] sm:max-w-xs ${tooltipZ}`;
                 tooltip.textContent = targetLabel || targetText;
+
+                // Position based on actionId
+                if (actionId === 'auth-area') {
+                    tooltip.classList.add('top-full', 'right-0', 'mt-3');
+                } else if (actionId === 'filter-area') {
+                    tooltip.className = `visioadapt-tooltip absolute top-full left-0 mt-3 max-w-[220px] sm:max-w-sm bg-slate-600/95 text-white text-xs sm:text-sm p-2 sm:p-3 rounded-lg shadow-xl border border-slate-500 pointer-events-none ${tooltipZ}`;
+                } else {
+                    tooltip.classList.add('top-full', 'left-1/2', '-translate-x-1/2', 'mt-3');
+                }
                 
                 try {
                     foundElement.appendChild(tooltip);
+                    
+                    // Hack to prevent overflow cutoff on product cards
+                    const parentCard = foundElement.closest('.overflow-hidden');
+                    if (parentCard) {
+                        parentCard.classList.remove('overflow-hidden');
+                        parentCard.classList.add('visioadapt-temp-overflow');
+                    }
                 } catch(e) {}
 
                 if (!firstFoundElement) firstFoundElement = foundElement;
@@ -235,11 +250,18 @@
     }
 
     function removeAllHighlights() {
-        const targets = document.querySelectorAll('.visioadapt-highlight-target');
+        const targets = document.querySelectorAll('.animate-pulse.ring-blue-500, .animate-pulse.ring-emerald-500');
         targets.forEach(el => {
-            el.classList.remove('visioadapt-highlight-target');
-            const tooltips = el.querySelectorAll('.visioadapt-tooltip');
-            tooltips.forEach(t => t.remove());
+            el.classList.remove("ring-4", "ring-blue-500", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[60]", "z-[9999]", "z-[999998]");
+        });
+        
+        const tooltips = document.querySelectorAll('.visioadapt-tooltip');
+        tooltips.forEach(t => t.remove());
+
+        // Restore overflow-hidden to product cards
+        document.querySelectorAll('.visioadapt-temp-overflow').forEach(el => {
+            el.classList.remove('visioadapt-temp-overflow');
+            el.classList.add('overflow-hidden');
         });
     }
 
@@ -268,44 +290,52 @@
 
         const overlay = document.createElement("div");
         overlay.id = "visio-adapt-overlay";
-        overlay.style.position = "fixed";
-        overlay.style.bottom = "80px";
-        overlay.style.left = "20px";
-        overlay.style.maxWidth = "400px";
-        overlay.style.backgroundColor = success ? "#0f172a" : "#7f1d1d"; // Lebih gelap untuk kontras tinggi
-        overlay.style.color = "#ffffff";
-        overlay.style.padding = "20px";
-        overlay.style.borderRadius = "12px";
-        overlay.style.boxShadow = "0 10px 25px rgba(0,0,0,0.5)";
-        overlay.style.zIndex = "999999";
-        overlay.style.borderLeft = success ? "6px solid #10b981" : "6px solid #b91c1c";
+        overlay.className = "fixed bottom-[80px] left-3 right-3 sm:left-5 sm:right-auto sm:max-w-sm md:max-w-md z-[999999] p-4 rounded-2xl shadow-2xl backdrop-blur-md border-l-4 " + 
+                            (success ? "bg-slate-900/95 border-blue-500" : "bg-red-900/95 border-red-500");
 
+        // Title
         const title = document.createElement("h4");
-        title.innerHTML = '<i class="fa-solid fa-robot"></i> Asisten Aksesibilitas';
-        title.style.margin = "0 0 8px 0";
-        title.style.color = success ? "#10b981" : "#ffffff";
+        title.innerHTML = '<i class="fa-solid fa-robot mr-2"></i> Panduan AI';
+        title.className = "flex items-center text-base font-bold mb-2 " + (success ? "text-blue-400" : "text-red-400");
         overlay.appendChild(title);
 
-        const text = document.createElement("p");
-        text.innerHTML = displayText.replace(/\n/g, '<br>');
-        text.style.fontSize = "15px"; // Diperbesar
-        text.style.fontWeight = "600"; // Dipertebal
-        text.style.letterSpacing = "0.5px"; // Jarak antar huruf diperlebar
-        text.style.margin = "0 0 16px 0";
-        text.style.lineHeight = "1.6";
-        overlay.appendChild(text);
+        // Short summary text (no paragraphs, just 1-2 lines)
+        const summary = document.createElement("p");
+        summary.textContent = displayText;
+        summary.className = "text-slate-300 text-xs sm:text-sm leading-relaxed mb-3";
+        overlay.appendChild(summary);
 
+        // Button guide cards
+        if (targetsArray.length > 0) {
+            const btnList = document.createElement("div");
+            btnList.className = "space-y-1.5 mb-3";
+            
+            targetsArray.forEach((t, i) => {
+                const card = document.createElement("div");
+                card.className = "flex items-start gap-2 bg-slate-800/80 rounded-lg px-3 py-2 border border-slate-700";
+                
+                const icon = document.createElement("span");
+                icon.className = "text-blue-400 text-xs mt-0.5 flex-shrink-0";
+                icon.innerHTML = '<i class="fa-solid fa-circle-dot"></i>';
+                card.appendChild(icon);
+                
+                const label = document.createElement("span");
+                label.textContent = t.label || t.teks || '';
+                label.className = "text-slate-200 text-xs sm:text-sm leading-snug";
+                card.appendChild(label);
+                
+                btnList.appendChild(card);
+            });
+            
+            overlay.appendChild(btnList);
+        }
+
+        // Close button
         const closeBtn = document.createElement("button");
         closeBtn.textContent = "Tutup Panduan";
-        closeBtn.style.padding = "8px 16px";
-        closeBtn.style.backgroundColor = success ? "#10b981" : "#b91c1c";
-        closeBtn.style.color = "white";
-        closeBtn.style.border = "none";
-        closeBtn.style.borderRadius = "6px";
-        closeBtn.style.cursor = "pointer";
-        closeBtn.style.fontSize = "14px"; // Diperbesar
-        closeBtn.style.fontWeight = "bold";
-        closeBtn.style.width = "100%"; // Membentang penuh agar mudah diklik
+        closeBtn.className = "w-full py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 shadow-sm flex items-center justify-center " +
+            (success ? "bg-transparent border border-slate-500 text-slate-200 hover:bg-white hover:text-slate-900 hover:border-white" : "bg-red-500 text-white hover:bg-red-600");
+        
         closeBtn.onclick = () => {
             overlay.remove();
             removeAllHighlights();

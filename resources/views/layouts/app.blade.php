@@ -19,8 +19,10 @@
         <script>
             (function() {
                 const theme = localStorage.getItem('floramart_theme');
-                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                if (theme === 'dark') {
                     document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
                 }
                 const a11y = localStorage.getItem('floramart_colorblind_type');
                 if (a11y && a11y !== 'Normal') {

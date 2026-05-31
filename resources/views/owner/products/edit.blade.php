@@ -22,7 +22,7 @@
             </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-xl border border-[#d4ccc0]/50">
-                <div class="p-8 text-gray-900">
+                <div class="p-4 md:p-6 lg:p-8 text-gray-900">
 
                     <form method="POST" action="{{ route('owner.products.update', $product->id) }}" enctype="multipart/form-data">
                         @csrf
@@ -76,7 +76,7 @@
                                         <img :src="filePreview" class="h-48 w-auto object-cover rounded-lg border border-gray-200 shadow-sm">
                                     </template>
                                     <template x-if="!filePreview && '{{ str_starts_with($product->image_path, 'http') }}' == '' && '{{ $product->image_path }}' != ''">
-                                        <img src="{{ asset('storage/' . $product->image_path) }}" class="h-48 w-auto object-cover rounded-lg border border-gray-200 shadow-sm">
+                                        <img src="{{ asset('images/' . $product->image_path) }}" class="h-48 w-auto object-cover rounded-lg border border-gray-200 shadow-sm">
                                     </template>
                                 </div>
                             </div>

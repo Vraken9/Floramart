@@ -30,7 +30,7 @@
 
         <div class="px-8 pb-8 pt-0 relative">
             <div class="flex flex-col md:flex-row items-center md:items-end gap-6 -mt-16 md:-mt-20 mb-6 relative z-10">
-                <img src="{{ str_starts_with($shop->logo_path ?? '', 'http') ? $shop->logo_path : asset('storage/' . ($shop->logo_path ?? 'default.png')) }}" 
+                <img src="{{ str_starts_with($shop->logo_path ?? '', 'http') ? $shop->logo_path : asset('images/' . ($shop->logo_path ?? 'default.png')) }}" 
                      class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-lg bg-white">
                 
                 <div class="flex-grow text-center md:text-left mb-2 md:mb-0">
@@ -94,7 +94,7 @@
                                 @endif
                             @endif
                             <a href="{{ route('product.show', ['slug' => $product->slug, 'ref' => 'shop-' . $shop->id]) }}" class="block aspect-square overflow-hidden bg-rose-50 relative">
-                                <img src="{{ str_starts_with($product->image_path, 'http') ? $product->image_path : asset('storage/' . $product->image_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out mix-blend-multiply">
+                                <img src="{{ ($product->image_path && str_starts_with($product->image_path, 'http')) ? $product->image_path : ($product->image_path ? asset('images/' . $product->image_path) : '') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out mix-blend-multiply" alt="{{ $product->name }}" onerror="this.style.display='none'">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             </a>
                             <div class="p-5 flex-grow bg-white relative z-10 -mt-2 rounded-t-2xl">

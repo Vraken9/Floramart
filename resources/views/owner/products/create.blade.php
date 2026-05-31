@@ -22,7 +22,7 @@
             </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-xl border border-[#d4ccc0]/50">
-                <div class="p-8 text-gray-900">
+                <div class="p-4 md:p-6 lg:p-8 text-gray-900">
 
                     <form method="POST" action="{{ route('owner.products.store') }}" enctype="multipart/form-data">
                         @csrf
