@@ -149,6 +149,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Accept': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         body: JSON.stringify({ message: userText })
@@ -162,6 +163,7 @@
                         this.messages.push({ role: 'ai', content: "Maaf, terjadi kesalahan: " + (data.error || 'Server tidak merespons.') });
                     }
                 } catch (error) {
+                    console.error("Chatbot Error:", error);
                     this.messages.push({ role: 'ai', content: "Gagal terhubung ke server. Silakan coba lagi nanti." });
                 } finally {
                     this.isLoading = false;

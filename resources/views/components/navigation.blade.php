@@ -1,7 +1,7 @@
 <style>
     [x-cloak] { display: none !important; }
 </style>
-<nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-[9999]" x-data="{ mobileOpen: false }">
+<nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-[9999]" x-data="{ mobileOpen: false, darkMode: localStorage.getItem('floramart_theme') === 'dark' }" x-init="$watch('darkMode', val => { localStorage.setItem('floramart_theme', val ? 'dark' : 'light'); if(val) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); })">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-14 md:h-16">
             <!-- Logo -->
@@ -107,6 +107,12 @@
             <a href="{{ route('shops.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('shops.index') ? 'bg-[#7c4959]/10 text-[#7c4959]' : 'text-gray-700 hover:bg-gray-50' }}">
                 <i class="fa-solid fa-store w-5 text-center"></i> Toko Florist
             </a>
+            
+            <!-- Dark Mode Toggle Mobile -->
+            <button @click="darkMode = !darkMode" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 text-left">
+                <i class="fa-solid w-5 text-center" :class="darkMode ? 'fa-sun text-yellow-500' : 'fa-moon'"></i>
+                <span x-text="darkMode ? 'Mode Terang' : 'Mode Gelap'"></span>
+            </button>
         </div>
 
         @if (Auth::check())
