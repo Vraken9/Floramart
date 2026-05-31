@@ -1,36 +1,23 @@
 <!-- resources/views/components/accessibility-widget.blade.php -->
 
 <style>
-    @keyframes visioBlink {
-        0% { outline-color: #FFFF00; box-shadow: 0 0 20px rgba(255, 255, 0, 0.9); }
-        50% { outline-color: #000000; box-shadow: 0 0 5px rgba(0, 0, 0, 0.8); }
-        100% { outline-color: #FFFF00; box-shadow: 0 0 20px rgba(255, 255, 0, 0.9); }
-    }
-    .visioadapt-highlight-target {
-        outline: 6px dashed #FFFF00 !important;
-        outline-offset: 6px !important;
-        animation: visioBlink 1.5s infinite !important;
-        position: relative !important;
-        z-index: 999998 !important;
-        background-color: rgba(255, 255, 0, 0.1) !important;
-    }
     .visioadapt-tooltip {
         position: absolute;
-        bottom: calc(100% + 15px);
+        bottom: calc(100% + 12px);
         left: 50%;
         transform: translateX(-50%);
-        background-color: #000000 !important;
-        color: #FFFF00 !important;
-        padding: 8px 14px;
+        background-color: rgb(15 23 42 / 0.95); /* bg-slate-900/95 */
+        backdrop-filter: blur(8px);
+        color: #f8fafc; /* text-slate-50 */
+        padding: 8px 12px;
         border-radius: 8px;
-        font-size: 16px;
-        font-weight: 900;
+        font-size: 13px;
+        font-weight: 600;
         white-space: nowrap;
         z-index: 999999;
         pointer-events: none;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.9);
-        border: 3px solid #FFFF00;
-        letter-spacing: 0.5px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        border: 1px solid rgb(51 65 85); /* border-slate-700 */
     }
     .visioadapt-tooltip::after {
         content: '';
@@ -38,9 +25,9 @@
         top: 100%;
         left: 50%;
         transform: translateX(-50%);
-        border-width: 8px;
+        border-width: 6px;
         border-style: solid;
-        border-color: #FFFF00 transparent transparent transparent;
+        border-color: rgb(15 23 42) transparent transparent transparent;
     }
     
     #a11y-widget-container {
@@ -243,7 +230,8 @@
             }
 
             if (foundElement) {
-                foundElement.classList.add("visioadapt-highlight-target");
+                // Tailwind classes for beautiful highlight ring
+                foundElement.classList.add("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[999998]");
                 const tooltip = document.createElement("div");
                 tooltip.className = "visioadapt-tooltip";
                 tooltip.textContent = targetLabel || targetText;
@@ -262,9 +250,9 @@
     }
 
     function removeAllHighlights() {
-        const targets = document.querySelectorAll('.visioadapt-highlight-target');
+        const targets = document.querySelectorAll('.animate-pulse.ring-emerald-500');
         targets.forEach(el => {
-            el.classList.remove('visioadapt-highlight-target');
+            el.classList.remove("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[999998]");
             const tooltips = el.querySelectorAll('.visioadapt-tooltip');
             tooltips.forEach(t => t.remove());
         });
@@ -295,47 +283,30 @@
 
         const overlay = document.createElement("div");
         overlay.id = "visio-adapt-overlay";
-        overlay.style.position = "fixed";
-        overlay.style.bottom = "80px";
-        overlay.style.left = "20px";
-        overlay.style.maxWidth = "400px";
-        overlay.style.backgroundColor = success ? "#000000" : "#7f1d1d"; 
-        overlay.style.color = "#FFFF00";
-        overlay.style.padding = "24px";
-        overlay.style.borderRadius = "12px";
-        overlay.style.boxShadow = "0 10px 30px rgba(0,0,0,0.8)";
-        overlay.style.zIndex = "999999";
-        overlay.style.border = success ? "3px solid #FFFF00" : "3px solid #b91c1c";
-        overlay.style.borderLeft = success ? "12px solid #FFFF00" : "12px solid #b91c1c";
+        // Convert to Tailwind UI classes
+        overlay.className = "fixed bottom-[80px] left-5 max-w-sm md:max-w-md z-[999999] p-5 md:p-6 rounded-2xl shadow-2xl backdrop-blur-md border-l-4 " + 
+                            (success ? "bg-slate-900/95 border-emerald-500" : "bg-red-900/95 border-red-500");
 
         const title = document.createElement("h4");
-        title.innerHTML = '<i class="fa-solid fa-robot"></i> Asisten Aksesibilitas AI';
-        title.style.margin = "0 0 12px 0";
-        title.style.color = success ? "#FFFF00" : "#ffffff";
-        title.style.fontSize = "18px";
-        title.style.fontWeight = "900";
+        title.innerHTML = '<i class="fa-solid fa-robot mr-2"></i> Panduan AI';
+        title.className = "flex items-center text-lg font-bold mb-3 " + (success ? "text-emerald-400" : "text-red-400");
         overlay.appendChild(title);
 
-        const text = document.createElement("p");
-        text.innerHTML = displayText.replace(/\n/g, '<br>');
-        text.style.fontSize = "16px"; 
-        text.style.fontWeight = "700"; 
-        text.style.letterSpacing = "0.8px"; 
-        text.style.margin = "0 0 20px 0";
-        text.style.lineHeight = "1.7";
+        const text = document.createElement("div");
+        
+        // Basic Markdown parser for **bold** tags to make them emerald
+        let formattedText = displayText.replace(/\n/g, '<br>');
+        formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<span class="text-emerald-400 font-bold">$1</span>');
+        
+        text.innerHTML = formattedText;
+        text.className = "text-slate-200 text-sm md:text-base leading-relaxed mb-5 font-medium"; 
         overlay.appendChild(text);
 
         const closeBtn = document.createElement("button");
-        closeBtn.textContent = "TUTUP PANDUAN";
-        closeBtn.style.padding = "12px 16px";
-        closeBtn.style.backgroundColor = success ? "#FFFF00" : "#b91c1c";
-        closeBtn.style.color = "#000000";
-        closeBtn.style.border = "none";
-        closeBtn.style.borderRadius = "6px";
-        closeBtn.style.cursor = "pointer";
-        closeBtn.style.fontSize = "14px"; // Diperbesar
-        closeBtn.style.fontWeight = "bold";
-        closeBtn.style.width = "100%"; // Membentang penuh agar mudah diklik
+        closeBtn.textContent = "Tutup Panduan";
+        closeBtn.className = "w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm flex items-center justify-center " +
+            (success ? "bg-transparent border border-slate-500 text-slate-200 hover:bg-white hover:text-slate-900 hover:border-white" : "bg-red-500 text-white hover:bg-red-600");
+        
         closeBtn.onclick = () => {
             overlay.remove();
             removeAllHighlights();
