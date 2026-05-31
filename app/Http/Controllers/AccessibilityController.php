@@ -30,8 +30,7 @@ Instruksi Analisis:
 
 PENTING: Anda HARUS mencocokkan niat pengguna (atau tindakan utama di layar) dengan salah satu ID Aksi berikut ini jika relevan:
 - \"filter-area\": Seluruh baris form filter (Nama Bunga, Kategori, Kabupaten, dll). Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan kolom ini untuk memfilter bunga berdasarkan nama, kategori, atau mencari toko terdekat di wilayah Anda.\"
-- \"btn-login\": Untuk tombol masuk.
-- \"btn-register\": Untuk tombol daftar.
+- \"auth-area\": Grup tombol masuk dan daftar. Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan tombol Masuk atau Daftar untuk mengakses akun Anda dan menyimpan riwayat transaksi.\"
 - \"input-search\": Kotak pencarian produk tunggal.
 - \"input-category\": Filter kategori tunggal.
 - \"input-location\": Filter wilayah/kabupaten.

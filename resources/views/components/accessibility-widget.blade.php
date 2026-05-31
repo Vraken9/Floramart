@@ -205,40 +205,34 @@
             }
 
             if (foundElement) {
-                // Tailwind classes for beautiful highlight ring and Z-Index 50 as requested
-                foundElement.classList.add("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]");
+                // Tailwind classes for beautiful highlight ring and Z-Index 60 as requested
+                foundElement.classList.add("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[60]");
                 
                 const tooltip = document.createElement("div");
-                // Tailwind classes for tooltip as requested: max-w-xs break-words whitespace-normal p-3 bg-slate-800 text-white rounded shadow-xl
-                tooltip.className = "visioadapt-tooltip absolute max-w-xs break-words whitespace-normal p-3 bg-slate-800 text-white rounded shadow-xl text-sm font-semibold z-[999999] pointer-events-none";
+                // Background solid bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 w-max max-w-sm
+                tooltip.className = "visioadapt-tooltip absolute bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 text-sm font-semibold z-[100] pointer-events-none w-max max-w-sm";
                 tooltip.textContent = targetLabel || targetText;
-                
-                // Append directly to body to escape overflow-hidden containers (Task 2)
-                document.body.appendChild(tooltip); 
-                
-                // Calculate absolute position based on viewport
-                const rect = foundElement.getBoundingClientRect();
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
-                const ttWidth = tooltip.offsetWidth;
-                const ttHeight = tooltip.offsetHeight;
-
-                // Default: place above the element
-                let topPos = rect.top + scrollTop - ttHeight - 12;
-                let leftPos = rect.left + scrollLeft + (rect.width / 2) - (ttWidth / 2);
-
-                // Task 1: Prevent cutting off at the top viewport (Navbar items)
-                if (rect.top - ttHeight < 20) {
-                    topPos = rect.bottom + scrollTop + 12; // Place below the element instead
+                // Position based on actionId
+                if (actionId === 'auth-area') {
+                    tooltip.classList.add('top-full', 'right-0', 'mt-3');
+                } else if (actionId === 'filter-area') {
+                    tooltip.classList.add('top-full', 'left-0', 'mt-4');
+                } else {
+                    // Default fallback
+                    tooltip.classList.add('top-full', 'left-1/2', '-translate-x-1/2', 'mt-3');
                 }
-
-                // Prevent cutting off at left/right edges of screen
-                if (leftPos < 10) leftPos = 10;
-                if (leftPos + ttWidth > window.innerWidth - 10) leftPos = window.innerWidth - ttWidth - 10;
-
-                tooltip.style.top = topPos + "px";
-                tooltip.style.left = leftPos + "px";
+                
+                try {
+                    foundElement.appendChild(tooltip);
+                    
+                    // Hack to prevent overflow cutoff on product cards
+                    const parentCard = foundElement.closest('.overflow-hidden');
+                    if (parentCard) {
+                        parentCard.classList.remove('overflow-hidden');
+                        parentCard.classList.add('visioadapt-temp-overflow');
+                    }
+                } catch(e) {}
 
                 if (!firstFoundElement) firstFoundElement = foundElement;
             }
@@ -252,11 +246,17 @@
     function removeAllHighlights() {
         const targets = document.querySelectorAll('.animate-pulse.ring-emerald-500');
         targets.forEach(el => {
-            el.classList.remove("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[999998]");
+            el.classList.remove("ring-4", "ring-emerald-500", "ring-offset-2", "ring-offset-white", "animate-pulse", "relative", "z-[50]", "z-[60]", "z-[999998]");
         });
         
         const tooltips = document.querySelectorAll('.visioadapt-tooltip');
         tooltips.forEach(t => t.remove());
+
+        // Restore overflow-hidden to product cards
+        document.querySelectorAll('.visioadapt-temp-overflow').forEach(el => {
+            el.classList.remove('visioadapt-temp-overflow');
+            el.classList.add('overflow-hidden');
+        });
     }
 
     function displayOverlay(message, success = true) {

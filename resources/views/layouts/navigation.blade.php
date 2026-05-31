@@ -68,10 +68,12 @@
                     </x-slot>
                 </x-dropdown>
                 @else
-                <a href="{{ route('login') }}" data-a11y="btn-login" class="btn-a11y-auth-login text-sm text-gray-700 underline">Log in</a>
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" data-a11y="btn-register" class="btn-a11y-auth-register ml-4 text-sm text-gray-700 underline">Register</a>
-                @endif
+                <div data-a11y="auth-area" class="flex items-center">
+                    <a href="{{ route('login') }}" class="btn-a11y-auth-login text-sm text-gray-700 underline">Log in</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn-a11y-auth-register ml-4 text-sm text-gray-700 underline">Register</a>
+                    @endif
+                </div>
                 @endauth
             </div>
 
@@ -129,10 +131,10 @@
                 </form>
             </div>
             @else
-            <div class="px-4 pb-2">
-                <a href="{{ route('login') }}" data-a11y="btn-login" class="btn-a11y-auth-login text-sm font-medium text-gray-700 hover:text-gray-900">Log in</a>
+            <div data-a11y="auth-area" class="px-4 pb-2 flex items-center">
+                <a href="{{ route('login') }}" class="btn-a11y-auth-login text-sm font-medium text-gray-700 hover:text-gray-900">Log in</a>
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}" data-a11y="btn-register" class="btn-a11y-auth-register ml-4 text-sm font-medium text-gray-700 hover:text-gray-900">Register</a>
+                    <a href="{{ route('register') }}" class="btn-a11y-auth-register ml-4 text-sm font-medium text-gray-700 hover:text-gray-900">Register</a>
                 @endif
             </div>
             @endauth
