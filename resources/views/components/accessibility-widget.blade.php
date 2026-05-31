@@ -215,17 +215,30 @@
 
         targetsArray.forEach(targetObj => {
             let targetText = targetObj.teks;
+            let actionId = targetObj.action_id;
             let targetLabel = targetObj.label;
-            if (!targetText) return;
+            
+            if (!targetText && !actionId) return;
             
             let foundElement = null;
-            const lowerTarget = targetText.toLowerCase().trim();
-            
-            for (let el of elements) {
-                const text = (el.innerText || el.value || el.getAttribute('aria-label') || el.title || '').toLowerCase().trim();
-                if (text === lowerTarget || text.includes(lowerTarget)) {
-                    foundElement = el;
-                    if (text === lowerTarget) break; // Perfect match
+
+            // 1. Prioritize finding element by action_id (CSS attribute selector)
+            if (actionId) {
+                const preciseEl = document.querySelector(`[data-a11y="${actionId}"]`);
+                if (preciseEl) {
+                    foundElement = preciseEl;
+                }
+            }
+
+            // 2. Fallback to text searching if action_id is not found or not provided
+            if (!foundElement && targetText) {
+                const lowerTarget = targetText.toLowerCase().trim();
+                for (let el of elements) {
+                    const text = (el.innerText || el.value || el.getAttribute('aria-label') || el.title || '').toLowerCase().trim();
+                    if (text === lowerTarget || text.includes(lowerTarget)) {
+                        foundElement = el;
+                        if (text === lowerTarget) break; // Perfect match
+                    }
                 }
             }
 

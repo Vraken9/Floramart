@@ -24,18 +24,30 @@ Tugasmu adalah menganalisis antarmuka (UI) pada gambar ini dan memberikan petunj
 
 Instruksi Analisis:
 1. Jika di layar terlihat pengguna belum masuk (ada tombol 'Masuk' atau 'Daftar'), arahkan mereka untuk masuk/daftar terlebih dahulu agar dapat bertransaksi.
-2. Jika terdapat kotak pencarian, arahkan pengguna untuk memanfaatkannya (misal: mencari nama bunga, alamat, kabupaten, kecamatan, atau kategori).
+2. Jika terdapat kotak pencarian, arahkan pengguna untuk memanfaatkannya.
 3. Jika sedang melihat produk atau toko, berikan petunjuk langkah selanjutnya.
 4. Jelaskan isi layar ini dengan detail, informatif, dan komunikatif.
+
+PENTING: Anda HARUS mencocokkan niat pengguna (atau tindakan utama di layar) dengan salah satu ID Aksi berikut ini jika relevan:
+- \"btn-login\": Untuk tombol masuk.
+- \"btn-register\": Untuk tombol daftar.
+- \"input-search\": Kotak pencarian produk.
+- \"input-category\": Filter kategori.
+- \"input-location\": Filter wilayah/kabupaten.
+- \"btn-search\": Tombol terapkan filter/cari.
+- \"btn-order\": Tombol pesan sekarang / beli.
 
 Wajib menjawab HANYA dalam format JSON dengan struktur yang valid:
 {
   \"pesan\": \"Penjelasan panduan yang sangat detail untuk pengguna.\",
   \"tombol_penting\": [
-    { \"teks\": \"Teks persis dari tombol (harus 100% sama dengan yang tertulis di tombol, perhatikan huruf besar/kecil)\", \"label\": \"Keterangan tombol ini buat apa\" }
+    { 
+      \"action_id\": \"PILIH_SALAH_SATU_ID_AKSI_DI_ATAS_JIKA_ADA\", 
+      \"label\": \"Keterangan tombol ini buat apa\" 
+    }
   ]
 }
-Catatan Penting: Identifikasi hingga 4 tombol UTAMA yang bisa diklik. Field 'teks' harus SANGAT AKURAT dengan teks yang ada di dalam gambar (misal: \"Beli Sekarang\", \"Masuk\", \"Cari\"). Jangan menambahkan kata lain. Kembalikan JSON mentah.";
+Catatan Penting: Identifikasi hingga 4 tindakan UTAMA. Jika tindakan tersebut cocok dengan ID Aksi di atas, isi `action_id`. Jika tidak ada yang cocok, Anda boleh mengosongkan action_id. Jangan menambahkan kata lain. Kembalikan JSON mentah.";
 
         try {
             $response = Http::withHeaders([

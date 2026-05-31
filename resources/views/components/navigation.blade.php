@@ -61,8 +61,8 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="btn-a11y-auth-login text-gray-600 hover:text-[#7c4959] font-semibold border-l pl-4 border-gray-300 transition-colors">Masuk</a>
-                    <a href="{{ route('register') }}" class="btn-a11y-auth-register bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-semibold uppercase shadow-sm transition-colors">Daftar</a>
+                    <a href="{{ route('login') }}" data-a11y="btn-login" class="btn-a11y-auth-login text-gray-600 hover:text-[#7c4959] font-semibold border-l pl-4 border-gray-300 transition-colors">Masuk</a>
+                    <a href="{{ route('register') }}" data-a11y="btn-register" class="btn-a11y-auth-register bg-[#7c4959] hover:bg-[#5d3642] text-white px-4 py-2 rounded-md text-xs font-semibold uppercase shadow-sm transition-colors">Daftar</a>
                 @endif
             </div>
 
@@ -76,7 +76,7 @@
                         {{ substr(Auth::user()->name, 0, 1) }}
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm font-semibold text-[#7c4959]">Masuk</a>
+                    <a href="{{ route('login') }}" data-a11y="btn-login-mobile" class="text-sm font-semibold text-[#7c4959]">Masuk</a>
                 @endif
                 <button @click="mobileOpen = !mobileOpen" class="p-1.5 text-gray-600 hover:text-[#7c4959] focus:outline-none">
                     <i x-show="!mobileOpen" class="fa-solid fa-bars text-xl"></i>
@@ -129,8 +129,8 @@
         </div>
         @else
         <div class="border-t border-gray-100 px-4 py-3 flex gap-3">
-            <a href="{{ route('login') }}" class="flex-1 text-center py-2.5 rounded-lg text-sm font-bold text-[#7c4959] border border-[#7c4959] hover:bg-[#7c4959]/5 transition">Masuk</a>
-            <a href="{{ route('register') }}" class="flex-1 text-center py-2.5 rounded-lg text-sm font-bold text-white bg-[#7c4959] hover:bg-[#5d3642] transition">Daftar</a>
+            <a href="{{ route('login') }}" data-a11y="btn-login" class="flex-1 text-center py-2.5 rounded-lg text-sm font-bold text-[#7c4959] border border-[#7c4959] hover:bg-[#7c4959]/5 transition">Masuk</a>
+            <a href="{{ route('register') }}" data-a11y="btn-register" class="flex-1 text-center py-2.5 rounded-lg text-sm font-bold text-white bg-[#7c4959] hover:bg-[#5d3642] transition">Daftar</a>
         </div>
         @endif
     </div>

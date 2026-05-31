@@ -123,7 +123,7 @@
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-4 mt-auto">
-                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" class="btn-a11y-pesan flex-1 inline-flex justify-center items-center px-4 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 border border-emerald-800 rounded-2xl font-black text-white tracking-wider shadow-lg shadow-emerald-700/30 hover:shadow-xl hover:shadow-emerald-700/40 hover:-translate-y-1 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600 text-lg">
+                            <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-order flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 md:py-4 px-6 rounded-xl transition-all flex items-center justify-center text-sm md:text-lg shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
                                 <i class="fa-brands fa-whatsapp mr-2 text-2xl"></i> Pesan Sekarang
                             </a>
 

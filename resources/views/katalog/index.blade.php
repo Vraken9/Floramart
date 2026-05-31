@@ -36,7 +36,7 @@ if (!function_exists('formatRupiah')) {
         
         {{-- MOBILE: Collapsible Filter --}}
         <div class="md:hidden mb-4" x-data="{ filterOpen: false }">
-            <button @click="filterOpen = !filterOpen" class="w-full flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-200 text-sm font-bold text-gray-700">
+            <button @click="filterOpen = !filterOpen" data-a11y="btn-filter-mobile" class="w-full flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-200 text-sm font-bold text-gray-700">
                 <span><i class="fa-solid fa-sliders mr-2 text-[#7c4959]"></i> Filter & Pencarian</span>
                 <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="filterOpen && 'rotate-180'"></i>
             </button>
@@ -64,7 +64,7 @@ if (!function_exists('formatRupiah')) {
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Kecamatan</label>
                             <input type="text" name="district" value="{{ request('district') }}" placeholder="Kecamatan..." class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-[#7c4959] text-sm">
                         </div>
-                        <button type="submit" class="px-4 py-2 bg-[#7c4959] text-white rounded-lg font-bold text-sm h-[38px]">
+                        <button type="submit" data-a11y="btn-search-mobile" class="px-4 py-2 bg-[#7c4959] text-white rounded-lg font-bold text-sm h-[38px]">
                             <i class="fa-solid fa-filter"></i>
                         </button>
                     </div>
@@ -78,21 +78,21 @@ if (!function_exists('formatRupiah')) {
                 <div>
                     <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Nama Bunga</label>
                     <div class="relative">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Contoh: Mawar..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
+                        <input type="text" name="search" data-a11y="input-search" value="{{ request('search') }}" placeholder="Contoh: Mawar..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
                         <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
                 </div>
                 <div>
                     <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kategori</label>
                     <div class="relative">
-                        <input type="text" name="category" value="{{ request('category') }}" placeholder="Contoh: Buket..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
+                        <input type="text" name="category" data-a11y="input-category" value="{{ request('category') }}" placeholder="Contoh: Buket..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
                         <i class="fa-solid fa-layer-group absolute left-3 top-3 text-gray-400"></i>
                     </div>
                 </div>
                 <div>
                     <label class="text-a11y-admin block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Kabupaten/Kota</label>
                     <div class="relative">
-                        <input type="text" name="regency" value="{{ request('regency') }}" placeholder="Contoh: Banjarnegara..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
+                        <input type="text" name="regency" data-a11y="input-location" value="{{ request('regency') }}" placeholder="Contoh: Banjarnegara..." class="input-a11y-admin w-full pl-10 pr-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:border-[#7c4959] focus:ring-1 focus:ring-[#7c4959] text-sm">
                         <i class="fa-solid fa-city absolute left-3 top-3 text-gray-400"></i>
                     </div>
                 </div>
@@ -104,7 +104,7 @@ if (!function_exists('formatRupiah')) {
                             <i class="fa-solid fa-map-location-dot absolute left-3 top-3 text-gray-400"></i>
                         </div>
                     </div>
-                    <button type="submit" class="btn-a11y-admin inline-flex justify-center items-center px-4 py-2.5 bg-[#7c4959] text-white rounded-md font-bold text-sm uppercase hover:bg-[#5d3642] transition-colors h-[42px]">
+                    <button type="submit" data-a11y="btn-search" class="btn-a11y-admin inline-flex justify-center items-center px-4 py-2.5 bg-[#7c4959] text-white rounded-md font-bold text-sm uppercase hover:bg-[#5d3642] transition-colors h-[42px]">
                         <i class="fa-solid fa-filter"></i>
                     </button>
                 </div>
@@ -155,8 +155,7 @@ if (!function_exists('formatRupiah')) {
 
                             <div class="mt-auto">
                                 <div class="text-sm md:text-lg font-extrabold text-gray-900 mb-2 md:mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
-                                <a href="https://wa.me/{{ $product->shop->whatsapp_number }}?text=Halo%20{{ $product->shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" 
-                                   target="_blank" class="btn-a11y-pesan block w-full py-2 md:py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-center font-bold text-xs md:text-sm rounded-lg border border-emerald-800 shadow-sm transition-colors">
+                                <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-order bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:py-2.5 px-3 md:px-4 rounded-lg md:rounded-xl text-xs md:text-sm transition-colors text-center shadow-sm hover:shadow-md flex items-center justify-center">
                                    <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
                                 </a>
                             </div>
@@ -221,8 +220,7 @@ if (!function_exists('formatRupiah')) {
 
                                             <div class="mt-auto">
                                                 <div class="text-sm md:text-lg font-extrabold text-gray-900 mb-2 md:mb-4">Rp {{ number_format($product->price,0,',','.') }}</div>
-                                                <a href="https://wa.me/6289530123608?text=Halo%20{{ $product->shop->name }},%20saya%20tertarik%20dengan%20produk%20{{ $product->name }}" 
-                                                   target="_blank" class="btn-a11y-pesan block w-full py-2 md:py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-center font-bold text-xs md:text-sm rounded-lg border border-emerald-800 shadow-sm transition-colors">
+                                                <a href="{{ route('product.whatsapp', $product->id) }}" target="_blank" data-a11y="btn-order" class="btn-a11y-order bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 px-2 md:py-2 md:px-3 rounded text-[10px] md:text-xs transition-colors flex items-center shadow-sm w-full md:w-auto justify-center md:justify-start">
                                                    <i class="fa-brands fa-whatsapp mr-1"></i> Pesan Sekarang
                                                 </a>
                                             </div>
