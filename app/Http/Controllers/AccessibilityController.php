@@ -19,35 +19,30 @@ class AccessibilityController extends Controller
             return response()->json(['error' => 'API Key Gemini belum dikonfigurasi di server.'], 500);
         }
 
-        $prompt = "Kamu adalah asisten panduan visual yang empatik dan detail untuk pengguna dengan kondisi buta warna " . $request->colorblind_type . ". 
-Tugasmu adalah menganalisis antarmuka (UI) pada gambar ini dan memberikan petunjuk navigasi yang sangat jelas.
+        $prompt = "Kamu adalah asisten panduan navigasi singkat untuk pengguna dengan kondisi buta warna " . $request->colorblind_type . ". Analisis UI pada gambar ini.
 
-Instruksi Analisis:
-1. Jika di layar terlihat pengguna belum masuk (ada tombol 'Masuk' atau 'Daftar'), arahkan mereka untuk masuk/daftar terlebih dahulu agar dapat bertransaksi.
-2. Jika terdapat kotak pencarian atau form filter, WAJIB arahkan pengguna dengan menyorot area tersebut secara keseluruhan.
-3. Jika sedang melihat produk atau toko, berikan petunjuk langkah selanjutnya.
-4. Jelaskan isi layar ini dengan detail, informatif, dan komunikatif. Pecah penjelasan menjadi 3-4 paragraf yang dipisahkan dengan baris baru ganda (\n\n). Gunakan format **Teks Tebal** untuk memberikan penekanan pada sub-judul poin.
+ATURAN FORMAT JAWABAN (WAJIB DIIKUTI):
+1. Field \"pesan\" HARUS singkat: maksimal 2 kalimat pendek yang menjelaskan halaman apa ini dan apa yang bisa dilakukan pengguna. DILARANG menulis paragraf panjang atau penjelasan bertele-tele.
+2. Semua detail fungsi tombol HARUS masuk ke array \"tombol_penting\" dengan label singkat (maksimal 15 kata per label).
+3. Identifikasi maksimal 4 tombol/area penting yang terlihat di layar.
 
-PENTING: Anda HARUS mencocokkan niat pengguna (atau tindakan utama di layar) dengan salah satu ID Aksi berikut ini jika relevan:
-- \"filter-area\": Seluruh baris form filter (Nama Bunga, Kategori, Kabupaten, dll). Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan area filter ini untuk mempermudah pencarian Anda. Ketikkan nama bunga, pilih kategori, atau tentukan lokasi (Kabupaten/Kecamatan) untuk menemukan toko bunga yang paling dekat dengan Anda.\"
-- \"auth-area\": Grup tombol masuk dan daftar. Jika ada, WAJIB gunakan label ini tepatnya: \"Gunakan tombol Masuk atau Daftar untuk mengakses akun Anda dan menyimpan riwayat transaksi.\"
-- \"input-search\": Kotak pencarian produk tunggal.
-- \"input-category\": Filter kategori tunggal.
-- \"input-location\": Filter wilayah/kabupaten.
-- \"btn-search\": Tombol terapkan filter/cari.
-- \"btn-order\": Tombol pesan sekarang / beli.
+ID Aksi yang tersedia (gunakan jika cocok):
+- \"filter-area\": Form filter/pencarian (Nama, Kategori, Kota, dll)
+- \"auth-area\": Tombol Masuk & Daftar
+- \"btn-order\": Tombol pesan/beli
+- \"btn-search\": Tombol cari/terapkan filter
+- \"input-search\": Kotak pencarian
+- \"input-category\": Filter kategori
+- \"input-location\": Filter wilayah
+- \"btn-filter-mobile\": Tombol buka filter di mobile
 
-Wajib menjawab HANYA dalam format JSON dengan struktur yang valid:
+Wajib jawab HANYA dalam JSON mentah (tanpa markdown):
 {
-  \"pesan\": \"Penjelasan panduan yang sangat detail untuk pengguna.\",
+  \"pesan\": \"Ringkasan singkat halaman ini (maks 2 kalimat).\",
   \"tombol_penting\": [
-    { 
-      \"action_id\": \"PILIH_SALAH_SATU_ID_AKSI_DI_ATAS_JIKA_ADA\", 
-      \"label\": \"Keterangan tombol ini buat apa\" 
-    }
+    { \"action_id\": \"ID_AKSI\", \"label\": \"Fungsi tombol ini (singkat)\" }
   ]
-}
-Catatan Penting: Identifikasi hingga 4 tindakan UTAMA. Jika tindakan tersebut cocok dengan ID Aksi di atas, isi `action_id`. Jika tidak ada yang cocok, Anda boleh mengosongkan action_id. Jangan menambahkan kata lain. Kembalikan JSON mentah.";
+}";
 
         try {
             $response = Http::withHeaders([

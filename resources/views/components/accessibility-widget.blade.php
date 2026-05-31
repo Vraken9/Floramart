@@ -216,18 +216,16 @@
                 const tooltip = document.createElement("div");
                 let tooltipZ = actionId === 'auth-area' ? "z-[10000]" : "z-[100]";
 
-                // Background solid bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 w-max max-w-sm
-                tooltip.className = `visioadapt-tooltip absolute bg-slate-800 text-white p-3 rounded-lg shadow-2xl border border-slate-600 text-sm font-semibold pointer-events-none w-max max-w-sm ${tooltipZ}`;
+                // Mobile-responsive tooltip: smaller on small screens
+                tooltip.className = `visioadapt-tooltip absolute bg-slate-800 text-white p-2 sm:p-3 rounded-lg shadow-2xl border border-slate-600 text-xs sm:text-sm font-semibold pointer-events-none max-w-[200px] sm:max-w-xs ${tooltipZ}`;
                 tooltip.textContent = targetLabel || targetText;
 
                 // Position based on actionId
                 if (actionId === 'auth-area') {
                     tooltip.classList.add('top-full', 'right-0', 'mt-3');
                 } else if (actionId === 'filter-area') {
-                    // Specific design for filter area requested by user
-                    tooltip.className = `visioadapt-tooltip absolute top-full left-0 md:left-1/2 md:-translate-x-1/2 mt-4 w-max max-w-md bg-slate-600/95 text-white text-sm p-3 rounded-lg shadow-xl border border-slate-500 pointer-events-none ${tooltipZ}`;
+                    tooltip.className = `visioadapt-tooltip absolute top-full left-0 mt-3 max-w-[220px] sm:max-w-sm bg-slate-600/95 text-white text-xs sm:text-sm p-2 sm:p-3 rounded-lg shadow-xl border border-slate-500 pointer-events-none ${tooltipZ}`;
                 } else {
-                    // Default fallback
                     tooltip.classList.add('top-full', 'left-1/2', '-translate-x-1/2', 'mt-3');
                 }
                 
@@ -292,34 +290,50 @@
 
         const overlay = document.createElement("div");
         overlay.id = "visio-adapt-overlay";
-        // Convert to Tailwind UI classes (Color-blind safe border blue)
-        overlay.className = "fixed bottom-[80px] left-5 max-w-sm md:max-w-md z-[999999] p-5 md:p-6 rounded-2xl shadow-2xl backdrop-blur-md border-l-4 " + 
-                            (success ? "bg-slate-900 border-blue-500" : "bg-red-900/95 border-red-500");
+        overlay.className = "fixed bottom-[80px] left-3 right-3 sm:left-5 sm:right-auto sm:max-w-sm md:max-w-md z-[999999] p-4 rounded-2xl shadow-2xl backdrop-blur-md border-l-4 " + 
+                            (success ? "bg-slate-900/95 border-blue-500" : "bg-red-900/95 border-red-500");
 
+        // Title
         const title = document.createElement("h4");
         title.innerHTML = '<i class="fa-solid fa-robot mr-2"></i> Panduan AI';
-        title.className = "flex items-center text-lg font-bold mb-3 " + (success ? "text-blue-400" : "text-red-400");
+        title.className = "flex items-center text-base font-bold mb-2 " + (success ? "text-blue-400" : "text-red-400");
         overlay.appendChild(title);
 
-        const text = document.createElement("div");
-        
-        // Task 2: Typography chunking with safe colors
-        let paragraphs = displayText.split(/\n\n+/);
-        let htmlContent = '';
-        paragraphs.forEach(p => {
-            if (p.trim() !== '') {
-                let pText = p.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<span class="text-blue-400 font-bold">$1</span>');
-                htmlContent += `<p class="mb-4">${pText}</p>`;
-            }
-        });
-        
-        text.innerHTML = htmlContent;
-        text.className = "text-slate-200 text-sm md:text-base leading-relaxed mb-5 font-medium"; 
-        overlay.appendChild(text);
+        // Short summary text (no paragraphs, just 1-2 lines)
+        const summary = document.createElement("p");
+        summary.textContent = displayText;
+        summary.className = "text-slate-300 text-xs sm:text-sm leading-relaxed mb-3";
+        overlay.appendChild(summary);
 
+        // Button guide cards
+        if (targetsArray.length > 0) {
+            const btnList = document.createElement("div");
+            btnList.className = "space-y-1.5 mb-3";
+            
+            targetsArray.forEach((t, i) => {
+                const card = document.createElement("div");
+                card.className = "flex items-start gap-2 bg-slate-800/80 rounded-lg px-3 py-2 border border-slate-700";
+                
+                const icon = document.createElement("span");
+                icon.className = "text-blue-400 text-xs mt-0.5 flex-shrink-0";
+                icon.innerHTML = '<i class="fa-solid fa-circle-dot"></i>';
+                card.appendChild(icon);
+                
+                const label = document.createElement("span");
+                label.textContent = t.label || t.teks || '';
+                label.className = "text-slate-200 text-xs sm:text-sm leading-snug";
+                card.appendChild(label);
+                
+                btnList.appendChild(card);
+            });
+            
+            overlay.appendChild(btnList);
+        }
+
+        // Close button
         const closeBtn = document.createElement("button");
         closeBtn.textContent = "Tutup Panduan";
-        closeBtn.className = "w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm flex items-center justify-center " +
+        closeBtn.className = "w-full py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 shadow-sm flex items-center justify-center " +
             (success ? "bg-transparent border border-slate-500 text-slate-200 hover:bg-white hover:text-slate-900 hover:border-white" : "bg-red-500 text-white hover:bg-red-600");
         
         closeBtn.onclick = () => {
